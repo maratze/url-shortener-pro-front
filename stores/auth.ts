@@ -1,10 +1,5 @@
 import { defineStore } from 'pinia';
-
-interface User {
-    id: number;
-    email: string;
-    isPremium: boolean;
-}
+import type { User, LoginRequest, RegisterRequest, AuthResponse } from '~/types/auth';
 
 interface AuthState {
     user: User | null;
@@ -18,88 +13,56 @@ export const useAuthStore = defineStore('auth', {
         user: null,
         token: null,
         loading: false,
-        error: null,
+        error: null
     }),
 
     getters: {
-        isAuthenticated: (state) => !!state.token,
+        isAuthenticated(): boolean {
+            return !!this.token;
+        },
+        isPremium(): boolean {
+            return this.user?.isPremium || false;
+        }
     },
 
     actions: {
-        async initialize() {
-            const token = localStorage.getItem('auth_token');
-            if (token) {
-                this.token = token;
-                await this.fetchCurrentUser();
-            }
-        },
-
-        async login(email: string, password: string) {
+        // Placeholder functions for future implementation
+        async login(credentials: LoginRequest): Promise<void> {
             this.loading = true;
             this.error = null;
 
             try {
-                const { $api } = useNuxtApp();
-                const response = await $api('/users/login', {
-                    method: 'POST',
-                    body: { email, password }
-                });
+                // Placeholder for API integration
+                // const response = await fetch(`${apiBaseUrl}/api/auth/login`, {...});
+                // const data: AuthResponse = await response.json();
 
-                this.token = response.token;
-                localStorage.setItem('auth_token', response.token);
-
-                await this.fetchCurrentUser();
+                // For now, just set a placeholder message
+                this.error = "Authentication functionality is not yet implemented";
             } catch (error: any) {
-                this.error = error.message || 'Не удалось войти в систему';
-                throw error;
+                this.error = error.message;
             } finally {
                 this.loading = false;
             }
         },
 
-        async register(email: string, password: string) {
+        async register(userData: RegisterRequest): Promise<void> {
             this.loading = true;
             this.error = null;
 
             try {
-                const { $api } = useNuxtApp();
-                const response = await $api('/auth/register', {
-                    method: 'POST',
-                    body: { email, password }
-                });
-
-                this.token = response.token;
-                localStorage.setItem('auth_token', response.token);
-
-                await this.fetchCurrentUser();
+                // Placeholder for API integration
+                this.error = "Registration functionality is not yet implemented";
             } catch (error: any) {
-                this.error = error.message || 'Не удалось зарегистрироваться';
-                throw error;
+                this.error = error.message;
             } finally {
                 this.loading = false;
             }
         },
 
-        async fetchCurrentUser() {
-            if (!this.token) return;
-
-            this.loading = true;
-
-            try {
-                const { $api } = useNuxtApp();
-                this.user = await $api('/users/me');
-            } catch (error: any) {
-                this.error = error.message || 'Не удалось получить данные пользователя';
-                this.logout();
-            } finally {
-                this.loading = false;
-            }
-        },
-
-        logout() {
+        logout(): void {
             this.user = null;
             this.token = null;
-            localStorage.removeItem('auth_token');
+            localStorage.removeItem('auth-token');
         }
     }
 });

@@ -1,14 +1,16 @@
 <template>
 	<div class="flex flex-col min-h-screen">
-		<TheHeader/>
+		<AppHeader/>
 		<main class="flex-grow">
 			<slot/>
 		</main>
-		<TheFooter/>
+		<AppFooter/>
+		<ToastContainer/>
 	</div>
 </template>
 
 <script setup lang="ts">
-import TheHeader from '~/components/common/TheHeader.vue';
-import TheFooter from '~/components/common/TheFooter.vue';
+import ToastContainer from '~/components/common/ToastContainer.vue';
+import AppHeader from '~/components/layout/AppHeader.vue';
+import AppFooter from '~/components/layout/AppFooter.vue';
 </script>

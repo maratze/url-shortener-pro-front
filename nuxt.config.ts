@@ -1,12 +1,28 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ssr: true,
   devtools: { enabled: true },
-  css: ['~/assets/css/tailwind.css'],
+
+  typescript: {
+      strict: true,
+      typeCheck: true
+  },
+
+  css: [
+      '~/assets/css/main.css',
+  ],
 
   modules: [
       '@nuxtjs/tailwindcss',
       '@pinia/nuxt',
+      '@nuxtjs/color-mode',
   ],
+
+  colorMode: {
+      classSuffix: '',
+      preference: 'system', // default theme
+      dataValue: 'theme', // data-theme attribute
+      fallback: 'light'
+  },
 
   app: {
       head: {
@@ -14,21 +30,23 @@ export default defineNuxtConfig({
           meta: [
               { charset: 'utf-8' },
               { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-              { name: 'description', content: 'Профессиональный сервис сокращения URL с аналитикой и расширенной функциональностью' }
+              {
+                  hid: 'description',
+                  name: 'description',
+                  content: 'Shorten your URLs quickly and securely with URL Shortener Pro. Simple, fast, and reliable URL shortening service.'
+              }
           ],
           link: [
-              { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-              { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap' },
-              { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }
+              { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
           ]
       }
   },
 
   runtimeConfig: {
       public: {
-          apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://localhost:7095/api'
+          apiBase: process.env.API_BASE_URL || 'https://localhost:7095'
       }
   },
 
-  compatibilityDate: '2025-03-03'
+  compatibilityDate: '2025-03-04'
 })

@@ -1,23 +1,39 @@
-# Nuxt Minimal Starter
+# URL Shortener Pro Frontend
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A modern URL shortening service built with Nuxt 3, Vue 3, TypeScript, and TailwindCSS.
+
+## Features
+
+- Shorten long URLs with a click
+- Free tier with 30 requests without registration + 30 after registration
+- QR code generation for shortened URLs
+- Tracking of remaining free requests
+- Dark/light mode themes
+- Responsive design with glassmorphism UI elements
+- TypeScript for type safety
+
+## Tech Stack
+
+- **Framework**: Nuxt.js 3
+- **UI Library**: Vue.js 3
+- **Type Checking**: TypeScript
+- **CSS Framework**: TailwindCSS
+- **State Management**: Pinia
+- **Build Tool**: Vite
 
 ## Setup
 
-Make sure to install dependencies:
+Make sure to install the dependencies:
 
 ```bash
 # npm
 npm install
 
-# pnpm
-pnpm install
-
 # yarn
 yarn install
 
-# bun
-bun install
+# pnpm
+pnpm install
 ```
 
 ## Development Server
@@ -28,14 +44,11 @@ Start the development server on `http://localhost:3000`:
 # npm
 npm run dev
 
-# pnpm
-pnpm dev
-
 # yarn
 yarn dev
 
-# bun
-bun run dev
+# pnpm
+pnpm dev
 ```
 
 ## Production
@@ -46,14 +59,11 @@ Build the application for production:
 # npm
 npm run build
 
-# pnpm
-pnpm build
-
 # yarn
 yarn build
 
-# bun
-bun run build
+# pnpm
+pnpm build
 ```
 
 Locally preview production build:
@@ -62,14 +72,40 @@ Locally preview production build:
 # npm
 npm run preview
 
-# pnpm
-pnpm preview
-
 # yarn
 yarn preview
 
-# bun
-bun run preview
+# pnpm
+pnpm preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Environment Variables
+
+Create a `.env` file based on the `.env.example` file:
+
+- `API_BASE_URL`: URL of the backend API
+- `BASE_URL`: Base URL for the frontend application
+
+## Project Structure
+
+```
+url-shortener-pro/
+├── assets/               # Static resources (images, fonts)
+├── components/           # Vue components
+│   ├── common/           # Common components (buttons, inputs)
+│   ├── layout/           # Layout components (Header, Footer)
+│   └── home/             # Home page components
+├── composables/          # Vue composables
+├── layouts/              # Page layouts
+├── pages/                # Application pages
+├── plugins/              # Nuxt plugins
+├── public/               # Public files
+├── server/               # Server API endpoints
+├── stores/               # Pinia stores
+├── types/                # TypeScript types
+└── utils/                # Utility functions
+```
+
+## License
+
+[MIT License](LICENSE)

@@ -1,108 +1,78 @@
 import { defineStore } from 'pinia';
+import { shortenUrl, getRemainingRequests } from '~/utils/api';
+import type { ShortenResponse } from '~/types/api';
+
+interface UrlState {
+    history: ShortenResponse[];
+    remainingFreeRequests: number;
+    error: string | null;
+}
 
 export const useUrlStore = defineStore('url', {
-    state: () => ({
-        urls: [],
-        currentUrl: null,
-        loading: false,
-        error: null,
-        totalItems: 0,
-        totalPages: 1
+    state: (): UrlState => ({
+        history: [],
+        remainingFreeRequests: 30, // Default value
+        error: null
     }),
 
     actions: {
-        async createShortUrl(urlData) {
+        async shortenUrl(originalUrl: string, customAlias?: string): Promise<ShortenResponse> {
             try {
-                this.loading = true;
-                this.error = null;
+                const response = await shortenUrl(originalUrl, customAlias);
 
-                const { $api } = useNuxtApp();
-                const response = await $api('/urls', {
-                    method: 'POST',
-                    body: urlData
-                });
+                // Update remaining requests count
+                this.remainingFreeRequests = response.remainingFreeRequests;
+
+                // Add to history
+                this.history.unshift(response);
+
+                // Limit history to last 10 items
+                if (this.history.length > 10) {
+                    this.history = this.history.slice(0, 10);
+                }
+
+                // Save to localStorage
+                this.saveToLocalStorage();
 
                 return response;
-            } catch (err) {
-                this.error = err.message || 'Произошла ошибка при создании короткого URL';
-                throw err;
-            } finally {
-                this.loading = false;
+            } catch (error: any) {
+                this.error = error.message;
+                throw error;
             }
         },
 
-        async fetchUrls(page = 1, pageSize = 10, sortBy = 'createdAt', sortOrder = 'desc') {
+        async fetchRemainingRequests(): Promise<void> {
             try {
-                this.loading = true;
-                this.error = null;
-
-                const { $api } = useNuxtApp();
-                const response = await $api(`/urls?page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortOrder}`);
-
-                this.urls = response.items || [];
-                this.totalItems = response.totalItems || 0;
-                this.totalPages = response.totalPages || 1;
-
-                return response;
-            } catch (err) {
-                this.error = err.message || 'Произошла ошибка при загрузке URL';
-                throw err;
-            } finally {
-                this.loading = false;
+                this.remainingFreeRequests = await getRemainingRequests();
+            } catch (error: any) {
+                this.error = error.message;
+                console.error('Failed to fetch remaining requests:', error);
             }
         },
 
-        async getUrlByShortCode(id) {
+        saveToLocalStorage(): void {
             try {
-                this.loading = true;
-                this.error = null;
-
-                const { $api } = useNuxtApp();
-                const response = await $api(`/urls/${id}`);
-
-                this.currentUrl = response;
-                return response;
-            } catch (err) {
-                this.error = err.message || 'Произошла ошибка при загрузке URL';
-                throw err;
-            } finally {
-                this.loading = false;
+                localStorage.setItem('url-shortener-history', JSON.stringify(this.history));
+                localStorage.setItem('url-shortener-remaining', this.remainingFreeRequests.toString());
+            } catch (error) {
+                console.error('Failed to save to localStorage:', error);
             }
         },
 
-        async getUrlStatistics(id) {
+        loadFromLocalStorage(): void {
             try {
-                this.loading = true;
-                this.error = null;
+                const history = localStorage.getItem('url-shortener-history');
+                const remaining = localStorage.getItem('url-shortener-remaining');
 
-                const { $api } = useNuxtApp();
-                const response = await $api(`/urls/${id}/statistics`);
+                if (history) {
+                    this.history = JSON.parse(history);
+                }
 
-                return response;
-            } catch (err) {
-                this.error = err.message || 'Произошла ошибка при загрузке статистики URL';
-                throw err;
-            } finally {
-                this.loading = false;
-            }
-        },
-
-        async deleteUrl(id) {
-            try {
-                this.loading = true;
-                this.error = null;
-
-                const { $api } = useNuxtApp();
-                await $api(`/urls/${id}`, {
-                    method: 'DELETE'
-                });
-
-                return true;
-            } catch (err) {
-                this.error = err.message || 'Произошла ошибка при удалении URL';
-                throw err;
-            } finally {
-                this.loading = false;
+                if (remaining) {
+                    this.remainingFreeRequests = parseInt(remaining, 10);
+                }
+            } catch (error) {
+                console.error('Failed to load from localStorage:', error);
             }
         }
     }

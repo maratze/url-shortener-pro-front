@@ -1,21 +1,13 @@
-import { useAuthStore } from '~/stores/auth';
+export default defineNuxtRouteMiddleware((to, from) => {
+    // Get the authentication status from the auth store
+    const authStore = useAuthStore();
 
-export default defineNuxtRouteMiddleware(async (to) => {
-    // Выполняется только на стороне клиента
-    if (process.client) {
-        const authStore = useAuthStore();
-
-        // Инициализация состояния из localStorage
-        if (!authStore.isAuthenticated) {
-            await authStore.initialize();
-        }
-
-        // Если пользователь не авторизован, перенаправляем на страницу логина
-        if (!authStore.isAuthenticated) {
-            return navigateTo({
-                path: '/login',
-                query: { redirect: to.fullPath }
-            });
-        }
+    // If the user is not authenticated and is trying to access a protected route
+    if (!authStore.isAuthenticated) {
+        // Redirect to the login page with a redirect back to the original route
+        return navigateTo({
+            path: '/login',
+            query: { redirect: to.fullPath }
+        });
     }
 });

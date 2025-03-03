@@ -6,6 +6,10 @@
 	</div>
 </template>
 
-<script setup>
-// Здесь можно добавить глобальную логику
+<script setup lang="ts">
+useHead({
+	htmlAttrs: {
+		lang: 'en'
+	}
+})
 </script>
