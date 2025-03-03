@@ -40,7 +40,7 @@ export const getRemainingRequests = async (): Promise<number> => {
     try {
         const uniqueId = getOrCreateUniqueId();
 
-        const response = await fetch(`${apiBaseUrl}/api/url/remaining-requests`, {
+        const response = await fetch(`${apiBaseUrl}/api/urls/remaining-requests`, {
             headers: {
                 'X-Client-Id': uniqueId
             }
