@@ -9,6 +9,7 @@ export default defineNuxtConfig({
 
   css: [
       '~/assets/css/main.css',
+      '~/assets/css/glassmorphism.css',
   ],
 
   modules: [
@@ -26,14 +27,14 @@ export default defineNuxtConfig({
 
   app: {
       head: {
-          title: 'URL Shortener Pro',
+          title: 'TinyLink - Shorten Your URLs',
           meta: [
               { charset: 'utf-8' },
               { name: 'viewport', content: 'width=device-width, initial-scale=1' },
               {
                   hid: 'description',
                   name: 'description',
-                  content: 'Shorten your URLs quickly and securely with URL Shortener Pro. Simple, fast, and reliable URL shortening service.'
+                  content: 'Shorten your URLs quickly and securely with TinyLink. Simple, fast, and reliable URL shortening service.'
               }
           ],
           link: [

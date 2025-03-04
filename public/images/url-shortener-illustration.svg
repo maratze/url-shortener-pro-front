@@ -1,0 +1,75 @@
+<svg width="630" height="300" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+    <!-- Определения фильтров для теней -->
+    <defs>
+        <filter id="shadow" x="-5%" y="-5%" width="110%" height="120%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.1"/>
+        </filter>
+    </defs>
+
+    <!-- Длинный URL - браузерная строка в стиле macOS -->
+    <g filter="url(#shadow)">
+        <!-- Фоновая часть окна браузера с корректным скруглением и обводкой -->
+        <rect x="40.5" y="40.5" width="339" height="39" rx="7.5" fill="#FFFFFF" class="theme-window" />
+
+        <!-- Верхняя панель с увеличенной высотой -->
+        <path d="M40.5,52 h339 v-4.5 a7.5,7.5 0 0,0 -7.5,-7.5 h-324 a7.5,7.5 0 0,0 -7.5,7.5 z" fill="#F1F5F9" class="theme-header" />
+
+        <!-- Рамка окна с корректным скруглением -->
+        <rect x="40.5" y="40.5" width="339" height="39" rx="7.5" fill="none" stroke="#E2E8F0" stroke-width="1" class="theme-border" />
+
+        <!-- Кнопки управления окном в стиле macOS -->
+        <circle cx="52" cy="46" r="3.5" fill="#FF5F56"/>
+        <circle cx="52" cy="46" r="3" fill="#FF5F56" stroke="#E64A40" stroke-width="0.5" opacity="0.9"/>
+
+        <circle cx="64" cy="46" r="3.5" fill="#FFBD2E"/>
+        <circle cx="64" cy="46" r="3" fill="#FFBD2E" stroke="#DEA123" stroke-width="0.5" opacity="0.9"/>
+
+        <circle cx="76" cy="46" r="3.5" fill="#27C93F"/>
+        <circle cx="76" cy="46" r="3" fill="#27C93F" stroke="#1AAB29" stroke-width="0.5" opacity="0.9"/>
+
+        <!-- URL-адрес -->
+        <circle cx="55" cy="65" r="4" fill="#6366F1" class="theme-accent" opacity="0.8"/>
+        <text x="65" y="70" font-family="Arial, sans-serif" font-size="13" fill="#64748B" class="theme-text-light">https://</text>
+        <text x="107" y="70" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#334155" class="theme-text">example.com/long/path/to/document</text>
+    </g>
+
+    <!-- Полностью переписанная стрелка без темного пятна -->
+    <g>
+        <!-- Вертикальная линия стрелки -->
+        <path d="M210,100 L210,120" stroke="#6366F1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Горизонтальные линии указателя стрелки -->
+        <path d="M202,112 L210,120 L218,112" stroke="#6366F1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Короткий URL - результат в стиле macOS -->
+    <g filter="url(#shadow)">
+        <!-- Фоновая часть окна с корректным скруглением -->
+        <rect x="130.5" y="130.5" width="159" height="39" rx="7.5" fill="#FFFFFF" class="theme-window" />
+
+        <!-- Верхняя панель с увеличенной высотой -->
+        <path d="M130.5,142 h159 v-4.5 a7.5,7.5 0 0,0 -7.5,-7.5 h-144 a7.5,7.5 0 0,0 -7.5,7.5 z" fill="#F1F5F9" class="theme-header" />
+
+        <!-- Рамка окна с корректным скруглением -->
+        <rect x="130.5" y="130.5" width="159" height="39" rx="7.5" fill="none" stroke="#E2E8F0" stroke-width="1" class="theme-border" />
+
+        <!-- Кнопки управления окном в стиле macOS для короткого URL -->
+        <circle cx="142" cy="136" r="3.5" fill="#FF5F56"/>
+        <circle cx="142" cy="136" r="3" fill="#FF5F56" stroke="#E64A40" stroke-width="0.5" opacity="0.9"/>
+
+        <circle cx="154" cy="136" r="3.5" fill="#FFBD2E"/>
+        <circle cx="154" cy="136" r="3" fill="#FFBD2E" stroke="#DEA123" stroke-width="0.5" opacity="0.9"/>
+
+        <circle cx="166" cy="136" r="3.5" fill="#27C93F"/>
+        <circle cx="166" cy="136" r="3" fill="#27C93F" stroke="#1AAB29" stroke-width="0.5" opacity="0.9"/>
+
+        <!-- Иконка безопасности и короткий URL с https:// -->
+        <circle cx="145" cy="155" r="4" fill="#10B981" class="theme-success" opacity="0.8"/>
+        <text x="155" y="160" font-family="Arial, sans-serif" font-size="11" fill="#64748B" class="theme-text-light">https://</text>
+        <text x="192" y="160" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#334155" class="theme-text">short.ly/a7c9</text>
+    </g>
+
+    <!-- Декоративные элементы -->
+    <circle cx="370" cy="65" r="4" fill="#6366F1" class="theme-accent" opacity="0.7"/>
+    <circle cx="360" cy="65" r="4" fill="#6366F1" class="theme-accent" opacity="0.5"/>
+    <circle cx="350" cy="65" r="4" fill="#6366F1" class="theme-accent" opacity="0.3"/>
+</svg>

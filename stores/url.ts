@@ -1,79 +1,151 @@
 import { defineStore } from 'pinia';
-import { shortenUrl, getRemainingRequests } from '~/utils/api';
-import type { ShortenResponse } from '~/types/api';
+import { useToastStore } from '~/stores/toast';
 
-interface UrlState {
-    history: ShortenResponse[];
-    remainingFreeRequests: number;
-    error: string | null;
+interface UrlData {
+    id: string;
+    originalUrl: string;
+    shortUrl: string;
+    createdAt: string;
+    clickCount?: number;
+}
+
+interface ShortenUrlParams {
+    url: string;
+    alias?: string;
+    expiresAt?: string | null;
 }
 
 export const useUrlStore = defineStore('url', {
-    state: (): UrlState => ({
-        history: [],
-        remainingFreeRequests: 30, // Default value
-        error: null
+    state: () => ({
+        urls: [] as UrlData[],
+        loading: false,
+        remainingFreeRequests: 30,
     }),
 
     actions: {
-        async shortenUrl(originalUrl: string, customAlias?: string): Promise<ShortenResponse> {
+        async shortenUrl(params: ShortenUrlParams): Promise<UrlData> {
+            const toastStore = useToastStore();
+            this.loading = true;
+
             try {
-                const response = await shortenUrl(originalUrl, customAlias);
+                // In a real application, this would be an API call
+                // For now, we're simulating it
+                await new Promise((resolve) => setTimeout(resolve, 800));
 
-                // Update remaining requests count
-                this.remainingFreeRequests = response.remainingFreeRequests;
-
-                // Add to history
-                this.history.unshift(response);
-
-                // Limit history to last 10 items
-                if (this.history.length > 10) {
-                    this.history = this.history.slice(0, 10);
+                // Check if URL is valid
+                try {
+                    new URL(params.url);
+                } catch (e) {
+                    throw new Error('Please enter a valid URL');
                 }
 
-                // Save to localStorage
+                // Check alias if provided
+                if (params.alias && !/^[a-zA-Z0-9-_]+$/.test(params.alias)) {
+                    throw new Error('Alias can only contain letters, numbers, hyphens and underscores');
+                }
+
+                // Check if we have requests left
+                if (this.remainingFreeRequests <= 0) {
+                    throw new Error('You have used all your free shortens for today. Please upgrade your plan for unlimited shortens.');
+                }
+
+                // Generate a short URL
+                const id = Math.random().toString(36).substring(2, 10);
+                const alias = params.alias || id;
+                const shortUrl = `https://short.link/${alias}`;
+
+                // Check if alias already exists in our urls
+                if (params.alias && this.urls.some(url => url.shortUrl === shortUrl)) {
+                    throw new Error('This custom alias is already taken. Please choose another one.');
+                }
+
+                const newUrl: UrlData = {
+                    id,
+                    originalUrl: params.url,
+                    shortUrl,
+                    createdAt: new Date().toISOString(),
+                    clickCount: 0,
+                };
+
+                // Decrease remaining free requests
+                this.remainingFreeRequests--;
+
+                // Add to our list of URLs
+                this.urls.unshift(newUrl);
+
+                // Save to local storage
                 this.saveToLocalStorage();
 
-                return response;
+                // Success toast
+                toastStore.success('URL shortened successfully');
+
+                return newUrl;
             } catch (error: any) {
-                this.error = error.message;
+                toastStore.error(error?.message || 'Failed to shorten URL');
                 throw error;
+            } finally {
+                this.loading = false;
             }
         },
 
-        async fetchRemainingRequests(): Promise<void> {
-            try {
-                this.remainingFreeRequests = await getRemainingRequests();
-            } catch (error: any) {
-                this.error = error.message;
-                console.error('Failed to fetch remaining requests:', error);
-            }
-        },
+        loadFromLocalStorage() {
+            if (process.client) {
+                try {
+                    const savedUrls = localStorage.getItem('shortened-urls');
+                    if (savedUrls) {
+                        this.urls = JSON.parse(savedUrls);
+                    }
 
-        saveToLocalStorage(): void {
-            try {
-                localStorage.setItem('url-shortener-history', JSON.stringify(this.history));
-                localStorage.setItem('url-shortener-remaining', this.remainingFreeRequests.toString());
-            } catch (error) {
-                console.error('Failed to save to localStorage:', error);
-            }
-        },
+                    const savedRequests = localStorage.getItem('remaining-requests');
+                    if (savedRequests) {
+                        this.remainingFreeRequests = parseInt(savedRequests, 10);
 
-        loadFromLocalStorage(): void {
-            try {
-                const history = localStorage.getItem('url-shortener-history');
-                const remaining = localStorage.getItem('url-shortener-remaining');
+                        // Reset remaining requests if it's a new day
+                        const lastResetDate = localStorage.getItem('last-reset-date');
+                        const today = new Date().toDateString();
 
-                if (history) {
-                    this.history = JSON.parse(history);
+                        if (!lastResetDate || lastResetDate !== today) {
+                            this.remainingFreeRequests = 30;
+                            localStorage.setItem('last-reset-date', today);
+                            localStorage.setItem('remaining-requests', '30');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading from localStorage:', error);
                 }
-
-                if (remaining) {
-                    this.remainingFreeRequests = parseInt(remaining, 10);
-                }
-            } catch (error) {
-                console.error('Failed to load from localStorage:', error);
             }
+        },
+
+        saveToLocalStorage() {
+            if (process.client) {
+                try {
+                    localStorage.setItem('shortened-urls', JSON.stringify(this.urls));
+                    localStorage.setItem('remaining-requests', this.remainingFreeRequests.toString());
+                } catch (error) {
+                    console.error('Error saving to localStorage:', error);
+                }
+            }
+        },
+
+        async fetchRemainingRequests(): Promise<number> {
+            // In a real app, this would be an API call
+            // For demo purposes, we're just using the local value
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // For demo: Reset counter to 30 every time this is called
+            // In a real app, this would fetch the actual remaining count from the server
+            if (process.client) {
+                const lastResetDate = localStorage.getItem('last-reset-date');
+                const today = new Date().toDateString();
+
+                if (!lastResetDate || lastResetDate !== today) {
+                    this.remainingFreeRequests = 30;
+                    localStorage.setItem('last-reset-date', today);
+                    localStorage.setItem('remaining-requests', '30');
+                }
+            }
+
+            return this.remainingFreeRequests;
         }
     }
 });

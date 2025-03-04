@@ -11,7 +11,7 @@ export const shortenUrl = async (originalUrl: string, customAlias?: string) => {
 
         const uniqueId = getOrCreateUniqueId();
 
-        const response = await fetch(`${apiBaseUrl}/api/url`, {
+        const response = await fetch(`${apiBaseUrl}/api/urls`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
