@@ -20,6 +20,7 @@ export const useUrlStore = defineStore('url', {
         urls: [] as UrlData[],
         loading: false,
         remainingFreeRequests: 30,
+        totalFreeRequests: 30
     }),
 
     actions: {
@@ -146,6 +147,10 @@ export const useUrlStore = defineStore('url', {
             }
 
             return this.remainingFreeRequests;
-        }
+        },
+
+        updateRemainingRequests(count: number) {
+            this.remainingFreeRequests = count;
+        },
     }
 });

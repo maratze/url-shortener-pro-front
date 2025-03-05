@@ -1,124 +1,219 @@
 <template>
-	<div class="request-counter">
-		<div v-if="loading" class="animate-pulse flex space-x-2">
-			<div class="h-2 w-24 bg-slate-200 dark:bg-slate-700 rounded"></div>
-		</div>
-		<template v-else-if="remainingRequests !== null">
-			<div class="flex items-center">
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" :class="limitClass" viewBox="0 0 20 20" fill="currentColor">
-					<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-				</svg>
-				<span class="text-sm" :class="limitClass">
-          {{ remainingRequests }} free shortens remaining
-        </span>
+	<div class="request-counter-wrapper">
+		<!-- Счетчик с прогресс-баром -->
+		<div class="counter-container">
+			<div class="flex items-center justify-between w-full">
+				<div class="flex items-center">
+					<span class="counter-text">{{ remainingRequests }} free shortens remaining</span>
 
-				<div class="tooltip-container">
-					<button class="info-icon ml-1" @mouseenter="showTooltip = true" @mouseleave="showTooltip = false">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
-							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-						</svg>
-					</button>
+					<!-- Иконка с улучшенной подсказкой -->
+					<div class="relative ml-1.5">
+						<button
+							@click="toggleTooltip"
+							type="button"
+							class="info-icon-button"
+							aria-label="More information"
+						>
+							<svg xmlns="http://www.w3.org/2000/svg" class="info-icon" viewBox="0 0 20 20" fill="currentColor">
+								<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+							</svg>
+						</button>
 
-					<div v-show="showTooltip" class="tooltip-content glass-tooltip">
-						<p class="text-xs">Free accounts are limited to 30 shortened URLs per day.</p>
-						<p class="text-xs mt-1">Need more? <a href="/pricing" class="text-blue-500 hover:underline">Upgrade your account</a>.</p>
+						<!-- Улучшенная компактная подсказка с обновленным позиционированием -->
+						<Transition name="tooltip">
+							<div
+								v-if="showTooltip"
+								class="tooltip-container"
+								@mouseleave="startCloseTimer"
+								@mouseenter="clearCloseTimer"
+								ref="tooltip"
+							>
+								<p class="tooltip-text">Free accounts are limited to {{ totalFreeRequests }} shortened URLs per month</p>
+								<div class="tooltip-divider"></div>
+								<NuxtLink to="/pricing" class="tooltip-link">
+									Upgrade account
+								</NuxtLink>
+								<div class="tooltip-arrow"></div>
+							</div>
+						</Transition>
 					</div>
 				</div>
+
+				<!-- Визуальный индикатор использования -->
+				<NuxtLink to="/pricing" class="upgrade-link" v-if="usageRatio >= 0.7">
+					Upgrade
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+						<path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+					</svg>
+				</NuxtLink>
 			</div>
-		</template>
+
+			<!-- Прогресс-бар -->
+			<div class="progress-bar-container">
+				<div
+					class="progress-bar"
+					:class="progressBarClass"
+					:style="{ width: `${usagePercentage}%` }"
+				></div>
+			</div>
+		</div>
 	</div>
 </template>
 
-<script setup lang="ts">
-import { computed, ref, onMounted } from 'vue';
+<script setup>
+import { ref, computed, onBeforeUnmount, onMounted } from 'vue';
 import { useUrlStore } from '~/stores/url';
 
+// Получаем хранилище URL
 const urlStore = useUrlStore();
-const loading = ref(true);
-const showTooltip = ref(false);
+
+// Общее количество бесплатных запросов в месяц (из конфигурации или констант)
+const totalFreeRequests = computed(() => urlStore.totalFreeRequests || 30); // Используем значение из стора или дефолтное
+
+// Получаем оставшееся количество бесплатных запросов
 const remainingRequests = computed(() => urlStore.remainingFreeRequests);
 
-const limitClass = computed(() => {
-	if (remainingRequests.value === null) return '';
-	if (remainingRequests.value <= 5) return 'text-red-600 dark:text-red-400';
-	if (remainingRequests.value <= 10) return 'text-yellow-600 dark:text-yellow-400';
-	return 'text-slate-600 dark:text-slate-400';
+const showTooltip = ref(false);
+const tooltip = ref(null);
+const tooltipCloseTimer = ref(null);
+
+// Расчет процента использования
+const usageRatio = computed(() => {
+	return (totalFreeRequests.value - remainingRequests.value) / totalFreeRequests.value;
 });
 
-onMounted(async () => {
-	loading.value = true;
-	try {
-		await urlStore.fetchRemainingRequests();
-	} catch (error) {
-		console.error('Failed to fetch remaining requests:', error);
-	} finally {
-		loading.value = false;
+const usagePercentage = computed(() => {
+	return Math.min(100, usageRatio.value * 100);
+});
+
+// Класс для прогресс-бара в зависимости от использования
+const progressBarClass = computed(() => {
+	if (usageRatio.value >= 0.9) return 'progress-high';
+	if (usageRatio.value >= 0.7) return 'progress-medium';
+	return 'progress-low';
+});
+
+// Управление подсказкой
+const toggleTooltip = () => {
+	showTooltip.value = !showTooltip.value;
+	if (showTooltip.value) {
+		clearCloseTimer();
 	}
+};
+
+const clearCloseTimer = () => {
+	if (tooltipCloseTimer.value) {
+		clearTimeout(tooltipCloseTimer.value);
+		tooltipCloseTimer.value = null;
+	}
+};
+
+const startCloseTimer = () => {
+	tooltipCloseTimer.value = setTimeout(() => {
+		showTooltip.value = false;
+	}, 500); // Задержка перед закрытием при уходе мыши
+};
+
+// Закрытие подсказки при клике вне её
+onMounted(() => {
+	// Альтернатива без vueuse
+	const handleClickOutside = (event) => {
+		if (tooltip.value && !tooltip.value.contains(event.target) &&
+			!event.target.closest('.info-icon-button')) {
+			showTooltip.value = false;
+		}
+	};
+
+	document.addEventListener('click', handleClickOutside);
+
+	onBeforeUnmount(() => {
+		document.removeEventListener('click', handleClickOutside);
+		clearCloseTimer();
+	});
 });
 </script>
 
 <style scoped>
-.request-counter {
-	position: relative;
+.request-counter-wrapper {
+	@apply py-1;
 }
 
-.tooltip-container {
-	position: relative;
-	display: inline-block;
+.counter-container {
+	@apply w-full;
+}
+
+.counter-text {
+	@apply text-sm text-slate-700 dark:text-slate-300 font-medium;
+}
+
+.info-icon-button {
+	@apply inline-flex items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700 w-5 h-5 text-slate-500 dark:text-slate-400 hover:bg-slate-300 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-slate-900 transition-colors duration-200;
 }
 
 .info-icon {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 50%;
-	transition: all 0.2s;
+	@apply h-3.5 w-3.5;
 }
 
-.info-icon:hover {
-	background-color: rgba(148, 163, 184, 0.1);
-}
-
-.tooltip-content {
-	position: absolute;
-	bottom: calc(100% + 10px);
-	left: 50%;
+/* Обновленный контейнер подсказки с увеличенной шириной */
+.tooltip-container {
+	@apply absolute z-50 bottom-full left-1/2 w-60 p-3 bg-white dark:bg-slate-800 rounded-lg shadow-xl mb-2;
 	transform: translateX(-50%);
-	width: max-content;
-	max-width: 250px;
-	padding: 8px 12px;
-	z-index: 10;
+	filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
 }
 
-.glass-tooltip {
-	background: rgba(255, 255, 255, 0.9);
-	backdrop-filter: blur(12px);
-	-webkit-backdrop-filter: blur(12px);
-	border: 1px solid rgba(255, 255, 255, 0.3);
-	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-	border-radius: 8px;
-	color: #334155;
+/* Увеличенный размер текста */
+.tooltip-text {
+	@apply text-slate-700 dark:text-slate-300 text-sm;
 }
 
-.dark .glass-tooltip {
-	background: rgba(30, 41, 59, 0.9);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-	color: #e2e8f0;
+.tooltip-divider {
+	@apply my-1.5 border-t border-slate-200 dark:border-slate-700;
 }
 
-.tooltip-content::after {
-	content: '';
-	position: absolute;
-	top: 100%;
-	left: 50%;
-	transform: translateX(-50%);
-	border-width: 5px;
-	border-style: solid;
-	border-color: rgba(255, 255, 255, 0.9) transparent transparent transparent;
+/* Увеличенный размер ссылки */
+.tooltip-link {
+	@apply text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium text-sm block;
 }
 
-.dark .tooltip-content::after {
-	border-color: rgba(30, 41, 59, 0.9) transparent transparent transparent;
+/* Исправленная стрелка подсказки - частично внутри контейнера */
+.tooltip-arrow {
+	@apply absolute left-1/2 w-2.5 h-2.5 bg-white dark:bg-slate-800 transform -translate-x-1/2 rotate-45;
+	top: calc(100% - 4px); /* Стрелка теперь частично внутри подсказки */
+}
+
+.progress-bar-container {
+	@apply w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 overflow-hidden;
+}
+
+.progress-bar {
+	@apply h-full rounded-full transition-all duration-500;
+}
+
+.progress-low {
+	@apply bg-green-500 dark:bg-green-600;
+}
+
+.progress-medium {
+	@apply bg-amber-500 dark:bg-amber-600;
+}
+
+.progress-high {
+	@apply bg-red-500 dark:bg-red-600;
+}
+
+.upgrade-link {
+	@apply text-xs text-indigo-600 dark:text-indigo-400 font-medium flex items-center hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors;
+}
+
+/* Обновленная анимация для тултипа */
+.tooltip-enter-active,
+.tooltip-leave-active {
+	transition: opacity 0.2s, transform 0.2s;
+}
+
+.tooltip-enter-from,
+.tooltip-leave-to {
+	opacity: 0;
+	transform: translateX(-50%) translateY(4px);
 }
 </style>

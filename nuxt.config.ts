@@ -10,6 +10,7 @@ export default defineNuxtConfig({
   css: [
       '~/assets/css/main.css',
       '~/assets/css/glassmorphism.css',
+      '~/assets/css/form-styles.css',
   ],
 
   modules: [
