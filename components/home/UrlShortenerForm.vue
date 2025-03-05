@@ -60,7 +60,7 @@
 						v-model="showAliasInput"
 						class="form-checkbox h-4 w-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 dark:border-slate-600 dark:focus:ring-blue-500"
 					/>
-					<label for="customAlias" class="ml-2 text-sm text-slate-600 dark:text-slate-400">
+					<label for="customAlias" class="ml-2 mb-0 text-sm text-slate-600 dark:text-slate-400">
 						Custom alias
 					</label>
 				</div>
