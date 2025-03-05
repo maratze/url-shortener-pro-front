@@ -43,7 +43,7 @@
 									</a>
 									<button
 										@click="copyToClipboard(url.shortUrl)"
-										class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-md transition-colors flex-shrink-0 ml-2"
+										class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-md transition-colors flex-shrink-0 ml-2 border border-slate-200"
 									>
                     <span v-if="copied === url.id" class="text-green-500">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
