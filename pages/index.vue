@@ -3,22 +3,30 @@
 		<!-- Animated background elements -->
 		<div class="fixed inset-0 overflow-hidden -z-10">
 			<!-- Gradient background -->
-			<div class="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950"></div>
+			<div
+				class="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950"></div>
 
 			<!-- Colorful blurred shapes -->
-			<div class="absolute top-[5%] left-[10%] w-[500px] h-[500px] rounded-full bg-blue-400/30 dark:bg-blue-600/20 blur-[80px] animate-float"></div>
-			<div class="absolute bottom-[15%] right-[5%] w-[400px] h-[400px] rounded-full bg-purple-400/20 dark:bg-purple-600/20 blur-[100px] animate-float-delay"></div>
-			<div class="absolute top-[40%] right-[20%] w-[300px] h-[300px] rounded-full bg-green-400/10 dark:bg-green-600/10 blur-[70px] animate-float-slow"></div>
+			<div
+				class="absolute top-[5%] left-[10%] w-[500px] h-[500px] rounded-full bg-blue-400/30 dark:bg-blue-600/20 blur-[80px] animate-float"></div>
+			<div
+				class="absolute bottom-[15%] right-[5%] w-[400px] h-[400px] rounded-full bg-purple-400/20 dark:bg-purple-600/20 blur-[100px] animate-float-delay"></div>
+			<div
+				class="absolute top-[40%] right-[20%] w-[300px] h-[300px] rounded-full bg-green-400/10 dark:bg-green-600/10 blur-[70px] animate-float-slow"></div>
 		</div>
 
 		<!-- Hero section - на полную высоту -->
 		<section class="relative min-h-[calc(100vh-74px)] flex items-center">
-			<div class="container mx-auto px-4">
+			<div class="container mx-auto px-4 py-24">
 				<!-- Заголовок и описание по центру -->
 				<div class="text-center max-w-4xl mx-auto mb-10 animate-fade-in">
 					<h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-slate-800 dark:text-white leading-tight">
-						<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">Simplify</span> your links,
-						<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">amplify</span> your reach
+						<span
+							class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">Simplify</span>
+						your links,
+						<span
+							class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">amplify</span>
+						your reach
 					</h1>
 					<p class="text-lg md:text-md text-slate-600 dark:text-slate-300 mb-10 animation-delay-200">
 						Transform long, complex URLs into short, memorable links that are easy to share
@@ -32,19 +40,17 @@
 						<!-- Shine effect -->
 						<div class="shine-effect"></div>
 
-						<UrlShortenerForm />
-						<RequestCounter class="mt-3" />
+						<UrlShortenerForm/>
+						<RequestCounter class="mt-3"/>
 					</div>
 				</div>
 			</div>
 		</section>
 
 		<!-- Recent URLs section -->
-		<section class="py-16 px-4 relative">
-			<div class="container mx-auto max-w-7xl">
-				<div class="glass-panel">
-					<RecentUrls />
-				</div>
+		<section class="relative">
+			<div class="glass-panel py-24">
+				<RecentUrls/>
 			</div>
 		</section>
 
@@ -53,10 +59,13 @@
 			<div class="container mx-auto max-w-7xl">
 				<div class="text-center max-w-3xl mx-auto mb-16">
 					<h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-800 dark:text-white">
-						Why Choose <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">URL Shortener Pro</span>
+						Why Choose
+						<span
+							class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">TinyLink</span>
 					</h2>
 					<p class="text-lg text-slate-600 dark:text-slate-300">
-						Our platform combines simplicity with powerful features, giving you everything you need for effective link management
+						Our platform combines simplicity with powerful features, giving you everything you need for
+						effective link management
 					</p>
 				</div>
 
@@ -117,7 +126,8 @@
 			<div class="container mx-auto max-w-7xl">
 				<div class="glass-panel">
 					<div class="text-center max-w-3xl mx-auto mb-12">
-						<h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-800 dark:text-white">Trusted by thousands worldwide</h2>
+						<h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-800 dark:text-white">Trusted by
+							thousands worldwide</h2>
 						<p class="text-lg text-slate-600 dark:text-slate-300">
 							Join our growing community of users who rely on URL Shortener Pro every day
 						</p>
@@ -127,8 +137,10 @@
 						<!-- Stat 1 -->
 						<div class="stat-card">
 							<div class="relative z-10">
-								<div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
-									<CountUp :to="5" :duration="3" />M+
+								<div
+									class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
+									<CountUp :to="5" :duration="3"/>
+									M+
 								</div>
 								<div class="text-lg font-medium text-slate-700 dark:text-slate-300">URLs Shortened</div>
 							</div>
@@ -137,8 +149,10 @@
 						<!-- Stat 2 -->
 						<div class="stat-card">
 							<div class="relative z-10">
-								<div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
-									<CountUp :to="99.9" :duration="3" :decimals="1" />%
+								<div
+									class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
+									<CountUp :to="99.9" :duration="3" :decimals="1"/>
+									%
 								</div>
 								<div class="text-lg font-medium text-slate-700 dark:text-slate-300">Uptime</div>
 							</div>
@@ -147,8 +161,10 @@
 						<!-- Stat 3 -->
 						<div class="stat-card">
 							<div class="relative z-10">
-								<div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
-									<CountUp :to="50" :duration="3" />K+
+								<div
+									class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
+									<CountUp :to="50" :duration="3"/>
+									K+
 								</div>
 								<div class="text-lg font-medium text-slate-700 dark:text-slate-300">Active Users</div>
 							</div>
@@ -157,8 +173,10 @@
 						<!-- Stat 4 -->
 						<div class="stat-card">
 							<div class="relative z-10">
-								<div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
-									<CountUp :to="200" :duration="3" />M+
+								<div
+									class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
+									<CountUp :to="200" :duration="3"/>
+									M+
 								</div>
 								<div class="text-lg font-medium text-slate-700 dark:text-slate-300">Monthly Clicks</div>
 							</div>
@@ -214,14 +232,15 @@
 			<div class="container mx-auto max-w-7xl">
 				<div class="glass-panel">
 					<div class="text-center max-w-3xl mx-auto mb-12">
-						<h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-800 dark:text-white">Frequently Asked Questions</h2>
+						<h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-800 dark:text-white">Frequently Asked
+							Questions</h2>
 						<p class="text-lg text-slate-600 dark:text-slate-300">
 							Everything you need to know about our URL shortening service
 						</p>
 					</div>
 
 					<div class="max-w-3xl mx-auto">
-						<FaqAccordion />
+						<FaqAccordion/>
 					</div>
 				</div>
 			</div>
@@ -234,7 +253,8 @@
 					<!-- Decorative elements -->
 					<div class="absolute top-0 left-0 w-full h-full">
 						<div class="absolute top-[10%] left-[10%] w-32 h-32 bg-blue-400/20 rounded-full blur-xl"></div>
-						<div class="absolute bottom-[10%] right-[10%] w-40 h-40 bg-purple-400/20 rounded-full blur-xl"></div>
+						<div
+							class="absolute bottom-[10%] right-[10%] w-40 h-40 bg-purple-400/20 rounded-full blur-xl"></div>
 					</div>
 
 					<div class="relative z-10 text-center py-12 px-6">
@@ -281,7 +301,10 @@ onMounted(async () => {
 useHead({
 	title: 'TinyLink - Make Your URLs Shorter',
 	meta: [
-		{ name: 'description', content: 'Shorten your URLs quickly and securely with TinyLink. Simple, fast, and reliable URL shortening service.' },
+		{
+			name: 'description',
+			content: 'Shorten your URLs quickly and securely with TinyLink. Simple, fast, and reliable URL shortening service.'
+		},
 		{ property: 'og:title', content: 'TinyLink - Make Your Links Shorter' },
 		{ property: 'og:description', content: 'Shorten your URLs quickly and securely with TinyLink.' },
 		{ property: 'og:type', content: 'website' },
@@ -306,26 +329,48 @@ useHead({
 }
 
 @keyframes float {
-	0% { transform: translateY(0px); }
-	50% { transform: translateY(-10px); }
-	100% { transform: translateY(0px); }
+	0% {
+		transform: translateY(0px);
+	}
+	50% {
+		transform: translateY(-10px);
+	}
+	100% {
+		transform: translateY(0px);
+	}
 }
 
 @keyframes float-delay {
-	0% { transform: translateY(0px); }
-	50% { transform: translateY(-12px); }
-	100% { transform: translateY(0px); }
+	0% {
+		transform: translateY(0px);
+	}
+	50% {
+		transform: translateY(-12px);
+	}
+	100% {
+		transform: translateY(0px);
+	}
 }
 
 @keyframes float-slow {
-	0% { transform: translateY(0px); }
-	50% { transform: translateY(-6px); }
-	100% { transform: translateY(0px); }
+	0% {
+		transform: translateY(0px);
+	}
+	50% {
+		transform: translateY(-6px);
+	}
+	100% {
+		transform: translateY(0px);
+	}
 }
 
 @keyframes pulse-delay {
-	0%, 100% { opacity: 0.5; }
-	50% { opacity: 0.8; }
+	0%, 100% {
+		opacity: 0.5;
+	}
+	50% {
+		opacity: 0.8;
+	}
 }
 
 @keyframes shine {
@@ -420,8 +465,6 @@ useHead({
 	-webkit-backdrop-filter: blur(12px);
 	border: 1px solid var(--glass-border);
 	box-shadow: var(--glass-shadow);
-	border-radius: 24px;
-	padding: 32px;
 	position: relative;
 }
 
@@ -570,8 +613,14 @@ useHead({
 }
 
 @keyframes fade-in {
-	0% { opacity: 0; transform: translateY(20px); }
-	100% { opacity: 1; transform: translateY(0); }
+	0% {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .animate-fade-in {

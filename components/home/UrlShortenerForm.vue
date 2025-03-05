@@ -157,7 +157,7 @@
 				<div class="shine-effect"></div>
 				<h3 class="text-lg font-medium text-slate-900 dark:text-white mb-2">Your shortened URL</h3>
 
-				<div class="glass-inner-panel mb-3">
+				<div class="glass-inner-panel mb-3 flex items-center justify-between">
 					<a
 						:href="shortenedUrl"
 						target="_blank"
@@ -574,7 +574,7 @@ input::placeholder {
 	background: rgba(255, 255, 255, 0.7);
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
-	border: 1px solid rgba(255, 255, 255, 0.3);
+	border: 1px solid rgba(0, 0, 0, 0.1);
 	border-radius: 16px;
 	padding: 16px;
 	position: relative;
@@ -590,7 +590,7 @@ input::placeholder {
 	background: rgba(255, 255, 255, 0.7);
 	backdrop-filter: blur(8px);
 	-webkit-backdrop-filter: blur(8px);
-	border: 1px solid rgba(255, 255, 255, 0.3);
+	border: 1px solid rgba(0, 0, 0, 0.1);
 	border-radius: 8px;
 	transition: all 0.3s ease;
 }

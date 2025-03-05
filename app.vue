@@ -2,7 +2,7 @@
 	<div>
 		<div
 			v-if="isLoading"
-			class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-50 dark:bg-slate-900 transition-all duration-300"
+			class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-100 dark:bg-slate-900 transition-all duration-300"
 			:class="{ 'opacity-0 invisible': isLoadingFadeOut }"
 		>
 			<div class="text-center">

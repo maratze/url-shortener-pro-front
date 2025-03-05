@@ -1,30 +1,38 @@
 <template>
-	<div>
+	<div class="container mx-auto max-w-7xl">
 		<div v-if="recentUrls.length > 0">
-			<h2 class="text-2xl font-bold mb-8 text-slate-800 dark:text-white text-center">Your Recent Links</h2>
+			<div class="mb-16 text-center">
+				<h2 class="text-3xl md:text-4xl font-extrabold mb-4 text-slate-800 dark:text-white">
+					Your Recent Links
+				</h2>
+				<div class="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full"></div>
+			</div>
 
-			<div class="overflow-x-auto">
-				<div class="recent-urls-container">
+			<div class="w-full">
+				<div class="w-full">
 					<TransitionGroup name="list" tag="div" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 						<div
 							v-for="url in recentUrls"
 							:key="url.id"
-							class="recent-url-card"
+							class="recent-url-card h-full"
 						>
-							<div class="relative h-full">
+							<div class="flex flex-col h-full">
 								<!-- Shine effect -->
 								<div class="shine-effect"></div>
 
 								<div class="flex items-center justify-between mb-3">
-                  <span class="text-sm font-medium text-slate-500 dark:text-slate-400 truncate max-w-[180px]">
-                    {{ formatUrl(url.originalUrl) }}
-                  </span>
+									<span
+										class="text-sm font-medium text-slate-500 dark:text-slate-400 truncate max-w-[180px]">
+										{{ formatUrl(url.originalUrl) }}
+									</span>
 									<span class="text-xs text-slate-400 dark:text-slate-500">
-                    {{ formatDate(url.createdAt) }}
-                  </span>
+										{{ formatDate(url.createdAt) }}
+									</span>
 								</div>
 
-								<div class="flex items-center justify-between bg-white/50 dark:bg-slate-700/50 rounded-lg p-3 mb-3 backdrop-blur-sm">
+								<div
+									class="flex items-center justify-between bg-white/50 dark:bg-slate-700/50 rounded-lg mb-3 backdrop-blur-sm"
+								>
 									<a
 										:href="url.shortUrl"
 										target="_blank"
@@ -34,29 +42,35 @@
 									</a>
 									<button
 										@click="copyToClipboard(url.shortUrl)"
-										class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-md transition-colors"
+										class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-md transition-colors flex-shrink-0 ml-2"
 									>
                     <span v-if="copied === url.id" class="text-green-500">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd"
+							  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+							  clip-rule="evenodd"/>
                       </svg>
                     </span>
 										<span v-else class="text-slate-500 dark:text-slate-400">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
-                        <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
+                        <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z"/>
+                        <path
+							d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z"/>
                       </svg>
                     </span>
 									</button>
 								</div>
 
-								<div class="flex justify-between items-center">
+								<!-- Использование mt-auto для прижатия кнопок к низу карточки -->
+								<div class="flex justify-between items-center mt-auto">
 									<NuxtLink
 										:to="`/analytics/${extractShortCode(url.shortUrl)}`"
 										class="text-xs flex items-center text-slate-600 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition-colors"
 									>
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-											<path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20"
+											 fill="currentColor">
+											<path
+												d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
 										</svg>
 										View Analytics
 									</NuxtLink>
@@ -64,9 +78,13 @@
 										@click="qrCode(url.shortUrl)"
 										class="text-xs flex items-center text-slate-600 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition-colors"
 									>
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-											<path fill-rule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 3a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1V4a1 1 0 00-1-1h-3zm1 2v1h1V5h-1z" clip-rule="evenodd" />
-											<path d="M11 4a1 1 0 10-2 0v1a1 1 0 002 0V4zM10 7a1 1 0 011 1v1h2a1 1 0 110 2h-3a1 1 0 01-1-1V8a1 1 0 011-1zM16 9a1 1 0 100 2 1 1 0 000-2zM9 13a1 1 0 011-1h1a1 1 0 110 2v2a1 1 0 11-2 0v-3zM7 11a1 1 0 100-2H4a1 1 0 100 2h3zM17 13a1 1 0 01-1 1h-2a1 1 0 110-2h2a1 1 0 011 1zM16 17a1 1 0 100-2h-3a1 1 0 100 2h3z" />
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20"
+											 fill="currentColor">
+											<path fill-rule="evenodd"
+												  d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 3a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1V4a1 1 0 00-1-1h-3zm1 2v1h1V5h-1z"
+												  clip-rule="evenodd"/>
+											<path
+												d="M11 4a1 1 0 10-2 0v1a1 1 0 002 0V4zM10 7a1 1 0 011 1v1h2a1 1 0 110 2h-3a1 1 0 01-1-1V8a1 1 0 011-1zM16 9a1 1 0 100 2 1 1 0 000-2zM9 13a1 1 0 011-1h1a1 1 0 110 2v2a1 1 0 11-2 0v-3zM7 11a1 1 0 100-2H4a1 1 0 100 2h3zM17 13a1 1 0 01-1 1h-2a1 1 0 110-2h2a1 1 0 011 1zM16 17a1 1 0 100-2h-3a1 1 0 100 2h3z"/>
 										</svg>
 										QR Code
 									</button>
@@ -77,10 +95,13 @@
 				</div>
 			</div>
 
-			<div class="text-center mt-10">
+			<div class="text-center mt-16">
 				<NuxtLink to="/history" class="glass-btn inline-flex items-center">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-						<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+						 fill="currentColor">
+						<path fill-rule="evenodd"
+							  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+							  clip-rule="evenodd"/>
 					</svg>
 					View All History
 				</NuxtLink>
@@ -88,8 +109,10 @@
 		</div>
 		<div v-else class="text-center py-12">
 			<div class="text-slate-400 dark:text-slate-500 mb-6">
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24"
+					 stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						  d="M13 10V3L4 14h7v7l9-11h-7z"/>
 				</svg>
 			</div>
 			<h3 class="text-xl font-medium text-slate-700 dark:text-slate-300 mb-2">No shortened URLs yet</h3>
@@ -216,6 +239,9 @@ const qrCode = (url: string) => {
 	position: relative;
 	overflow: hidden;
 	transition: all 0.3s ease;
+	display: flex;
+	flex-direction: column;
+	min-height: 150px; /* Добавлено минимальную высоту */
 }
 
 .dark .recent-url-card {
@@ -271,6 +297,7 @@ const qrCode = (url: string) => {
 .list-leave-active {
 	transition: all 0.5s ease;
 }
+
 .list-enter-from,
 .list-leave-to {
 	opacity: 0;
