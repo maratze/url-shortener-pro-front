@@ -12,7 +12,7 @@
 		</div>
 
 		<!-- Hero section -->
-		<section class="relative py-16 md:py-24 px-4">
+		<section class="relative py-16 md:py-28 px-4">
 			<div class="container mx-auto max-w-7xl">
 				<div class="flex flex-col lg:flex-row items-center justify-between gap-12">
 					<div class="lg:w-1/2">
