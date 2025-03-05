@@ -91,7 +91,7 @@
 						Custom alias (optional)
 					</label>
 					<div class="flex items-center">
-						<span class="text-slate-500 dark:text-slate-400 mr-1 text-sm">short.link/</span>
+						<span class="text-slate-500 dark:text-slate-400 mr-1 text-sm">https://short.link/</span>
 						<input
 							v-model="form.alias"
 							type="text"

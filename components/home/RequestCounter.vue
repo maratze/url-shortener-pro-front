@@ -3,7 +3,7 @@
 		<!-- Счетчик с прогресс-баром -->
 		<div class="counter-container">
 			<div class="flex items-center justify-between w-full">
-				<div class="flex items-center">
+				<div class="flex items-start">
 					<span class="counter-text">{{ remainingRequests }} free shortens remaining</span>
 
 					<!-- Иконка с улучшенной подсказкой -->
