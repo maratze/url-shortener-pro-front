@@ -678,9 +678,9 @@ input::placeholder {
 	height: 100%;
 	background: linear-gradient(
 		to right,
-		rgba(255, 255, 255, 0) 0%,
-		rgba(255, 255, 255, 0.3) 50%,
-		rgba(255, 255, 255, 0) 100%
+		rgba(79, 70, 229, 0) 0%,
+		rgba(79, 70, 229, 0.25) 50%,
+		rgba(79, 70, 229, 0) 100%
 	);
 	top: 0;
 	left: -100%;
@@ -694,7 +694,7 @@ input::placeholder {
 	background: linear-gradient(
 		to right,
 		rgba(255, 255, 255, 0) 0%,
-		rgba(255, 255, 255, 0.1) 50%,
+		rgba(255, 255, 255, 0.12) 50%,
 		rgba(255, 255, 255, 0) 100%
 	);
 }
