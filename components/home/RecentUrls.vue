@@ -2,7 +2,7 @@
 	<div class="container mx-auto max-w-7xl">
 		<div v-if="recentUrls.length > 0">
 			<div class="mb-16 text-center">
-				<h2 class="text-3xl md:text-4xl font-extrabold mb-4 text-slate-800 dark:text-white">
+				<h2 class="text-3xl md:text-4xl font-extrabold mb-6 text-slate-800 dark:text-white">
 					Your Recent
 					<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400" data-v-inspector="pages/index.vue:63:7">Links</span>
 				</h2>

@@ -1,19 +1,5 @@
 <template>
 	<div class="min-h-screen relative overflow-hidden">
-		<!-- Animated background elements -->
-		<div class="fixed inset-0 overflow-hidden -z-10">
-			<!-- Gradient background -->
-			<div
-				class="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950"></div>
-
-			<!-- Colorful blurred shapes -->
-			<div
-				class="absolute top-[5%] left-[10%] w-[500px] h-[500px] rounded-full bg-blue-400/30 dark:bg-blue-600/20 blur-[80px] animate-float"></div>
-			<div
-				class="absolute bottom-[15%] right-[5%] w-[400px] h-[400px] rounded-full bg-purple-400/20 dark:bg-purple-600/20 blur-[100px] animate-float-delay"></div>
-			<div
-				class="absolute top-[40%] right-[20%] w-[300px] h-[300px] rounded-full bg-green-400/10 dark:bg-green-600/10 blur-[70px] animate-float-slow"></div>
-		</div>
 
 		<!-- Hero section - на полную высоту -->
 		<section class="relative min-h-[calc(100vh-74px)] flex items-center">
@@ -53,76 +39,11 @@
 				<RecentUrls/>
 			</div>
 		</section>
-
-		<!-- Features Section -->
-		<section class="py-20 px-4 relative">
-			<div class="container mx-auto max-w-7xl">
-				<div class="text-center max-w-3xl mx-auto mb-16">
-					<h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-800 dark:text-white">
-						Why Choose
-						<span
-							class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">TinyLink</span>
-					</h2>
-					<p class="text-lg text-slate-600 dark:text-slate-300">
-						Our platform combines simplicity with powerful features, giving you everything you need for
-						effective link management
-					</p>
-				</div>
-
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-					<!-- Feature 1 -->
-					<FeatureCard
-						title="Lightning Fast"
-						description="Create shortened URLs instantly and enjoy rapid redirection speeds for all your users"
-						icon="bolt"
-						animation="fade-right"
-					/>
-
-					<!-- Feature 2 -->
-					<FeatureCard
-						title="Advanced Analytics"
-						description="Track clicks, geographic data, and visitor devices to optimize your marketing efforts"
-						icon="chart"
-						animation="fade-up"
-					/>
-
-					<!-- Feature 3 -->
-					<FeatureCard
-						title="Custom Aliases"
-						description="Create branded, memorable short links with your own custom text to enhance recognition"
-						icon="pencil"
-						animation="fade-left"
-					/>
-
-					<!-- Feature 4 -->
-					<FeatureCard
-						title="Secure & Reliable"
-						description="Your links are always available and protected with enterprise-grade security measures"
-						icon="shield"
-						animation="fade-right"
-					/>
-
-					<!-- Feature 5 -->
-					<FeatureCard
-						title="QR Code Generation"
-						description="Instantly generate QR codes for your shortened links for seamless offline-to-online transitions"
-						icon="qrcode"
-						animation="fade-up"
-					/>
-
-					<!-- Feature 6 -->
-					<FeatureCard
-						title="Cross-Platform Sharing"
-						description="Share your links seamlessly across any platform, social media, or messaging app"
-						icon="share"
-						animation="fade-left"
-					/>
-				</div>
-			</div>
-		</section>
+		
+		<WhyChooseTinyLink />
 
 		<!-- Statistics Section -->
-		<section class="py-20 px-4 relative">
+		<section class="py-24 px-4 relative">
 			<div class="container mx-auto max-w-7xl">
 				<div class="glass-panel">
 					<div class="text-center max-w-3xl mx-auto mb-12">
@@ -187,7 +108,7 @@
 		</section>
 
 		<!-- How it works -->
-		<section class="py-20 px-4 relative">
+		<section class="py-24 px-4 relative">
 			<div class="container mx-auto max-w-7xl">
 				<div class="text-center max-w-3xl mx-auto mb-16">
 					<h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-800 dark:text-white">How It Works</h2>
@@ -228,7 +149,7 @@
 		</section>
 
 		<!-- FAQ Section -->
-		<section class="py-20 px-4 relative">
+		<section class="py-24 px-4 relative">
 			<div class="container mx-auto max-w-7xl">
 				<div class="glass-panel">
 					<div class="text-center max-w-3xl mx-auto mb-12">
@@ -247,7 +168,7 @@
 		</section>
 
 		<!-- CTA Section -->
-		<section class="py-20 px-4 relative">
+		<section class="py-24 px-4 relative">
 			<div class="container mx-auto max-w-7xl">
 				<div class="glass-card-highlight overflow-hidden relative">
 					<!-- Decorative elements -->
@@ -281,6 +202,7 @@ import RequestCounter from '~/components/home/RequestCounter.vue';
 import UrlShortenerForm from '~/components/home/UrlShortenerForm.vue';
 import CountUp from '~/components/CountUp.vue';
 import FaqAccordion from '~/components/FaqAccordion.vue';
+import WhyChooseTinyLink from "~/components/sections/WhyChooseTinyLink.vue";
 
 const urlStore = useUrlStore();
 const remainingRequests = computed(() => urlStore.remainingFreeRequests);
