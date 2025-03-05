@@ -1,21 +1,38 @@
 <template>
-	<div
-		class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950 transition-colors duration-300">
+	<div>
+		<div
+			v-if="isLoading"
+			class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-50 dark:bg-slate-900 transition-all duration-300"
+			:class="{ 'opacity-0 invisible': isLoadingFadeOut }"
+		>
+			<div class="text-center">
+				<div class="w-16 h-16 mx-auto border-4 border-blue-100 dark:border-blue-900 border-t-blue-600 dark:border-t-blue-400 rounded-full animate-spin"></div>
+			</div>
+		</div>
+		<div :class="{ 'opacity-0': isLoading }">
+			<NuxtLayout>
+				<div
+					class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950 transition-colors duration-300">
+					<AppHeader/>
 
-		<AppHeader />
+					<main class="pt-[74px]">
+						<NuxtPage/>
+					</main>
 
-		<main class="pt-[74px]">
-			<NuxtPage/>
-		</main>
-
-		<AppFooter />
+					<AppFooter/>
+				</div>
+			</NuxtLayout>
+		</div>
 	</div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
-import AppHeader from "~/components/layout/AppHeader.vue";
-import AppFooter from "~/components/layout/AppFooter.vue";
+import { ref, onMounted } from 'vue';
+import AppHeader from '~/components/layout/AppHeader.vue';
+import AppFooter from '~/components/layout/AppFooter.vue';
+
+const isLoading = ref(true);
+const isLoadingFadeOut = ref(false);
 
 onMounted(() => {
 	document.title = 'TinyLink - Shorten Your URLs';
@@ -49,6 +66,14 @@ onMounted(() => {
 		meta.content = 'Create short, memorable links with TinyLink URL shortener.';
 		document.head.appendChild(meta);
 	}
+
+	setTimeout(() => {
+		isLoadingFadeOut.value = true;
+
+		setTimeout(() => {
+			isLoading.value = false;
+		}, 300);
+	}, 800);
 })
 </script>
 
@@ -59,8 +84,25 @@ onMounted(() => {
 	font-family: 'Inter', sans-serif;
 }
 
+html {
+	visibility: visible;
+}
+
 body {
 	@apply bg-slate-50 dark:bg-slate-900;
 	font-family: 'Inter', sans-serif;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.animate-spin-slow {
+	animation: spin 1.5s linear infinite;
 }
 </style>
