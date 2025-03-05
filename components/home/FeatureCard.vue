@@ -83,13 +83,13 @@ const animationClass = computed(() => {
 	padding: 32px 24px;
 	position: relative;
 	overflow: hidden;
-	transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	transition: all .2s linear !important;
 	cursor: pointer;
 	z-index: 1;
 }
 
 .dark .feature-card {
-	background: rgba(30, 41, 59, 0.85);
+	background: var(--glass-bg-dark);
 	border-color: rgba(30, 41, 59, 0.6);
 	box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
 }
@@ -98,6 +98,7 @@ const animationClass = computed(() => {
 	transform: translateY(-8px);
 	border-color: rgba(99, 102, 241, 0.5);
 	box-shadow: 0 20px 30px -10px rgba(79, 70, 229, 0.2);
+	margin-top: -4px;
 }
 
 .dark .feature-card:hover {

@@ -3,72 +3,8 @@
 
 		<HeroSection/>
 		<RecentUrls/>
-		<WhyChooseTinyLink />
-
-		<!-- Statistics Section -->
-		<section class="py-24 px-4 relative">
-			<div class="container mx-auto max-w-7xl">
-				<div class="glass-panel">
-					<div class="text-center max-w-3xl mx-auto mb-12">
-						<h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-800 dark:text-white">Trusted by
-							thousands worldwide</h2>
-						<p class="text-lg text-slate-600 dark:text-slate-300">
-							Join our growing community of users who rely on URL Shortener Pro every day
-						</p>
-					</div>
-
-					<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-						<!-- Stat 1 -->
-						<div class="stat-card">
-							<div class="relative z-10">
-								<div
-									class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
-									<CountUp :to="5" :duration="3"/>
-									M+
-								</div>
-								<div class="text-lg font-medium text-slate-700 dark:text-slate-300">URLs Shortened</div>
-							</div>
-						</div>
-
-						<!-- Stat 2 -->
-						<div class="stat-card">
-							<div class="relative z-10">
-								<div
-									class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
-									<CountUp :to="99.9" :duration="3" :decimals="1"/>
-									%
-								</div>
-								<div class="text-lg font-medium text-slate-700 dark:text-slate-300">Uptime</div>
-							</div>
-						</div>
-
-						<!-- Stat 3 -->
-						<div class="stat-card">
-							<div class="relative z-10">
-								<div
-									class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
-									<CountUp :to="50" :duration="3"/>
-									K+
-								</div>
-								<div class="text-lg font-medium text-slate-700 dark:text-slate-300">Active Users</div>
-							</div>
-						</div>
-
-						<!-- Stat 4 -->
-						<div class="stat-card">
-							<div class="relative z-10">
-								<div
-									class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
-									<CountUp :to="200" :duration="3"/>
-									M+
-								</div>
-								<div class="text-lg font-medium text-slate-700 dark:text-slate-300">Monthly Clicks</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
+		<WhyChooseSection/>
+		<StatisticsSection/>
 
 		<!-- How it works -->
 		<section class="py-24 px-4 relative">
@@ -162,8 +98,9 @@ import { useUrlStore } from '~/stores/url';
 import RecentUrls from '~/components/home/RecentUrls.vue';
 import CountUp from '~/components/CountUp.vue';
 import FaqAccordion from '~/components/FaqAccordion.vue';
-import WhyChooseTinyLink from '~/components/sections/WhyChooseTinyLink.vue';
 import HeroSection from '~/components/sections/HeroSection.vue';
+import WhyChooseSection from '~/components/sections/WhyChooseSection.vue';
+import StatisticsSection from '~/components/sections/StatisticsSection.vue';
 
 const urlStore = useUrlStore();
 

@@ -247,10 +247,10 @@ const qrCode = (url: string) => {
 	padding: 16px;
 	position: relative;
 	overflow: hidden;
-	transition: all 0.3s ease;
+	transition: all .2s linear;
 	display: flex;
 	flex-direction: column;
-	min-height: 150px; /* Добавлено минимальную высоту */
+	min-height: 150px;
 }
 
 .dark .recent-url-card {
