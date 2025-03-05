@@ -1,5 +1,11 @@
 <template>
-	<header class="fixed top-0 left-0 right-0 z-40 py-4">
+	<header
+		class="fixed top-0 left-0 right-0 z-40 py-4 transition-all duration-300"
+		:class="{ 
+      'backdrop-blur-md bg-white/80 dark:bg-slate-900/80 shadow-md': isScrolled,
+      'bg-transparent': !isScrolled
+    }"
+	>
 		<div class="container mx-auto px-4 flex justify-between items-center">
 			<NuxtLink to="/" class="flex items-center space-x-2">
 				<div
@@ -10,6 +16,9 @@
 			</NuxtLink>
 
 			<div class="flex items-center space-x-4">
+				<!-- Переместили кнопку смены темы в центр шапки -->
+				<DarkModeToggle class="md:absolute md:left-1/2 md:transform md:-translate-x-1/2"/>
+
 				<nav class="hidden md:flex items-center space-x-6">
 					<NuxtLink to="/history" class="nav-link">History</NuxtLink>
 					<NuxtLink to="/analytics" class="nav-link">Analytics</NuxtLink>
@@ -18,7 +27,11 @@
 				</nav>
 
 				<div class="flex items-center space-x-3">
-					<DarkModeToggle/>
+					<!-- Добавлена кнопка Register -->
+					<NuxtLink to="/register" class="register-btn hidden sm:flex">
+						<span>Register</span>
+					</NuxtLink>
+
 					<NuxtLink to="/login" class="login-btn">
 						<span class="hidden sm:inline">Login</span>
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:hidden" viewBox="0 0 20 20"
@@ -51,6 +64,7 @@
 					<NuxtLink to="/pricing" class="mobile-nav-link" @click="mobileMenuOpen = false">Pricing
 					</NuxtLink>
 					<NuxtLink to="/about" class="mobile-nav-link" @click="mobileMenuOpen = false">About</NuxtLink>
+					<NuxtLink to="/register" class="mobile-nav-link" @click="mobileMenuOpen = false">Register</NuxtLink>
 					<NuxtLink to="/login" class="mobile-nav-link" @click="mobileMenuOpen = false">Login</NuxtLink>
 				</nav>
 			</div>
@@ -59,9 +73,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 const mobileMenuOpen = ref(false);
+const isScrolled = ref(false);
+
+const checkScroll = () => {
+	isScrolled.value = window.scrollY > 10;
+};
+
+onMounted(() => {
+	window.addEventListener('scroll', checkScroll);
+	checkScroll();
+});
+
+onUnmounted(() => {
+	window.removeEventListener('scroll', checkScroll);
+});
 </script>
 
 <style scoped>
@@ -77,6 +105,11 @@ const mobileMenuOpen = ref(false);
 	@apply px-4 py-2 bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-lg border border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center font-medium;
 	backdrop-filter: blur(8px);
 	-webkit-backdrop-filter: blur(8px);
+}
+
+/* Добавлена стилизация для Register кнопки */
+.register-btn {
+	@apply px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center font-medium;
 }
 
 .menu-btn {
