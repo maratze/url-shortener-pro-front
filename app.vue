@@ -4,7 +4,7 @@
 
 		<AppHeader />
 
-		<main class="pt-24">
+		<main class="pt-[74px]">
 			<NuxtPage/>
 		</main>
 

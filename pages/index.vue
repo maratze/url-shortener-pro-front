@@ -11,61 +11,29 @@
 			<div class="absolute top-[40%] right-[20%] w-[300px] h-[300px] rounded-full bg-green-400/10 dark:bg-green-600/10 blur-[70px] animate-float-slow"></div>
 		</div>
 
-		<!-- Hero section -->
-		<section class="relative py-16 md:py-28 px-4">
-			<div class="container mx-auto max-w-7xl">
-				<div class="flex flex-col lg:flex-row items-center justify-between gap-12">
-					<div class="lg:w-1/2">
-						<h1 class="animate-fade-in text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-slate-800 dark:text-white leading-tight">
-							<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">Simplify</span> your links,
-							<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">amplify</span> your reach
-						</h1>
-						<p class="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-10 animate-fade-in animation-delay-200">
-							Transform long, complex URLs into short, memorable links that are easy to share
-							and track with our powerful URL shortener.
-						</p>
+		<!-- Hero section - на полную высоту -->
+		<section class="relative min-h-[calc(100vh-74px)] flex items-center">
+			<div class="container mx-auto px-4">
+				<!-- Заголовок и описание по центру -->
+				<div class="text-center max-w-4xl mx-auto mb-10 animate-fade-in">
+					<h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-slate-800 dark:text-white leading-tight">
+						<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">Simplify</span> your links,
+						<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">amplify</span> your reach
+					</h1>
+					<p class="text-lg md:text-md text-slate-600 dark:text-slate-300 mb-10 animation-delay-200">
+						Transform long, complex URLs into short, memorable links that are easy to share
+						and track with our powerful URL shortener.
+					</p>
+				</div>
 
-						<!-- URL Shortener Form -->
-						<div class="glass-card p-6 md:p-8 animate-fade-in animation-delay-400 relative overflow-hidden">
-							<!-- Shine effect -->
-							<div class="shine-effect"></div>
+				<!-- URL Shortener Form - по центру -->
+				<div class="max-w-2xl mx-auto">
+					<div class="glass-card p-6 md:p-8 animate-fade-in animation-delay-400 relative overflow-hidden">
+						<!-- Shine effect -->
+						<div class="shine-effect"></div>
 
-							<UrlShortenerForm />
-							<RequestCounter class="mt-3" />
-						</div>
-					</div>
-
-					<!-- Hero illustration -->
-					<div class="lg:w-1/2 flex justify-center animate-fade-in animation-delay-600">
-						<div class="relative">
-							<!-- Main image with glassmorphism effect -->
-							<div class="glass-card p-8 relative overflow-hidden">
-								<img
-									src="/images/url-shortener-illustration.svg"
-									alt="URL Shortener Illustration"
-									class="w-full h-auto max-w-lg mx-auto relative z-10"
-								/>
-
-								<!-- Decoration elements -->
-								<div class="absolute top-[20%] left-[10%] w-16 h-16 bg-blue-400/30 dark:bg-blue-600/30 rounded-full blur-md animate-pulse"></div>
-								<div class="absolute bottom-[15%] right-[10%] w-20 h-20 bg-purple-400/20 dark:bg-purple-600/20 rounded-full blur-md animate-pulse-delay"></div>
-							</div>
-
-							<!-- Floating elements -->
-							<div class="absolute -top-5 -right-5 glass-pill animate-float">
-								<div class="flex items-center space-x-2 p-3">
-									<div class="w-3 h-3 bg-green-400 rounded-full"></div>
-									<span class="text-sm font-medium">Fast & Secure</span>
-								</div>
-							</div>
-
-							<div class="absolute -bottom-5 -left-5 glass-pill animate-float-delay">
-								<div class="flex items-center space-x-2 p-3">
-									<div class="w-3 h-3 bg-blue-400 rounded-full"></div>
-									<span class="text-sm font-medium">Easy Sharing</span>
-								</div>
-							</div>
-						</div>
+						<UrlShortenerForm />
+						<RequestCounter class="mt-3" />
 					</div>
 				</div>
 			</div>
@@ -327,6 +295,7 @@ useHead({
 </script>
 
 <style>
+/* Стили остаются без изменений */
 :root {
 	--glass-border: rgba(255, 255, 255, 0.5);
 	--glass-border-dark: rgba(255, 255, 255, 0.1);
