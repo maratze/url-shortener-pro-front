@@ -1,36 +1,12 @@
 <template>
 	<div class="min-h-screen relative overflow-hidden">
-
 		<HeroSection/>
 		<RecentUrls/>
 		<WhyChooseSection/>
 		<StatisticsSection/>
 		<HowItWorksSection/>
-		<FaqSection />
-
-		<!-- CTA Section -->
-		<section class="py-24 px-4 relative">
-			<div class="container mx-auto max-w-7xl">
-				<div class="glass-card-highlight overflow-hidden relative">
-					<!-- Decorative elements -->
-					<div class="absolute top-0 left-0 w-full h-full">
-						<div class="absolute top-[10%] left-[10%] w-32 h-32 bg-blue-400/20 rounded-full blur-xl"></div>
-						<div
-							class="absolute bottom-[10%] right-[10%] w-40 h-40 bg-purple-400/20 rounded-full blur-xl"></div>
-					</div>
-
-					<div class="relative z-10 text-center py-12 px-6">
-						<h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">Ready to simplify your links?</h2>
-						<p class="text-xl text-white/90 max-w-2xl mx-auto mb-8">
-							Start shortening URLs for free and unlock the power of link management
-						</p>
-						<button class="btn-glow mx-auto">
-							Get Started Free
-						</button>
-					</div>
-				</div>
-			</div>
-		</section>
+		<FaqSection/>
+		<CtaSection/>
 	</div>
 </template>
 
@@ -43,6 +19,7 @@ import WhyChooseSection from '~/components/sections/WhyChooseSection.vue';
 import StatisticsSection from '~/components/sections/StatisticsSection.vue';
 import HowItWorksSection from '~/components/sections/HowItWorksSection.vue';
 import FaqSection from '~/components/sections/FaqSection.vue';
+import CtaSection from '~/components/sections/CtaSection.vue';
 
 const urlStore = useUrlStore();
 
