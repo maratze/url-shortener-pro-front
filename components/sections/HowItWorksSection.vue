@@ -52,6 +52,7 @@
 }
 
 .step-card {
+	background: rgba(255, 255, 255, 0.85);
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
 	border: 1px solid rgba(0, 0, 0, 0.1);
@@ -67,6 +68,7 @@
 }
 
 .dark .step-card {
+	background: var(--glass-bg-dark);
 	border-color: rgba(30, 41, 59, 0.6);
 	box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
 }
