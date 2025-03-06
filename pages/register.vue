@@ -7,6 +7,8 @@
 </template>
 
 <script setup lang="ts">
+import RegisterForm from '~/components/auth/RegisterForm.vue';
+
 // SEO
 useHead({
 	title: 'Register - URL Shortener Pro',

@@ -88,6 +88,7 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth';
 import { useToastStore } from '~/stores/toast';
+import InputField from '~/components/common/InputField.vue';
 
 const authStore = useAuthStore();
 const toastStore = useToastStore();

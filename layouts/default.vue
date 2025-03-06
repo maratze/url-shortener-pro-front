@@ -6,6 +6,7 @@
 		</main>
 		<AppFooter/>
 		<ToastContainer/>
+		<FloatingThemeToggle />
 	</div>
 </template>
 
@@ -13,4 +14,5 @@
 import ToastContainer from '~/components/common/ToastContainer.vue';
 import AppHeader from '~/components/layout/AppHeader.vue';
 import AppFooter from '~/components/layout/AppFooter.vue';
+import FloatingThemeToggle from "~/components/FloatingThemeToggle.vue";
 </script>

@@ -8,6 +8,8 @@
 
 <script setup lang="ts">
 // SEO
+import LoginForm from '~/components/auth/LoginForm.vue';
+
 useHead({
 	title: 'Log In - URL Shortener Pro',
 	meta: [

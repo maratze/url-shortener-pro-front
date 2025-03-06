@@ -8,7 +8,7 @@
 	>
 		<div class="container mx-auto px-6 max-w-7xl">
 			<div class="flex items-center justify-between">
-				<!-- Левая часть: Логотип и кнопка темы -->
+				<!-- Левая часть: Логотип -->
 				<div class="flex items-center space-x-4">
 					<NuxtLink to="/" class="flex items-center space-x-2">
 						<div
@@ -29,10 +29,8 @@
 
 				<!-- Правая часть: Кнопки авторизации -->
 				<div class="flex items-center space-x-3">
-					<DarkModeToggle class="theme-toggle" />
 					<NuxtLink to="/register" class="register-btn hidden sm:flex">Register</NuxtLink>
 					<NuxtLink to="/login" class="login-btn">Login</NuxtLink>
-					<!-- Mobile menu button -->
 				</div>
 			</div>
 		</div>
@@ -41,11 +39,6 @@
 		<Transition name="slide-down">
 			<div v-if="mobileMenuOpen" class="md:hidden mobile-menu">
 				<nav class="px-4 py-6 space-y-4">
-					<!-- Добавил кнопку смены темы в мобильное меню -->
-					<div class="flex items-center justify-between py-3 px-4">
-						<span class="text-slate-800 dark:text-white font-medium">Switch Theme</span>
-						<DarkModeToggle />
-					</div>
 					<div class="border-t dark:border-slate-700"></div>
 					<NuxtLink to="/history" class="mobile-nav-link" @click="mobileMenuOpen = false">History</NuxtLink>
 					<NuxtLink to="/analytics" class="mobile-nav-link" @click="mobileMenuOpen = false">Analytics</NuxtLink>
@@ -98,10 +91,6 @@ onUnmounted(() => {
 	@apply px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center font-medium;
 }
 
-.menu-btn {
-	@apply p-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-lg border border-slate-200 dark:border-slate-700 hover:border-purple-400 dark:hover:border-purple-500 transition-all duration-300;
-}
-
 .mobile-menu {
 	@apply fixed top-16 left-0 right-0 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 shadow-lg;
 	backdrop-filter: blur(12px);
@@ -110,15 +99,6 @@ onUnmounted(() => {
 
 .mobile-nav-link {
 	@apply block py-3 px-4 text-slate-800 dark:text-white font-medium hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors;
-}
-
-/* Стили для кнопки смены темы - предотвращение смещения при наведении */
-.theme-toggle {
-	@apply relative transition-transform duration-200 transform-gpu;
-}
-
-.theme-toggle:hover {
-	@apply transform-none;
 }
 
 /* Transitions */
