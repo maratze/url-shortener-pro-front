@@ -1,6 +1,6 @@
 <template>
-	<footer class="py-12 px-6 bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-sm">
-		<div class="container mx-auto max-w-7xl">
+	<footer class="py-12 bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-sm">
+		<div class="container mx-auto max-w-7xl px-6">
 			<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
 				<div>
 					<div class="flex items-center space-x-2 mb-4">

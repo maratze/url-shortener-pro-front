@@ -9,6 +9,7 @@ export default defineNuxtConfig({
 
   css: [
       '~/assets/css/main.css',
+      '~/assets/css/global.css',
       '~/assets/css/form-styles.css',
   ],
 

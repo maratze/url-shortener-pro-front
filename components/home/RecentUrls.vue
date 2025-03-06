@@ -1,7 +1,7 @@
 <template>
 	<section class="relative">
-		<div class="glass-panel py-24 px-6">
-			<div class="container mx-auto max-w-7xl">
+		<div class="glass-panel py-24">
+			<div class="container mx-auto max-w-7xl px-6">
 				<div v-if="recentUrls.length > 0">
 					<div class="mb-16 text-center">
 						<h2 class="text-3xl md:text-4xl font-extrabold mb-6 text-slate-800 dark:text-white">

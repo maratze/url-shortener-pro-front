@@ -1,6 +1,6 @@
 <template>
-	<section class="statistics-section py-24 px-6 relative overflow-hidden">
-		<div class="container mx-auto max-w-7xl relative">
+	<section class="statistics-section py-24 relative overflow-hidden">
+		<div class="container mx-auto max-w-7xl relative px-6">
 			<!-- Обновленный заголовок в соответствии с предыдущими блоками -->
 			<div class="text-center max-w-3xl mx-auto mb-16">
 				<h2 class="text-3xl md:text-4xl font-extrabold mb-6 text-slate-800 dark:text-white">

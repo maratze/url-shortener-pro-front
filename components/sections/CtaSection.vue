@@ -1,6 +1,6 @@
 <template>
-	<section class="cta-section py-24 px-6 relative">
-		<div class="container mx-auto max-w-7xl">
+	<section class="cta-section py-24 relative">
+		<div class="container mx-auto max-w-7xl px-6">
 			<div class="glass-card-highlight overflow-hidden relative">
 				<!-- Декоративные элементы фона -->
 				<div class="absolute top-0 left-0 w-full h-full">
