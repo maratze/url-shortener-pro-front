@@ -6,7 +6,7 @@
       'bg-transparent': !isScrolled
     }"
 	>
-		<div class="container mx-auto px-4">
+		<div class="container mx-auto px-6 max-w-7xl">
 			<div class="flex items-center justify-between">
 				<!-- Левая часть: Логотип и кнопка темы -->
 				<div class="flex items-center space-x-4">

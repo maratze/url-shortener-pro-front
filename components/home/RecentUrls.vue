@@ -1,6 +1,6 @@
 <template>
 	<section class="relative">
-		<div class="glass-panel py-24">
+		<div class="glass-panel py-24 px-6">
 			<div class="container mx-auto max-w-7xl">
 				<div v-if="recentUrls.length > 0">
 					<div class="mb-16 text-center">

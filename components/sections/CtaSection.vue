@@ -1,5 +1,5 @@
 <template>
-	<section class="cta-section py-24 px-4 relative">
+	<section class="cta-section py-24 px-6 relative">
 		<div class="container mx-auto max-w-7xl">
 			<div class="glass-card-highlight overflow-hidden relative">
 				<!-- Декоративные элементы фона -->

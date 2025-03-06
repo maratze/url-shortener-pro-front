@@ -1,5 +1,5 @@
 <template>
-	<section class="how-it-works-section py-24 px-4 relative overflow-hidden">
+	<section class="how-it-works-section py-24 px-6 relative overflow-hidden">
 		<div class="container mx-auto max-w-7xl relative">
 			<!-- Обновленный заголовок в соответствии с предыдущими блоками -->
 			<div class="text-center max-w-3xl mx-auto mb-16">
@@ -13,7 +13,7 @@
 				</p>
 			</div>
 
-			<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-6  mx-auto">
 				<!-- Step 1 -->
 				<div class="step-card feature-card-1" data-aos="fade-up" data-aos-delay="0">
 					<div class="step-number">1</div>

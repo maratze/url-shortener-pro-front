@@ -1,5 +1,5 @@
 <template>
-	<section class="features-section py-24 px-4 relative overflow-hidden">
+	<section class="features-section py-24 px-6 relative overflow-hidden">
 		<!-- Декоративный фоновый элемент -->
 		<div
 			class="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-br from-blue-100/30 to-purple-100/30 blur-3xl rounded-full -z-10 dark:from-blue-900/10 dark:to-purple-900/10"></div>
@@ -22,7 +22,7 @@
 			</div>
 
 			<!-- Grid с карточками функций -->
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 				<!-- Feature 1 -->
 				<FeatureCard
 					title="Lightning Fast"
@@ -81,11 +81,3 @@
 <script setup lang="ts">
 import FeatureCard from '~/components/home/FeatureCard.vue';
 </script>
-
-<style scoped>
-@media (min-width: 1024px) {
-	.features-section .grid {
-		padding-bottom: 3rem;
-	}
-}
-</style>

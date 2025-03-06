@@ -12,13 +12,9 @@
 		<div :class="{ 'opacity-0': isLoading }">
 			<NuxtLayout>
 				<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950 transition-colors duration-300">
-					<AppHeader/>
-
 					<main class="pt-[74px]">
 						<NuxtPage/>
 					</main>
-
-					<AppFooter/>
 				</div>
 			</NuxtLayout>
 		</div>
