@@ -5,47 +5,7 @@
 		<RecentUrls/>
 		<WhyChooseSection/>
 		<StatisticsSection/>
-
-		<!-- How it works -->
-		<section class="py-24 px-4 relative">
-			<div class="container mx-auto max-w-7xl">
-				<div class="text-center max-w-3xl mx-auto mb-16">
-					<h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-800 dark:text-white">How It Works</h2>
-					<p class="text-lg text-slate-600 dark:text-slate-300">
-						Three simple steps to get your shortened URL
-					</p>
-				</div>
-
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-					<!-- Step 1 -->
-					<div class="step-card" data-aos="fade-up" data-aos-delay="0">
-						<div class="step-number">1</div>
-						<h3 class="text-xl font-bold mb-3 text-slate-800 dark:text-white">Paste Your URL</h3>
-						<p class="text-slate-600 dark:text-slate-400">
-							Paste your long URL into the input field at the top of the page
-						</p>
-					</div>
-
-					<!-- Step 2 -->
-					<div class="step-card" data-aos="fade-up" data-aos-delay="100">
-						<div class="step-number">2</div>
-						<h3 class="text-xl font-bold mb-3 text-slate-800 dark:text-white">Click Shorten</h3>
-						<p class="text-slate-600 dark:text-slate-400">
-							Click the shorten button and wait for our system to generate your link
-						</p>
-					</div>
-
-					<!-- Step 3 -->
-					<div class="step-card" data-aos="fade-up" data-aos-delay="200">
-						<div class="step-number">3</div>
-						<h3 class="text-xl font-bold mb-3 text-slate-800 dark:text-white">Copy & Share</h3>
-						<p class="text-slate-600 dark:text-slate-400">
-							Copy your shortened URL and share it wherever you want
-						</p>
-					</div>
-				</div>
-			</div>
-		</section>
+		<HowItWorksSection/>
 
 		<!-- FAQ Section -->
 		<section class="py-24 px-4 relative">
@@ -96,11 +56,11 @@
 import { onMounted, computed } from 'vue';
 import { useUrlStore } from '~/stores/url';
 import RecentUrls from '~/components/home/RecentUrls.vue';
-import CountUp from '~/components/CountUp.vue';
 import FaqAccordion from '~/components/FaqAccordion.vue';
 import HeroSection from '~/components/sections/HeroSection.vue';
 import WhyChooseSection from '~/components/sections/WhyChooseSection.vue';
 import StatisticsSection from '~/components/sections/StatisticsSection.vue';
+import HowItWorksSection from '~/components/sections/HowItWorksSection.vue';
 
 const urlStore = useUrlStore();
 
