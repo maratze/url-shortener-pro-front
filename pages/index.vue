@@ -6,25 +6,7 @@
 		<WhyChooseSection/>
 		<StatisticsSection/>
 		<HowItWorksSection/>
-
-		<!-- FAQ Section -->
-		<section class="py-24 px-4 relative">
-			<div class="container mx-auto max-w-7xl">
-				<div class="glass-panel">
-					<div class="text-center max-w-3xl mx-auto mb-12">
-						<h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-800 dark:text-white">Frequently Asked
-							Questions</h2>
-						<p class="text-lg text-slate-600 dark:text-slate-300">
-							Everything you need to know about our URL shortening service
-						</p>
-					</div>
-
-					<div class="max-w-3xl mx-auto">
-						<FaqAccordion/>
-					</div>
-				</div>
-			</div>
-		</section>
+		<FaqSection />
 
 		<!-- CTA Section -->
 		<section class="py-24 px-4 relative">
@@ -53,14 +35,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed } from 'vue';
+import { onMounted } from 'vue';
 import { useUrlStore } from '~/stores/url';
 import RecentUrls from '~/components/home/RecentUrls.vue';
-import FaqAccordion from '~/components/FaqAccordion.vue';
 import HeroSection from '~/components/sections/HeroSection.vue';
 import WhyChooseSection from '~/components/sections/WhyChooseSection.vue';
 import StatisticsSection from '~/components/sections/StatisticsSection.vue';
 import HowItWorksSection from '~/components/sections/HowItWorksSection.vue';
+import FaqSection from '~/components/sections/FaqSection.vue';
 
 const urlStore = useUrlStore();
 

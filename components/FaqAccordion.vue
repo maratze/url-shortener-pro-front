@@ -89,19 +89,20 @@ onMounted(() => {
 </script>
 
 <style scoped>
+
 .faq-item {
-	background: rgba(255, 255, 255, 0.7);
+	background: rgba(255, 255, 255, 0.7);	
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
-	border: 1px solid rgba(255, 255, 255, 0.3);
+	border: 1px solid rgba(0, 0, 0, 0.1);
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 	border-radius: 16px;
 	overflow: hidden;
-	transition: all 0.3s ease;
+	transition: all 0.2s linear;
 }
 
 .dark .faq-item {
-	background: rgba(30, 41, 59, 0.7);
+	background: transparent;
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
@@ -121,12 +122,12 @@ onMounted(() => {
 }
 
 .faq-answer {
-	@apply overflow-hidden transition-all duration-300 ease-in-out;
+	@apply overflow-hidden transition-all duration-200 ease-in-out;
 	background: rgba(255, 255, 255, 0.5);
 }
 
 .dark .faq-answer {
-	background: rgba(15, 23, 42, 0.5);
+	background: rgba(15, 23, 42, 1);
 }
 
 .faq-answer-content {
