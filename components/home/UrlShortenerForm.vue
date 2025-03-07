@@ -430,7 +430,7 @@ const submitForm = async () => {
 	background: rgba(255, 255, 255, 0.9);
 	backdrop-filter: blur(4px);
 	-webkit-backdrop-filter: blur(4px);
-	border: 1px solid rgba(255, 255, 255, 0.6);
+	border: 1px solid rgba(0, 0, 0, 0.1);
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 	border-radius: 12px;
 	padding: 12px 16px;

@@ -4,7 +4,7 @@
 			class="relative p-8 md:p-10 z-10 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-xl">
 			<!-- Заголовок формы -->
 			<div class="mb-8">
-				<h2 class="text-2xl font-bold mb-2 text-slate-800 dark:text-white">
+				<h2 class="text-2xl font-bold mb-2 text-slate-800 dark:text-white animate-fade-in animation-delay-600">
 					Create your account
 				</h2>
 				<p class="text-slate-600 dark:text-slate-300 max-w-md mx-auto animate-fade-in animation-delay-600 text-sm">
