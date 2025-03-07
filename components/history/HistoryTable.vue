@@ -171,6 +171,10 @@ const getSelectedLinks = (): string[] => {
 	@apply bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 backdrop-blur-md;
 }
 
+.glass-card:hover {
+	transform: translateY(0);
+}
+
 .table-head-cell {
 	@apply px-4 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider;
 }

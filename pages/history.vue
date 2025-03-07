@@ -1,8 +1,8 @@
 <template>
-	<div class="container mx-auto px-4 py-6">
+	<div class="container mx-auto px-4 py-6 max-w-7xl">
 		<!-- Заголовок страницы с кнопкой создания новой ссылки -->
 		<div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
-			<h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-4 sm:mb-0">Link History</h1>
+			<h1 class="text-3xl font-bold text-slate-800 dark:text-white mb-4 sm:mb-0">Link History</h1>
 			<button
 				@click="openCreateModal"
 				class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg flex items-center justify-center"
@@ -15,7 +15,7 @@
 		</div>
 
 		<!-- Блоки статистики -->
-		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
 			<history-summary-card
 				title="Total Links"
 				:value="summary.totalLinks"
@@ -75,11 +75,6 @@
 					</svg>
 				</template>
 			</history-summary-card>
-		</div>
-
-		<!-- Блок рекомендаций -->
-		<div class="mb-6">
-			<history-insights />
 		</div>
 
 		<!-- Панель управления, фильтры и переключатели вида -->

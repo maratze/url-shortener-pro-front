@@ -1,5 +1,5 @@
 <template>
-	<footer class="py-12 bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-sm">
+	<footer class="footer py-12 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
 		<div class="container mx-auto max-w-7xl px-6">
 			<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
 				<div>
@@ -111,6 +111,10 @@
 </template>
 
 <style scoped>
+.footer {
+	box-shadow: var(--glass-shadow);
+}
+
 .social-link {
 	@apply inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-colors;
 }
