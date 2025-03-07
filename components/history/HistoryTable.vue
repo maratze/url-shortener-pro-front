@@ -25,20 +25,9 @@
 				</tr>
 				</thead>
 				<tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
-				<tr v-for="link in links" :key="link.id" class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors duration-150 group">
-					<!-- Чекбокс для выделения строки -->
-					<td class="table-cell">
-						<div class="flex items-center">
-							<input
-								type="checkbox"
-								v-model="selectedItems"
-								:value="link.id"
-								class="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 dark:bg-slate-800"
-							/>
-						</div>
-					</td>
-
-					<!-- Остальные ячейки таблицы -->
+				<template
+					v-for="link in links"
+					:key="link.id">
 					<history-table-row
 						:link="link"
 						@edit="$emit('edit', link)"
@@ -47,7 +36,7 @@
 						@copy="$emit('copy', $event)"
 						@toggle-active="$emit('toggle-active', link)"
 					/>
-				</tr>
+				</template>
 				</tbody>
 			</table>
 		</div>
