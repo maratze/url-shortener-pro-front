@@ -1,5 +1,5 @@
 <template>
-	<div class="register-page px-6 relative min-h-screen flex items-center justify-center overflow-hidden">
+	<div class="register-page py-20 px-4 relative min-h-screen flex items-center justify-center overflow-hidden">
 		<div class="container mx-auto max-w-lg z-10">
 			<RegisterForm />
 		</div>

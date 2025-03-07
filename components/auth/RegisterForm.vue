@@ -1,18 +1,21 @@
 <template>
 	<div class="premium-glass-card relative overflow-hidden animate-fade-in animation-delay-800">
 		<!-- Эффект сияния -->
-		<div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 opacity-20 blur rounded-[inherit]"></div>
+		<div
+			class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 opacity-20 blur rounded-[inherit]"></div>
 		<div class="shine-effect z-0"></div>
 
-		<div class="relative p-8 md:p-10 z-10 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-xl">
+		<div
+			class="relative p-8 md:p-10 z-10 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-xl">
 			<!-- Заголовок формы -->
 			<div class="mb-8">
 				<h2 class="text-2xl font-bold mb-2 text-slate-800 dark:text-white">
 					Create your account
 				</h2>
-					<p class="text-slate-600 dark:text-slate-300 max-w-md mx-auto animate-fade-in animation-delay-600 text-sm">
-						Create an account to unlock <span class="font-medium text-indigo-600 dark:text-indigo-400">30 free shortened URLs</span> monthly and access advanced features
-					</p>
+				<p class="text-slate-600 dark:text-slate-300 max-w-md mx-auto animate-fade-in animation-delay-600 text-sm">
+					Create an account to unlock <span class="font-medium text-indigo-600 dark:text-indigo-400">30 free shortened URLs</span>
+					monthly and access advanced features
+				</p>
 			</div>
 
 			<form @submit.prevent="handleSubmit" class="space-y-6">
@@ -21,8 +24,10 @@
 					<label class="form-label" for="email">Email</label>
 					<div class="relative">
 						<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none"
+								 viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									  d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
 							</svg>
 						</div>
 						<input
@@ -42,8 +47,10 @@
 					<label class="form-label" for="password">Password</label>
 					<div class="relative">
 						<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none"
+								 viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
 							</svg>
 						</div>
 						<input
@@ -59,12 +66,17 @@
 							@click="showPassword = !showPassword"
 							class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 focus:outline-none"
 						>
-							<svg v-if="showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+							<svg v-if="showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+								 viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
 							</svg>
-							<svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+							<svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+								 viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
 							</svg>
 						</button>
 					</div>
@@ -112,11 +124,13 @@
 					<div class="ml-3 text-sm">
 						<label for="terms" class="text-slate-600 dark:text-slate-400">
 							I agree to the
-							<NuxtLink to="/terms" class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">
+							<NuxtLink to="/terms"
+									  class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">
 								Terms
 							</NuxtLink>
 							and
-							<NuxtLink to="/privacy" class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">
+							<NuxtLink to="/privacy"
+									  class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">
 								Privacy Policy
 							</NuxtLink>
 						</label>
@@ -124,9 +138,13 @@
 				</div>
 
 				<!-- Ошибка -->
-				<div v-if="errors.general" class="py-3 px-4 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg text-sm flex items-start">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-						<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zm-1 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+				<div v-if="errors.general"
+					 class="py-3 px-4 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg text-sm flex items-start">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
+						 viewBox="0 0 20 20" fill="currentColor">
+						<path fill-rule="evenodd"
+							  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zm-1 9a1 1 0 100-2 1 1 0 000 2z"
+							  clip-rule="evenodd"/>
 					</svg>
 					<span>{{ errors.general }}</span>
 				</div>
@@ -140,9 +158,11 @@
 				>
 					<span v-if="!loading">Create Account</span>
 					<span v-else class="flex items-center justify-center">
-            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+				 viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <path class="opacity-75" fill="currentColor"
+					d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
             Creating account...
           </span>
@@ -151,7 +171,8 @@
 				<!-- Разделитель -->
 				<div class="relative flex items-center justify-center my-6">
 					<div class="h-px flex-grow bg-slate-200 dark:bg-slate-700"></div>
-					<span class="px-4 text-xs font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 relative z-10">or continue with</span>
+					<span
+						class="px-4 text-xs font-medium text-slate-500 dark:text-slate-400 bg-transparent relative z-10">or continue with</span>
 					<div class="h-px flex-grow bg-slate-200 dark:bg-slate-700"></div>
 				</div>
 
@@ -159,10 +180,14 @@
 				<div class="social-buttons">
 					<button type="button" class="social-btn google-btn">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 48 48">
-							<path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-							<path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-							<path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-							<path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+							<path fill="#EA4335"
+								  d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+							<path fill="#4285F4"
+								  d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+							<path fill="#FBBC05"
+								  d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+							<path fill="#34A853"
+								  d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
 						</svg>
 						Google
 					</button>
@@ -170,7 +195,8 @@
 
 				<p class="text-center text-sm text-slate-600 dark:text-slate-400 mt-6">
 					Already have an account?
-					<NuxtLink to="/login" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium transition-colors duration-200">
+					<NuxtLink to="/login"
+							  class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium transition-colors duration-200">
 						Log in
 					</NuxtLink>
 				</p>
@@ -224,21 +250,31 @@ const passwordStrength = computed(() => {
 
 const passwordStrengthText = computed(() => {
 	switch (passwordStrength.value) {
-		case 0: return 'Too Weak';
-		case 1: return 'Weak';
-		case 2: return 'Good';
-		case 3: return 'Strong';
-		default: return '';
+		case 0:
+			return 'Too Weak';
+		case 1:
+			return 'Weak';
+		case 2:
+			return 'Good';
+		case 3:
+			return 'Strong';
+		default:
+			return '';
 	}
 });
 
 const passwordStrengthClass = computed(() => {
 	switch (passwordStrength.value) {
-		case 0: return 'text-red-600 dark:text-red-400';
-		case 1: return 'text-orange-600 dark:text-orange-400';
-		case 2: return 'text-yellow-600 dark:text-yellow-400';
-		case 3: return 'text-green-600 dark:text-green-400';
-		default: return 'text-slate-500';
+		case 0:
+			return 'text-red-600 dark:text-red-400';
+		case 1:
+			return 'text-orange-600 dark:text-orange-400';
+		case 2:
+			return 'text-yellow-600 dark:text-yellow-400';
+		case 3:
+			return 'text-green-600 dark:text-green-400';
+		default:
+			return 'text-slate-500';
 	}
 });
 
@@ -258,10 +294,14 @@ const passwordTipsText = computed(() => {
 
 function strengthColorClass(level: number) {
 	switch (passwordStrength.value) {
-		case 1: return 'bg-orange-500 dark:bg-orange-600';
-		case 2: return 'bg-yellow-500 dark:bg-yellow-600';
-		case 3: return 'bg-green-500 dark:bg-green-600';
-		default: return 'bg-red-500 dark:bg-red-600';
+		case 1:
+			return 'bg-orange-500 dark:bg-orange-600';
+		case 2:
+			return 'bg-yellow-500 dark:bg-yellow-600';
+		case 3:
+			return 'bg-green-500 dark:bg-green-600';
+		default:
+			return 'bg-red-500 dark:bg-red-600';
 	}
 }
 
