@@ -1,7 +1,7 @@
 <template>
 	<button
 		:class="[
-      'flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2',
+			'flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2',
       'disabled:opacity-60 disabled:cursor-not-allowed',
       rounded ? 'rounded-full' : 'rounded-lg',
       sizeClasses,

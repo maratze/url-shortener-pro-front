@@ -1,18 +1,20 @@
 <template>
 	<div class="container mx-auto px-4 py-6 max-w-7xl">
-		<!-- Заголовок страницы с кнопкой создания новой ссылки -->
-		<div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
-			<h1 class="text-3xl font-bold text-slate-800 dark:text-white mb-4 sm:mb-0">Link History</h1>
-			<button
-				@click="openCreateModal"
-				class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg flex items-center justify-center"
-			>
-				<svg class="h-5 w-5 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-				</svg>
-				Create New Link
-			</button>
-		</div>
+		<PageHeader title="Link History">
+			<template #button>
+				<button
+					@click="openCreateModal"
+					class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg flex items-center justify-center"
+				>
+					<svg class="h-5 w-5 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+						 stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							  d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+					</svg>
+					Create New Link
+				</button>
+			</template>
+		</PageHeader>
 
 		<!-- Блоки статистики -->
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
@@ -420,6 +422,7 @@ import CreateLinkModal from '~/components/history/modals/CreateLinkModal.vue';
 import EditLinkModal from '~/components/history/modals/EditLinkModal.vue';
 import DeleteLinkModal from '~/components/history/modals/DeleteLinkModal.vue';
 import StatsModal from '~/components/history/modals/StatsModal.vue';
+import PageHeader from '~/components/common/PageHeader.vue';
 
 interface TableColumn {
 	id: string;
