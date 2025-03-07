@@ -23,23 +23,21 @@ import { ref, onMounted } from 'vue';
 
 const isDark = ref(false);
 
+// Переключение темы с сохранением в localStorage
 const toggleDarkMode = () => {
 	if (isDark.value) {
 		document.documentElement.classList.remove('dark');
-		localStorage.theme = 'light';
+		localStorage.setItem('theme', 'light');
 	} else {
 		document.documentElement.classList.add('dark');
-		localStorage.theme = 'dark';
+		localStorage.setItem('theme', 'dark');
 	}
 	isDark.value = !isDark.value;
 };
 
 onMounted(() => {
-	// Проверяем текущую тему при загрузке компонента
-	isDark.value = document.documentElement.classList.contains('dark') ||
-		(localStorage.theme === 'dark' ||
-			(!('theme' in localStorage) &&
-				window.matchMedia('(prefers-color-scheme: dark)').matches));
+	// Проверяем текущую тему при монтировании компонента
+	isDark.value = document.documentElement.classList.contains('dark');
 });
 </script>
 

@@ -1,10 +1,5 @@
 <template>
 	<div class="premium-glass-card relative overflow-hidden animate-fade-in animation-delay-800">
-		<!-- Эффект сияния -->
-		<div
-			class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 opacity-20 blur rounded-[inherit]"></div>
-		<div class="shine-effect z-0"></div>
-
 		<div
 			class="relative p-8 md:p-10 z-10 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-xl">
 			<!-- Заголовок формы -->
@@ -84,12 +79,12 @@
 					<!-- Индикатор силы пароля с анимацией -->
 					<div class="mt-3" v-if="form.password">
 						<div class="flex items-center mb-1">
-              <span class="text-xs font-medium mr-auto" :class="passwordStrengthClass">
-                {{ passwordStrengthText }}
-              </span>
+							<span class="text-xs font-medium mr-auto" :class="passwordStrengthClass">
+								{{ passwordStrengthText }}
+							</span>
 							<span class="text-xs text-slate-500 dark:text-slate-400">
-                {{ passwordTipsText }}
-              </span>
+								{{ passwordTipsText }}
+							</span>
 						</div>
 						<div class="flex gap-1.5">
 							<div
@@ -158,14 +153,15 @@
 				>
 					<span v-if="!loading">Create Account</span>
 					<span v-else class="flex items-center justify-center">
-            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-				 viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor"
-					d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Creating account...
-          </span>
+						<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg"
+							 fill="none" viewBox="0 0 24 24">
+							<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+									stroke-width="4"></circle>
+							<path class="opacity-75" fill="currentColor"
+								  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path> 
+						</svg>
+						Creating account...
+					</span>
 				</button>
 
 				<!-- Разделитель -->
