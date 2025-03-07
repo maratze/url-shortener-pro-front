@@ -1,5 +1,5 @@
 <template>
-	<div class="premium-glass-card relative overflow-hidden animate-fade-in animation-delay-800">
+	<div class="premium-glass-card relative overflow-hidden">
 		<div
 			class="relative p-8 md:p-10 z-10 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-xl">
 			<!-- Заголовок формы -->
