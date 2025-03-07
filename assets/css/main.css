@@ -37,6 +37,6 @@
 }
 
 body {
-    @apply bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 min-h-screen text-slate-900 dark:text-white;
+    @apply  from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 min-h-screen text-slate-900 dark:text-white;
     font-family: 'Inter', sans-serif;
 }
