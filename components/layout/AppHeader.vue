@@ -21,10 +21,10 @@
 
 				<!-- Центральная часть: Навигация -->
 				<nav class="hidden md:flex items-center justify-center space-x-6">
-					<NuxtLink to="/history" class="nav-link">History</NuxtLink>
-					<NuxtLink to="/analytics" class="nav-link">Analytics</NuxtLink>
-					<NuxtLink to="/pricing" class="nav-link">Pricing</NuxtLink>
-					<NuxtLink to="/about" class="nav-link">About</NuxtLink>
+					<NuxtLink to="/history" class="nav-link" active-class="router-link-active">History</NuxtLink>
+					<NuxtLink to="/analytics" class="nav-link" active-class="router-link-active">Analytics</NuxtLink>
+					<NuxtLink to="/pricing" class="nav-link" active-class="router-link-active">Pricing</NuxtLink>
+					<NuxtLink to="/about" class="nav-link" active-class="router-link-active">About</NuxtLink>
 				</nav>
 
 				<!-- Правая часть: Кнопки авторизации -->
@@ -40,10 +40,11 @@
 			<div v-if="mobileMenuOpen" class="md:hidden mobile-menu">
 				<nav class="px-4 py-6 space-y-4">
 					<div class="border-t dark:border-slate-700"></div>
-					<NuxtLink to="/history" class="mobile-nav-link" @click="mobileMenuOpen = false">History</NuxtLink>
-					<NuxtLink to="/analytics" class="mobile-nav-link" @click="mobileMenuOpen = false">Analytics</NuxtLink>
-					<NuxtLink to="/pricing" class="mobile-nav-link" @click="mobileMenuOpen = false">Pricing</NuxtLink>
-					<NuxtLink to="/about" class="mobile-nav-link" @click="mobileMenuOpen = false">About</NuxtLink>
+					<!-- Мобильное меню -->
+					<NuxtLink to="/history" class="mobile-nav-link" active-class="text-purple-600 dark:text-purple-400 font-semibold" @click="mobileMenuOpen = false">History</NuxtLink>
+					<NuxtLink to="/analytics" class="mobile-nav-link" active-class="text-purple-600 dark:text-purple-400 font-semibold" @click="mobileMenuOpen = false">Analytics</NuxtLink>
+					<NuxtLink to="/pricing" class="mobile-nav-link" active-class="text-purple-600 dark:text-purple-400 font-semibold" @click="mobileMenuOpen = false">Pricing</NuxtLink>
+					<NuxtLink to="/about" class="mobile-nav-link" active-class="text-purple-600 dark:text-purple-400 font-semibold" @click="mobileMenuOpen = false">About</NuxtLink>
 					<NuxtLink to="/register" class="mobile-nav-link text-purple-600 dark:text-purple-400 font-semibold" @click="mobileMenuOpen = false">Register</NuxtLink>
 					<NuxtLink to="/login" class="mobile-nav-link" @click="mobileMenuOpen = false">Login</NuxtLink>
 				</nav>
@@ -77,7 +78,7 @@ onUnmounted(() => {
 	@apply text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium transition-colors;
 }
 
-.nav-link.router-link-active {
+.router-link-active {
 	@apply text-purple-600 dark:text-purple-400 font-semibold;
 }
 
