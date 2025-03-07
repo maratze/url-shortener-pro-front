@@ -643,22 +643,22 @@ const openCreateModal = () => {
 	showCreateModal.value = true;
 };
 
-const openEditModal = (link: LinkData) => {
+const openEditModal = (link: LinkData): void => {
 	selectedLink.value = { ...link };
 	showEditModal.value = true;
 };
 
-const openDeleteModal = (link: LinkData) => {
+const openDeleteModal = (link: LinkData): void => {
 	selectedLink.value = link;
 	showDeleteModal.value = true;
 };
 
-const openStatsModal = (link: LinkData) => {
+const openStatsModal = (link: LinkData): void => {
 	selectedLink.value = link;
 	showStatsModal.value = true;
 };
 
-const copyToClipboard = (text: string) => {
+const copyToClipboard = (text: string): void => {
 	navigator.clipboard.writeText(text)
 		.then(() => {
 			toastStore.success('Link copied to clipboard');
@@ -669,7 +669,7 @@ const copyToClipboard = (text: string) => {
 		});
 };
 
-const toggleLinkActive = (link: LinkData) => {
+const toggleLinkActive = (link: LinkData): void => {
 	// В реальном приложении здесь был бы запрос к API
 	const index = links.value.findIndex(l => l.id === link.id);
 	if (index !== -1) {
@@ -679,7 +679,7 @@ const toggleLinkActive = (link: LinkData) => {
 };
 
 // Функции для массовых действий
-const bulkCopy = (urls: string[]) => {
+const bulkCopy = (urls: string[]): void => {
 	navigator.clipboard.writeText(urls.join('\n'))
 		.then(() => {
 			toastStore.success(`${urls.length} links copied to clipboard`);
@@ -690,7 +690,7 @@ const bulkCopy = (urls: string[]) => {
 		});
 };
 
-const bulkActivate = (ids: string[], active: boolean) => {
+const bulkActivate = (ids: string[], active: boolean): void => {
 	// В реальном приложении здесь был бы запрос к API
 	ids.forEach(id => {
 		const link = links.value.find(l => l.id === id);
@@ -711,7 +711,7 @@ const bulkDelete = async (ids: string[]) => {
 	}
 };
 
-const bulkExport = (ids: string[]) => {
+const bulkExport = (ids: string[]): void => {
 	const selectedLinks = links.value.filter(link => ids.includes(link.id));
 	const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(selectedLinks, null, 2));
 	const downloadAnchorNode = document.createElement('a');
@@ -725,7 +725,7 @@ const bulkExport = (ids: string[]) => {
 };
 
 // Создание, обновление и удаление ссылок
-const createLink = (link: LinkData) => {
+const createLink = (link: LinkData): void => {
 	// Генерация уникального ID и короткой ссылки
 	const newLink = {
 		...link,
@@ -740,7 +740,7 @@ const createLink = (link: LinkData) => {
 	showCreateModal.value = false;
 };
 
-const updateLink = (updatedLink: LinkData) => {
+const updateLink = (updatedLink: LinkData): void => {
 	const index = links.value.findIndex(link => link.id === updatedLink.id);
 	if (index !== -1) {
 		links.value[index] = { ...updatedLink };
@@ -750,7 +750,7 @@ const updateLink = (updatedLink: LinkData) => {
 	}
 };
 
-const deleteLink = (id: string) => {
+const deleteLink = (id: string): void => {
 	links.value = links.value.filter(link => link.id !== id);
 	updateSummary();
 	toastStore.success('Link deleted successfully');
@@ -758,7 +758,7 @@ const deleteLink = (id: string) => {
 };
 
 // Обновление сводных данных
-const updateSummary = () => {
+const updateSummary = (): void => {
 	summary.totalLinks = links.value.length;
 	summary.totalClicks = links.value.reduce((acc, link) => acc + link.clicks, 0);
 	summary.activeLinks = links.value.filter(link => link.isActive).length;
