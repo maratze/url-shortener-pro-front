@@ -235,7 +235,8 @@ const formData = reactive<LinkData>({
 	utmSource: '',
 	utmMedium: '',
 	utmCampaign: '',
-	tags: []
+	tags: [],
+	clickTrend: 0
 });
 
 // Состояние отправки формы
