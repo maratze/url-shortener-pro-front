@@ -1,6 +1,6 @@
 <template>
-	<div class="container mx-auto px-4 py-12">
-		<div class="max-w-md mx-auto">
+	<div class="register-page px-6 relative min-h-screen flex items-center justify-center overflow-hidden">
+		<div class="container mx-auto max-w-lg z-10">
 			<RegisterForm />
 		</div>
 	</div>
@@ -11,9 +11,18 @@ import RegisterForm from '~/components/auth/RegisterForm.vue';
 
 // SEO
 useHead({
-	title: 'Register - URL Shortener Pro',
+	title: 'Join TinyLink - Create Your Account',
 	meta: [
-		{ name: 'description', content: 'Create your URL Shortener Pro account to get additional free URL shortening requests and access premium features.' },
+		{
+			name: 'description',
+			content: 'Create your TinyLink account in seconds to get 100 free URL shortening requests per month and access premium features like analytics and custom links.'
+		},
 	]
 })
 </script>
+
+<style scoped>
+.register-page {
+	background: transparent;
+}
+</style>
