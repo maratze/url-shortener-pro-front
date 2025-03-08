@@ -115,23 +115,23 @@
 					</div>
 				</div>
 
-				<!-- Устройства -->
-				<div class="graph-container bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden">
-					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
-						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Devices</h3>
-					</div>
-					<div class="p-4">
-						<history-devices-chart :data="devicesData" />
-					</div>
-				</div>
-
-				<!-- Рефереры -->
+				<!-- Рефереры (Traffic Sources) -->
 				<div class="graph-container bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden">
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
 						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Traffic Sources</h3>
 					</div>
 					<div class="p-4">
 						<history-referrers-chart :data="referrersData" />
+					</div>
+				</div>
+
+				<!-- Устройства (Devices) -->
+				<div class="graph-container bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden">
+					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
+						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Devices</h3>
+					</div>
+					<div class="p-4">
+						<history-devices-chart :data="devicesData" />
 					</div>
 				</div>
 			</div>
