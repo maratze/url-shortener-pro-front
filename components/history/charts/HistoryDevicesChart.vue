@@ -39,7 +39,7 @@
                 </div>
                 <div class="font-medium text-slate-800 dark:text-white">{{ device.type }}</div>
                 <div class="text-2xl font-bold text-slate-900 dark:text-white mt-1">{{ device.count }}</div>
-                <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ device.percentage }}% от общего</div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ device.percentage }}% of total</div>
             </div>
         </div>
     </div>

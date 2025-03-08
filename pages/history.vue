@@ -20,9 +20,9 @@
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 							d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 					</svg>
-					<span>Вы используете базовую версию. <NuxtLink to="/login"
-							class="text-indigo-600 dark:text-indigo-400 hover:underline">Войдите</NuxtLink> для доступа
-						к расширенной аналитике.</span>
+					<span>You are using the basic version. <NuxtLink to="/login"
+							class="text-indigo-600 dark:text-indigo-400 hover:underline">Log in</NuxtLink> for access to
+						advanced analytics.</span>
 				</div>
 			</template>
 		</PageHeader>
@@ -82,7 +82,7 @@
 		<div v-if="isAuthenticated" class="mb-6">
 			<div class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden mb-4">
 				<div class="p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
-					<h3 class="text-lg font-medium text-slate-900 dark:text-white">Аналитика кликов</h3>
+					<h3 class="text-lg font-medium text-slate-900 dark:text-white">Clicks Analytics</h3>
 					<div class="flex space-x-2">
 						<button v-for="(period, index) in timePeriods" :key="index"
 							@click="activeTimePeriod = period.value"
@@ -99,7 +99,8 @@
 				<div class="p-4">
 					<div class="h-64">
 						<!-- Здесь будет внедрен график кликов -->
-						<history-clicks-chart :data="chartData[activeTimePeriod]" :period="activeTimePeriod" />
+						<history-clicks-chart :data="chartData[activeTimePeriod as keyof ChartDataTypes]"
+							:period="activeTimePeriod" />
 					</div>
 				</div>
 			</div>
@@ -108,7 +109,7 @@
 				<!-- Географическое распределение -->
 				<div class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden">
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
-						<h3 class="text-lg font-medium text-slate-900 dark:text-white">География</h3>
+						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Geography</h3>
 					</div>
 					<div class="p-4">
 						<history-geo-distribution :data="geoData" />
@@ -118,7 +119,7 @@
 				<!-- Устройства -->
 				<div class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden">
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
-						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Устройства</h3>
+						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Devices</h3>
 					</div>
 					<div class="p-4">
 						<history-devices-chart :data="devicesData" />
@@ -128,7 +129,7 @@
 				<!-- Рефереры -->
 				<div class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden">
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
-						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Источники трафика</h3>
+						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Traffic Sources</h3>
 					</div>
 					<div class="p-4">
 						<history-referrers-chart :data="referrersData" />
@@ -181,8 +182,8 @@
 
 				<!-- Фильтры -->
 				<div class="relative">
-					<button @click="showFilters = !showFilters"
-						class="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
+					<button @click="toggleFilters"
+						class="filters-button p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
 						title="Filters">
 						<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
 							stroke="currentColor">
@@ -193,7 +194,7 @@
 
 					<!-- Выпадающая панель фильтров -->
 					<div v-if="showFilters"
-						class="absolute right-0 mt-2 w-72 rounded-lg shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-10">
+						class="filters-menu absolute right-0 mt-2 w-72 rounded-lg shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-10">
 						<div class="p-4 space-y-4">
 							<div>
 								<label
@@ -254,10 +255,10 @@
 
 							<div v-if="isAuthenticated">
 								<label
-									class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Проекты</label>
+									class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Projects</label>
 								<select v-model="filters.project"
 									class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
-									<option value="">Все проекты</option>
+									<option value="">All projects</option>
 									<option v-for="project in availableProjects" :key="project.id" :value="project.id">
 										{{ project.name }}
 									</option>
@@ -267,7 +268,7 @@
 							<div>
 								<label
 									class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tags</label>
-								<div class="flex flex-wrap gap-1">
+								<div class="max-h-40 overflow-y-auto flex flex-wrap gap-1">
 									<button v-for="tag in availableTags" :key="tag" @click="toggleTagFilter(tag)"
 										:class="[
 											'px-2 py-1 text-xs rounded-full',
@@ -285,7 +286,7 @@
 									class="px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">
 									Clear filters
 								</button>
-								<button @click="applyFilters"
+								<button @click="handleApplyFilters"
 									class="ml-2 px-3 py-1.5 text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-md">
 									Apply
 								</button>
@@ -295,12 +296,13 @@
 				</div>
 
 				<!-- Настройки таблицы -->
-				<history-table-settings @columns-change="handleColumnsChange" @density-change="handleDensityChange" />
+				<history-table-settings @columns-change="handleColumnsChange" @density-change="handleDensityChange"
+					@items-per-page-change="handleItemsPerPageChange" />
 
 				<!-- Импорт/Экспорт (для авторизованных) -->
 				<div v-if="isAuthenticated" class="relative">
-					<button @click="showImportExport = !showImportExport"
-						class="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
+					<button @click="toggleImportExport"
+						class="import-export-button p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
 						title="Import/Export">
 						<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
 							stroke="currentColor">
@@ -311,19 +313,19 @@
 
 					<!-- Выпадающая панель импорта/экспорта -->
 					<div v-if="showImportExport"
-						class="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-10">
+						class="import-export-menu absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-10">
 						<div class="p-2">
 							<button @click="openImportModal"
 								class="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md">
-								Импорт из CSV/JSON
+								Import from CSV/JSON
 							</button>
 							<button @click="exportLinks"
 								class="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md">
-								Экспорт выбранных
+								Export selected
 							</button>
 							<button @click="exportAllLinks"
 								class="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md">
-								Экспорт всех ссылок
+								Export all links
 							</button>
 						</div>
 					</div>
@@ -360,7 +362,7 @@
 			</div>
 
 			<div v-if="filters.project" class="active-filter">
-				Проект: {{ getProjectName(filters.project) }}
+				Project: {{ getProjectName(filters.project) }}
 				<button @click="filters.project = ''"
 					class="ml-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
 					<svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -425,20 +427,23 @@
 			</button>
 		</div>
 
-		<!-- Табличный вид -->
-		<div v-else-if="viewType === 'table'">
-			<history-table :links="filteredLinks" @edit="openEditModal" @delete="openDeleteModal"
-				@view-stats="openStatsModal"
-				@copy="copyToClipboard" @toggle-active="toggleLinkActive" @bulk-copy="bulkCopy"
-				@bulk-activate="bulkActivate"
-				@bulk-delete="bulkDelete" @bulk-export="bulkExport" />
-		</div>
+		<!-- Основная часть страницы - список ссылок -->
+		<div class="mt-4">
+			<!-- Таблица с историей ссылок -->
+			<div v-if="viewType === 'table'">
+				<history-table :links="paginatedLinks" @edit="openEditModal" @delete="openDeleteModal"
+					@view-stats="openStatsModal" @copy="copyToClipboard" @toggle-active="toggleLinkActive"
+					@bulk-copy="bulkCopy"
+					@bulk-activate="bulkActivate" @bulk-delete="bulkDelete" @bulk-export="bulkExport"
+					@items-per-page-change="handleItemsPerPageChange" />
+			</div>
 
-		<!-- Вид карточками -->
-		<div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-			<history-card v-for="link in filteredLinks" :key="link.id" :link="link" @edit="openEditModal"
-				@delete="openDeleteModal" @view-stats="openStatsModal" @copy="copyToClipboard"
-				@toggle-active="toggleLinkActive" />
+			<!-- Вид карточками -->
+			<div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+				<history-card v-for="link in filteredLinks" :key="link.id" :link="link" @edit="openEditModal"
+					@delete="openDeleteModal" @view-stats="openStatsModal" @copy="copyToClipboard"
+					@toggle-active="toggleLinkActive" />
+			</div>
 		</div>
 
 		<!-- Пагинация -->
@@ -466,7 +471,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, watch } from 'vue';
+import { ref, reactive, computed, onMounted, watch, onBeforeUnmount } from 'vue';
 import type { LinkData, SummaryData } from '~/types/link';
 import { useDeviceFingerprint } from '~/composables/useDeviceFingerprint';
 import { useToastStore } from '~/stores/toast';
@@ -547,23 +552,64 @@ const itemsPerPage = ref(10);
 
 // Временные периоды для графиков
 const timePeriods = ref<TimePeriod[]>([
-	{ value: 'day', label: 'День' },
-	{ value: 'week', label: 'Неделя' },
-	{ value: 'month', label: 'Месяц' },
-	{ value: 'year', label: 'Год' }
+	{ value: 'day', label: 'Day' },
+	{ value: 'week', label: 'Week' },
+	{ value: 'month', label: 'Month' },
+	{ value: 'year', label: 'Year' }
 ]);
 const activeTimePeriod = ref('week');
 
+// Типы данных для графиков
+interface DayData {
+	time: string;
+	clicks: number;
+}
+
+interface DateData {
+	date: string;
+	clicks: number;
+}
+
+interface MonthData {
+	month: string;
+	clicks: number;
+}
+
+interface ChartDataTypes {
+	day: DayData[];
+	week: DateData[];
+	month: DateData[];
+	year: MonthData[];
+}
+
+interface GeoData {
+	country: string;
+	clicks: number;
+	percentage: number;
+}
+
+interface DeviceData {
+	type: string;
+	count: number;
+	percentage: number;
+}
+
+interface ReferrerData {
+	source: string;
+	count: number;
+	percentage: number;
+}
+
 // Данные для графиков
-const chartData = ref({
+const chartData = ref<ChartDataTypes>({
 	day: [],
 	week: [],
 	month: [],
 	year: []
 });
-const geoData = ref([]);
-const devicesData = ref([]);
-const referrersData = ref([]);
+const geoData = ref<GeoData[]>([]);
+const devicesData = ref<DeviceData[]>([]);
+const referrersData = ref<ReferrerData[]>([]);
 
 // Проекты
 const availableProjects = ref<Project[]>([]);
@@ -745,8 +791,9 @@ const clearFilters = () => {
 	showFilters.value = false;
 };
 
-const applyFilters = () => {
+const handleApplyFilters = () => {
 	showFilters.value = false;
+	document.removeEventListener('click', closeFiltersOnClickOutside);
 };
 
 // Функции для управления страницей
@@ -769,6 +816,11 @@ const handleColumnsChange = (columns: Array<{
 const handleDensityChange = (density: string) => {
 	console.log('Table density changed:', density);
 	// Здесь логика изменения плотности таблицы
+};
+
+const handleItemsPerPageChange = (count: number) => {
+	itemsPerPage.value = count;
+	currentPage.value = 1; // Сбрасываем на первую страницу при изменении количества элементов
 };
 
 // Функции работы с ссылками
@@ -983,12 +1035,12 @@ const generateChartData = () => {
 
 	// Географические данные
 	geoData.value = [
-		{ country: 'США', clicks: 1245, percentage: 35 },
-		{ country: 'Россия', clicks: 854, percentage: 24 },
-		{ country: 'Германия', clicks: 432, percentage: 12 },
-		{ country: 'Великобритания', clicks: 321, percentage: 9 },
-		{ country: 'Франция', clicks: 287, percentage: 8 },
-		{ country: 'Другие', clicks: 423, percentage: 12 }
+		{ country: 'USA', clicks: 1245, percentage: 35 },
+		{ country: 'Russia', clicks: 854, percentage: 24 },
+		{ country: 'Germany', clicks: 432, percentage: 12 },
+		{ country: 'UK', clicks: 321, percentage: 9 },
+		{ country: 'France', clicks: 287, percentage: 8 },
+		{ country: 'Others', clicks: 423, percentage: 12 }
 	];
 
 	// Данные по устройствам
@@ -1011,10 +1063,10 @@ const generateChartData = () => {
 // Генерация тестовых проектов
 const generateMockProjects = (): Project[] => {
 	return [
-		{ id: 'project_1', name: 'Маркетинговая кампания 2024' },
-		{ id: 'project_2', name: 'Запуск продукта' },
-		{ id: 'project_3', name: 'Блог компании' },
-		{ id: 'project_4', name: 'Социальные сети' }
+		{ id: 'project_1', name: 'Marketing Campaign 2024' },
+		{ id: 'project_2', name: 'Product Launch' },
+		{ id: 'project_3', name: 'Company Blog' },
+		{ id: 'project_4', name: 'Social Media' }
 	];
 };
 
@@ -1111,12 +1163,23 @@ watch([() => filters.status, () => filters.startDate, () => filters.endDate, () 
 // Импорт ссылок
 const importLinks = (links: LinkData[]) => {
 	// В реальном приложении здесь был бы запрос к API для импорта ссылок
-	toastStore.success(`Импортировано ${links.length} ссылок`);
+	toastStore.success(`Imported ${links.length} links`);
 	showImportModal.value = false;
 	fetchLinks(); // Перезагружаем ссылки после импорта
 };
 
 // Импорт/экспорт ссылок
+const toggleImportExport = () => {
+	showImportExport.value = !showImportExport.value;
+	if (showImportExport.value) {
+		showFilters.value = false; // Закрываем другие меню при открытии текущего
+		// Добавляем обработчик клика за пределами меню
+		setTimeout(() => {
+			document.addEventListener('click', closeImportExportOnClickOutside);
+		}, 0);
+	}
+};
+
 const openImportModal = () => {
 	showImportModal.value = true;
 	showImportExport.value = false;
@@ -1141,6 +1204,53 @@ const exportAllLinks = () => {
 	toastStore.success('Все ссылки успешно экспортированы');
 	showImportExport.value = false;
 };
+
+// Добавим функции для закрытия выпадающих меню при клике вне элемента
+// Закрытие меню импорта/экспорта при клике вне элемента
+const closeImportExportOnClickOutside = (event: MouseEvent) => {
+	const target = event.target as HTMLElement;
+	const importExportMenu = document.querySelector('.import-export-menu');
+	const importExportButton = document.querySelector('.import-export-button');
+
+	if (importExportMenu && importExportButton &&
+		!importExportMenu.contains(target) &&
+		!importExportButton.contains(target)) {
+		showImportExport.value = false;
+		document.removeEventListener('click', closeImportExportOnClickOutside);
+	}
+};
+
+// Функция для переключения фильтров
+const toggleFilters = () => {
+	showFilters.value = !showFilters.value;
+	if (showFilters.value) {
+		showImportExport.value = false; // Закрываем другие меню при открытии текущего
+		// Добавляем обработчик клика за пределами меню
+		setTimeout(() => {
+			document.addEventListener('click', closeFiltersOnClickOutside);
+		}, 0);
+	}
+};
+
+// Закрытие фильтров при клике вне элемента
+const closeFiltersOnClickOutside = (event: MouseEvent) => {
+	const target = event.target as HTMLElement;
+	const filtersMenu = document.querySelector('.filters-menu');
+	const filtersButton = document.querySelector('.filters-button');
+
+	if (filtersMenu && filtersButton &&
+		!filtersMenu.contains(target) &&
+		!filtersButton.contains(target)) {
+		showFilters.value = false;
+		document.removeEventListener('click', closeFiltersOnClickOutside);
+	}
+};
+
+// Обработчики для закрытия меню при размонтировании компонента
+onBeforeUnmount(() => {
+	document.removeEventListener('click', closeImportExportOnClickOutside);
+	document.removeEventListener('click', closeFiltersOnClickOutside);
+});
 </script>
 
 <style scoped>
