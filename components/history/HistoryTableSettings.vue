@@ -1,202 +1,131 @@
 <template>
-	<div class="relative">
-		<button
-			@click="toggleMenu"
-			class="table-settings-button p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
-			title="Table settings">
-			<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-				stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-					d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-					d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-			</svg>
-		</button>
+	<div class="flex flex-col space-y-4 p-4 glass-card rounded-xl">
+		<h3 class="text-lg font-medium text-slate-800 dark:text-white mb-2">Table Settings</h3>
 
-		<!-- Выпадающая панель настроек -->
-		<div
-			v-if="isOpen"
-			class="table-settings-menu absolute right-0 mt-2 w-64 rounded-lg shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-10">
-			<div class="p-4">
-				<h3 class="text-sm font-medium text-slate-800 dark:text-white mb-3">Table Columns</h3>
-
-				<div class="space-y-2">
-					<div
-						v-for="column in columns"
-						:key="column.id"
-						class="flex items-center">
-						<input
-							type="checkbox"
-							:id="`column-${column.id}`"
-							v-model="column.visible"
-							:disabled="column.required"
-							class="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600" />
-						<label :for="`column-${column.id}`" class="ml-2 text-sm text-slate-700 dark:text-slate-300">
-							{{ column.label }}
-							<span v-if="column.required"
-								class="text-xs text-slate-500 dark:text-slate-400">(required)</span>
-						</label>
-					</div>
-				</div>
-
-				<hr class="my-3 border-slate-200 dark:border-slate-700">
-
-				<h3 class="text-sm font-medium text-slate-800 dark:text-white mb-3">Table Density</h3>
-
-				<div class="flex space-x-4">
-					<button
-						@click="setDensity('compact')"
-						class="flex-1 py-1.5 text-xs rounded-md transition-colors"
-						:class="density === 'compact'
-							? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
-							: 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400'">
-						Compact
-					</button>
-					<button
-						@click="setDensity('normal')"
-						class="flex-1 py-1.5 text-xs rounded-md transition-colors"
-						:class="density === 'normal'
-							? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
-							: 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400'">
-						Normal
-					</button>
-					<button
-						@click="setDensity('relaxed')"
-						class="flex-1 py-1.5 text-xs rounded-md transition-colors"
-						:class="density === 'relaxed'
-							? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
-							: 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400'">
-						Relaxed
-					</button>
-				</div>
-
-				<h3 class="text-sm font-medium text-slate-800 dark:text-white mb-3 mt-4">Items Per Page</h3>
-
-				<div class="flex space-x-4">
-					<button
-						v-for="count in itemsPerPageOptions"
-						:key="count"
-						@click="setItemsPerPage(count)"
-						class="flex-1 py-1.5 text-xs rounded-md transition-colors"
-						:class="itemsPerPage === count
-							? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
-							: 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400'">
-						{{ count }}
-					</button>
-				</div>
-
-				<div class="flex justify-end mt-4">
-					<button
-						@click="savePreferences"
-						class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded-md">
-						Save Preferences
-					</button>
+		<!-- Отображаемые колонки -->
+		<div>
+			<h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Visible Columns</h4>
+			<div class="space-y-2">
+				<div v-for="column in columns" :key="column.key" class="flex items-center">
+					<input
+						type="checkbox"
+						:id="`column-${column.key}`"
+						:checked="column.visible"
+						@change="toggleColumn(column.key)"
+						class="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+					<label :for="`column-${column.key}`" class="ml-2 text-sm text-slate-700 dark:text-slate-300">
+						{{ column.label }}
+					</label>
 				</div>
 			</div>
+		</div>
+
+		<!-- Настройки внешнего вида -->
+		<div>
+			<h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Appearance</h4>
+			<div class="space-y-3">
+				<div class="flex items-center">
+					<input
+						type="checkbox"
+						id="setting-compact"
+						:checked="isCompact"
+						@change="toggleCompact"
+						class="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+					<label for="setting-compact" class="ml-2 text-sm text-slate-700 dark:text-slate-300">
+						Compact Mode
+					</label>
+				</div>
+
+				<div class="flex items-center">
+					<input
+						type="checkbox"
+						id="setting-borders"
+						:checked="showBorders"
+						@change="toggleBorders"
+						class="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+					<label for="setting-borders" class="ml-2 text-sm text-slate-700 dark:text-slate-300">
+						Show Borders
+					</label>
+				</div>
+
+				<div class="flex items-center">
+					<input
+						type="checkbox"
+						id="setting-stripes"
+						:checked="showStripes"
+						@change="toggleStripes"
+						class="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+					<label for="setting-stripes" class="ml-2 text-sm text-slate-700 dark:text-slate-300">
+						Striped Rows
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="pt-2">
+			<button
+				@click="resetSettings"
+				class="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors duration-200">
+				Reset to Default
+			</button>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted, onBeforeUnmount } from 'vue';
-import { useLocalStorage } from '@vueuse/core';
+import { defineProps, defineEmits } from 'vue';
 
-const emit = defineEmits<{
-	(e: 'columns-change', columns: any[]): void;
-	(e: 'density-change', density: string): void;
-	(e: 'items-per-page-change', count: number): void;
+interface Column {
+	key: string;
+	label: string;
+	visible: boolean;
+}
+
+const props = defineProps<{
+	columns: Column[];
+	isCompact: boolean;
+	showBorders: boolean;
+	showStripes: boolean;
 }>();
 
-// Состояние выпадающего меню
-const isOpen = ref(false);
+const emit = defineEmits<{
+	(e: 'toggle-column', key: string): void;
+	(e: 'toggle-compact'): void;
+	(e: 'toggle-borders'): void;
+	(e: 'toggle-stripes'): void;
+	(e: 'reset-settings'): void;
+}>();
 
-// Возможные количества элементов на странице
-const itemsPerPageOptions = [10, 20, 50, 100];
-const itemsPerPage = useLocalStorage('items-per-page', 10);
-
-// Возможные колонки таблицы
-const columns = reactive([
-	{ id: 'link', label: 'Link', visible: true, required: true },
-	{ id: 'shortUrl', label: 'Short URL', visible: true, required: true },
-	{ id: 'clicks', label: 'Clicks', visible: true, required: false },
-	{ id: 'created', label: 'Created Date', visible: true, required: false },
-	{ id: 'status', label: 'Status', visible: true, required: false },
-	{ id: 'tags', label: 'Tags', visible: false, required: false },
-	{ id: 'lastClick', label: 'Last Click', visible: false, required: false },
-]);
-
-// Плотность таблицы
-const density = useLocalStorage('table-density', 'normal');
-
-// Установка плотности таблицы
-const setDensity = (value: string) => {
-	density.value = value;
-	emit('density-change', value);
+const toggleColumn = (key: string) => {
+	emit('toggle-column', key);
 };
 
-// Установка количества элементов на странице
-const setItemsPerPage = (count: number) => {
-	itemsPerPage.value = count;
-	emit('items-per-page-change', count);
+const toggleCompact = () => {
+	emit('toggle-compact');
 };
 
-// Переключение меню
-const toggleMenu = () => {
-	isOpen.value = !isOpen.value;
-	if (isOpen.value) {
-		// Добавляем обработчик клика за пределами меню
-		setTimeout(() => {
-			document.addEventListener('click', closeMenuOnClickOutside);
-		}, 0);
-	}
+const toggleBorders = () => {
+	emit('toggle-borders');
 };
 
-// Сохранение настроек
-const savePreferences = () => {
-	// Сохраняем настройки колонок в локальное хранилище
-	localStorage.setItem('table-columns', JSON.stringify(columns));
-
-	// Передаем обновленные настройки наверх
-	emit('columns-change', columns);
-
-	// Закрываем выпадающее меню
-	isOpen.value = false;
-	document.removeEventListener('click', closeMenuOnClickOutside);
+const toggleStripes = () => {
+	emit('toggle-stripes');
 };
 
-// Закрытие меню при клике вне элемента
-const closeMenuOnClickOutside = (event: MouseEvent) => {
-	const target = event.target as HTMLElement;
-	const settingsMenu = document.querySelector('.table-settings-menu');
-	const settingsButton = document.querySelector('.table-settings-button');
-
-	if (settingsMenu && settingsButton &&
-		!settingsMenu.contains(target) &&
-		!settingsButton.contains(target)) {
-		isOpen.value = false;
-		document.removeEventListener('click', closeMenuOnClickOutside);
-	}
+const resetSettings = () => {
+	emit('reset-settings');
 };
-
-// Убираем обработчик событий при размонтировании компонента
-onBeforeUnmount(() => {
-	document.removeEventListener('click', closeMenuOnClickOutside);
-});
-
-// Загрузка сохраненных настроек при монтировании компонента
-watch(
-	() => density.value,
-	(newDensity) => {
-		emit('density-change', newDensity);
-	},
-	{ immediate: true }
-);
-
-watch(
-	() => itemsPerPage.value,
-	(newCount) => {
-		emit('items-per-page-change', newCount);
-	},
-	{ immediate: true }
-);
 </script>
+
+<style scoped>
+.glass-card {
+	background: rgba(255, 255, 255, 0.7);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-card {
+	background: rgba(15, 23, 42, 0.7);
+	border: 1px solid rgba(255, 255, 255, 0.05);
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-	<div class="container mx-auto px-4 py-6 max-w-7xl">
+	<div class="container mx-auto px-6 py-6 max-w-7xl">
 		<PageHeader title="Link History">
 			<template #button>
 				<button
@@ -53,11 +53,11 @@
 				</template>
 			</history-summary-card>
 
-			<history-summary-card title="Average CTR" :value="summary.averageCTR.toFixed(1)" unit="%"
+			<history-summary-card title="Average CTR" :value="summary.averageCtr.toFixed(1)" unit="%"
 				:trend="summary.ctrTrend"
-				color="orange" :sparkline-data="summary.ctrSparkline">
+				color="blue" :sparkline-data="summary.ctrSparkline">
 				<template #icon>
-					<svg class="h-5 w-5 text-orange-600 dark:text-orange-400" xmlns="http://www.w3.org/2000/svg"
+					<svg class="h-5 w-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg"
 						fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 							d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -66,8 +66,7 @@
 			</history-summary-card>
 
 			<history-summary-card title="Active Links" :value="summary.activeLinks" unit="active"
-				:trend="summary.activeTrend"
-				color="blue" :sparkline-data="summary.activeSparkline">
+				:trend="summary.activeLinksTrend" color="blue" :sparkline-data="summary.activeLinksSparkline">
 				<template #icon>
 					<svg class="h-5 w-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none"
 						viewBox="0 0 24 24" stroke="currentColor">
@@ -227,15 +226,24 @@
 								</div>
 							</div>
 
-							<div>
-								<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Date
-									range</label>
-								<div class="flex space-x-2">
-									<input type="date" v-model="filters.startDate"
-										class="px-3 py-1.5 text-xs rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800" />
-									<span class="text-slate-500 self-center">to</span>
-									<input type="date" v-model="filters.endDate"
-										class="px-3 py-1.5 text-xs rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800" />
+							<!-- Фильтр по дате -->
+							<div class="mb-4">
+								<label class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 block">
+									Date Range
+								</label>
+
+								<div class="flex flex-col space-y-3">
+									<div class="flex items-center">
+										<span class="text-sm text-slate-600 dark:text-slate-400 w-16">From:</span>
+										<input type="date" v-model="filters.startDate"
+											class="w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white">
+									</div>
+
+									<div class="flex items-center">
+										<span class="text-sm text-slate-600 dark:text-slate-400 w-16">To:</span>
+										<input type="date" v-model="filters.endDate"
+											class="w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white">
+									</div>
 								</div>
 							</div>
 
@@ -296,8 +304,10 @@
 				</div>
 
 				<!-- Настройки таблицы -->
-				<history-table-settings @columns-change="handleColumnsChange" @density-change="handleDensityChange"
-					@items-per-page-change="handleItemsPerPageChange" />
+				<history-table-settings ref="settingsMenuRef" :columns="tableColumns" :is-compact="isCompactTable"
+					:show-borders="showTableBorders" :show-stripes="showTableStripes" @toggle-column="toggleColumn"
+					@toggle-compact="toggleCompact" @toggle-borders="toggleBorders" @toggle-stripes="toggleStripes"
+					@reset-settings="resetTableSettings" />
 
 				<!-- Импорт/Экспорт (для авторизованных) -->
 				<div v-if="isAuthenticated" class="relative">
@@ -476,6 +486,7 @@ import type { LinkData, SummaryData } from '~/types/link';
 import { useDeviceFingerprint } from '~/composables/useDeviceFingerprint';
 import { useToastStore } from '~/stores/toast';
 import { useAuth } from '~/composables/useAuth';
+import { useLocalStorage } from '@vueuse/core';
 
 // Импортируем компоненты
 import HistorySummaryCard from '~/components/history/HistorySummaryCard.vue';
@@ -618,8 +629,9 @@ const availableProjects = ref<Project[]>([]);
 const summary = reactive<SummaryData>({
 	totalLinks: 0,
 	totalClicks: 0,
-	averageCTR: 0,
+	averageCtr: 0,
 	activeLinks: 0,
+	activeLinksPercentage: 0,
 	weeklyClicksData: [],
 	linksTrend: 5,
 	linksSparkline: [10, 15, 12, 18, 20, 25, 22],
@@ -627,8 +639,8 @@ const summary = reactive<SummaryData>({
 	clicksSparkline: [150, 230, 180, 290, 340, 320, 410],
 	ctrTrend: -2,
 	ctrSparkline: [3.2, 4.5, 4.2, 3.8, 3.5, 3.3, 3.7],
-	activeTrend: 0,
-	activeSparkline: [8, 12, 15, 14, 15, 18, 18]
+	activeLinksTrend: 0,
+	activeLinksSparkline: [8, 12, 15, 14, 15, 18, 18]
 });
 
 // Массив ссылок
@@ -638,6 +650,40 @@ const availableTags = ref<string[]>([]);
 // Хук для получения fingerprint
 const { generateFingerprint } = useDeviceFingerprint();
 const toastStore = useToastStore();
+
+// Состояние темы
+const isDarkMode = useLocalStorage('dark-mode', true);
+
+// Переключение темы
+const toggleTheme = () => {
+	isDarkMode.value = !isDarkMode.value;
+
+	// Применяем тему и сохраняем в localStorage
+	if (isDarkMode.value) {
+		document.documentElement.classList.add('dark');
+		localStorage.setItem('theme', 'dark');
+	} else {
+		document.documentElement.classList.remove('dark');
+		localStorage.setItem('theme', 'light');
+	}
+};
+
+// Применение темы при загрузке страницы
+onMounted(() => {
+	// Применяем тему из localStorage
+	const theme = localStorage.getItem('theme');
+
+	if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+		isDarkMode.value = true;
+		document.documentElement.classList.add('dark');
+	} else if (theme === 'light') {
+		isDarkMode.value = false;
+		document.documentElement.classList.remove('dark');
+	}
+
+	// Загружаем данные
+	fetchLinks();
+});
 
 // Вычисляемые свойства
 const hasActiveFilters = computed(() => {
@@ -950,9 +996,16 @@ const updateSummary = (): void => {
 
 	// Вычисляем средний CTR (если есть данные)
 	if (summary.totalLinks > 0) {
-		summary.averageCTR = (summary.totalClicks / summary.totalLinks) * 100;
+		summary.averageCtr = (summary.totalClicks / summary.totalLinks) * 100;
 	} else {
-		summary.averageCTR = 0;
+		summary.averageCtr = 0;
+	}
+
+	// Вычисляем процент активных ссылок
+	if (summary.totalLinks > 0) {
+		summary.activeLinksPercentage = Math.round((summary.activeLinks / summary.totalLinks) * 100);
+	} else {
+		summary.activeLinksPercentage = 0;
 	}
 
 	// Обновляем список тегов
@@ -1251,10 +1304,117 @@ onBeforeUnmount(() => {
 	document.removeEventListener('click', closeImportExportOnClickOutside);
 	document.removeEventListener('click', closeFiltersOnClickOutside);
 });
+
+// Добавлю функцию-помощник для закрытия выпадающих меню при клике вне их
+const useClickOutside = (elementRef: Ref<HTMLElement | null>, callback: () => void) => {
+	const handleClickOutside = (event: MouseEvent) => {
+		if (elementRef.value && !elementRef.value.contains(event.target as Node)) {
+			callback();
+		}
+	};
+
+	onMounted(() => {
+		document.addEventListener('mousedown', handleClickOutside);
+	});
+
+	onUnmounted(() => {
+		document.removeEventListener('mousedown', handleClickOutside);
+	});
+};
+
+// Добавлю ref для каждого выпадающего списка
+const filterMenuRef = ref<HTMLElement | null>(null);
+const settingsMenuRef = ref<HTMLElement | null>(null);
+const userMenuRef = ref<HTMLElement | null>(null);
+
+// Функции для закрытия выпадающих меню
+const closeFilterMenu = () => {
+	if (showFilters.value) {
+		showFilters.value = false;
+	}
+};
+
+const closeSettingsMenu = () => {
+	if (showImportExport.value) {
+		showImportExport.value = false;
+	}
+};
+
+const closeUserMenu = () => {
+	if (showCreateModal.value || showEditModal.value || showDeleteModal.value || showStatsModal.value || showImportModal.value) {
+		showCreateModal.value = false;
+		showEditModal.value = false;
+		showDeleteModal.value = false;
+		showStatsModal.value = false;
+		showImportModal.value = false;
+	}
+};
+
+// Используем функцию-помощник для каждого меню
+useClickOutside(filterMenuRef, closeFilterMenu);
+useClickOutside(settingsMenuRef, closeSettingsMenu);
+useClickOutside(userMenuRef, closeUserMenu);
+
+// Состояние настроек таблицы
+const tableColumns = ref([
+	{ key: 'link', label: 'Link', visible: true },
+	{ key: 'shortUrl', label: 'Short URL', visible: true },
+	{ key: 'clicks', label: 'Clicks', visible: true },
+	{ key: 'created', label: 'Created Date', visible: true },
+	{ key: 'status', label: 'Status', visible: true },
+	{ key: 'tags', label: 'Tags', visible: true },
+	{ key: 'lastClick', label: 'Last Click', visible: false }
+]);
+
+const isCompactTable = ref(false);
+const showTableBorders = ref(true);
+const showTableStripes = ref(true);
+
+// Обработчики для настроек таблицы
+const toggleColumn = (key: string) => {
+	const column = tableColumns.value.find(col => col.key === key);
+	if (column) {
+		column.visible = !column.visible;
+	}
+};
+
+const toggleCompact = () => {
+	isCompactTable.value = !isCompactTable.value;
+};
+
+const toggleBorders = () => {
+	showTableBorders.value = !showTableBorders.value;
+};
+
+const toggleStripes = () => {
+	showTableStripes.value = !showTableStripes.value;
+};
+
+const resetTableSettings = () => {
+	// Сброс настроек к значениям по умолчанию
+	tableColumns.value.forEach(column => {
+		if (['link', 'shortUrl', 'clicks', 'created', 'status'].includes(column.key)) {
+			column.visible = true;
+		} else {
+			column.visible = false;
+		}
+	});
+	isCompactTable.value = false;
+	showTableBorders.value = true;
+	showTableStripes.value = true;
+};
+
+// Состояние пользовательского меню
+const isUserMenuOpen = ref(false);
+
+// Переключение пользовательского меню
+const toggleUserMenu = () => {
+	isUserMenuOpen.value = !isUserMenuOpen.value;
+};
 </script>
 
-<style scoped>
-.active-filter {
-	@apply px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center;
-}
+<style>
+@import '~/assets/css/tooltips.css';
+
+/* Other styles */
 </style>

@@ -1,95 +1,103 @@
 <template>
-	<div class="glass-card p-6 flex flex-col">
+	<div class="glass-card p-5 rounded-xl shadow-sm relative overflow-hidden flex flex-col transition-all duration-200 hover:shadow-md"
+		:class="{
+			'bg-indigo-50/30 dark:bg-indigo-900/10': color === 'indigo',
+			'bg-green-50/30 dark:bg-green-900/10': color === 'green',
+			'bg-blue-50/30 dark:bg-blue-900/10': color === 'blue',
+			'bg-purple-50/30 dark:bg-purple-900/10': color === 'purple'
+		}">
 		<div class="flex items-center mb-1">
-			<div :class="`p-2 bg-${color}-100 dark:bg-${color}-900/30 rounded-lg mr-3`">
-				<slot name="icon" />
+			<div class="text-xs font-medium text-slate-600 dark:text-slate-300 flex items-center">
+				<slot name="icon"></slot>
 			</div>
-			<h3 class="text-sm font-medium text-slate-600 dark:text-slate-400">{{ title }}</h3>
 		</div>
-		<div class="flex items-baseline mt-2 mb-1">
+
+		<h3 class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">{{ title }}</h3>
+		<div class="flex items-baseline">
 			<span class="text-3xl font-bold text-slate-800 dark:text-white">{{ value }}</span>
-			<span class="ml-2 text-sm font-medium text-slate-500 dark:text-slate-400">{{ unit }}</span>
+			<span v-if="subtitle" class="ml-2 text-sm font-medium text-slate-500 dark:text-slate-400">{{ subtitle
+				}}</span>
 		</div>
-		<div v-if="trend !== null" class="flex items-center mt-1">
-      <span
-		  :class="`flex items-center text-xs font-medium ${getTrendColor()}`"
-	  >
-        <svg v-if="trend > 0" class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-        </svg>
-        <svg v-else-if="trend < 0" class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6" />
-        </svg>
-        <svg v-else class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14" />
-        </svg>
-        {{ formatTrend(trend) }} {{ trendPeriod }}
-      </span>
-			<div class="ml-auto">
-				<div v-if="sparklineData.length" class="h-8 w-16">
-					<sparkline-chart :chart-data="sparklineData" :color="getSparklineColor()" />
-				</div>
-			</div>
+
+		<div v-if="trend !== undefined" class="text-sm mt-3 flex items-center">
+			<span
+				:class="{
+					'text-green-600 dark:text-green-400': trend > 0,
+					'text-red-600 dark:text-red-400': trend < 0,
+					'text-slate-500 dark:text-slate-400': trend === 0
+				}"
+				class="flex items-center font-medium">
+				<svg v-if="trend > 0" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
+					viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+				</svg>
+				<svg v-else-if="trend < 0" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
+					viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+				</svg>
+				<svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+					stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14" />
+				</svg>
+				{{ trend > 0 ? '+' : '' }}{{ trend }}%
+			</span>
+			<span class="text-slate-500 dark:text-slate-400 ml-1">vs previous period</span>
 		</div>
+
+		<div v-if="sparklineData && sparklineData.length" class="mt-4 h-8">
+			<sparkline-chart
+				:data="sparklineData"
+				:color="getSparklineColor()"
+				:line-width="1.5"
+				:fill-opacity="0.2" />
+		</div>
+
+		<p v-if="description" class="text-xs text-slate-500 dark:text-slate-400 mt-2">{{ description }}</p>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { defineProps, computed } from 'vue';
+import SparklineChart from './charts/SparklineChart.vue';
 
-const props = defineProps({
-	title: {
-		type: String,
-		required: true
-	},
-	value: {
-		type: [Number, String],
-		required: true
-	},
-	unit: {
-		type: String,
-		default: ''
-	},
-	trend: {
-		type: Number,
-		default: null
-	},
-	trendPeriod: {
-		type: String,
-		default: 'vs last week'
-	},
-	color: {
-		type: String,
-		default: 'indigo'
-	},
-	sparklineData: {
-		type: Array,
-		default: () => []
-	}
+interface Props {
+	title: string;
+	value: string | number;
+	subtitle?: string;
+	color?: 'indigo' | 'green' | 'blue' | 'purple';
+	trend?: number;
+	sparklineData?: number[];
+	description?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+	color: 'indigo',
+	subtitle: undefined,
+	trend: undefined,
+	sparklineData: undefined,
+	description: undefined
 });
 
-const getTrendColor = () => {
-	if (props.trend === null) return '';
-	if (props.trend > 0) return 'text-green-600 dark:text-green-400';
-	if (props.trend < 0) return 'text-red-600 dark:text-red-400';
-	return 'text-slate-500 dark:text-slate-400';
-};
-
 const getSparklineColor = () => {
-	if (props.trend === null) return 'indigo';
-	if (props.trend > 0) return 'green';
-	if (props.trend < 0) return 'red';
-	return 'slate';
-};
-
-const formatTrend = (trend: number) => {
-	const sign = trend > 0 ? '+' : '';
-	return `${sign}${trend}%`;
+	const colors = {
+		indigo: '#6366F1',
+		green: '#10B981',
+		blue: '#3B82F6',
+		purple: '#8B5CF6'
+	};
+	return colors[props.color];
 };
 </script>
 
 <style scoped>
 .glass-card {
-	@apply bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 backdrop-blur-md;
+	backdrop-filter: blur(8px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-card {
+	border-color: rgba(255, 255, 255, 0.05);
 }
 </style>

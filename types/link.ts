@@ -31,15 +31,16 @@ export interface LinkAnalytics {
 export interface SummaryData {
     totalLinks: number;
     totalClicks: number;
-    averageCTR: number;
+    averageCtr: number;
     activeLinks: number;
-    weeklyClicksData: { date: string; count: number }[];
+    activeLinksPercentage: number;
     linksTrend: number;
-    linksSparkline: number[];
     clicksTrend: number;
-    clicksSparkline: number[];
     ctrTrend: number;
+    activeLinksTrend: number;
+    linksSparkline: number[];
+    clicksSparkline: number[];
     ctrSparkline: number[];
-    activeTrend: number;
-    activeSparkline: number[];
+    activeLinksSparkline: number[];
+    weeklyClicksData: Array<{ day: string, clicks: number }>;
 }
