@@ -78,7 +78,8 @@
 			</div>
 		</div>
 
-		<table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+		<table
+			class="min-w-full divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-800 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
 			<thead class="bg-slate-50 dark:bg-slate-800/60">
 				<tr>
 					<th scope="col"
@@ -155,14 +156,24 @@
 									{{ link.shortUrl }}
 								</a>
 								<button
-									@click="$emit('copy', link.shortUrl)"
+									@click="handleCopy(link.shortUrl, link.id)"
 									class="ml-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
 									title="Copy short URL">
-									<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-										viewBox="0 0 24 24" stroke="currentColor">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-											d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-									</svg>
+									<span v-if="copiedLinkId === link.id" class="text-green-500">
+										<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+											fill="currentColor">
+											<path fill-rule="evenodd"
+												d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+												clip-rule="evenodd" />
+										</svg>
+									</span>
+									<span v-else>
+										<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+											viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+										</svg>
+									</span>
 								</button>
 							</div>
 						</div>
@@ -393,6 +404,18 @@ const handleBulkDelete = (): void => {
 const handleBulkExport = (): void => {
 	emit('bulk-export', selectedLinks.value);
 	showBulkActions.value = false;
+};
+
+// Добавляем состояние для отслеживания скопированной ссылки
+const copiedLinkId = ref<string | null>(null);
+
+// Обновляем обработчик события копирования
+const handleCopy = (url: string, id: string) => {
+	emit('copy', url);
+	copiedLinkId.value = id;
+	setTimeout(() => {
+		copiedLinkId.value = null;
+	}, 2000);
 };
 </script>
 

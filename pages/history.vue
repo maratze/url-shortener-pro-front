@@ -78,8 +78,9 @@
 		</div>
 
 		<!-- Графики и расширенная аналитика (только для авторизованных пользователей) -->
-		<div v-if="isAuthenticated" class="mb-6">
-			<div class="graph-container bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden mb-4">
+		<div v-if="isAuthenticated" class="mb-4">
+			<div
+				class="graph-container bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden mb-4 border border-slate-200 dark:border-slate-700">
 				<div class="p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
 					<h3 class="text-lg font-medium text-slate-900 dark:text-white">Clicks Analytics</h3>
 					<div class="flex space-x-2">
@@ -106,7 +107,8 @@
 
 			<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
 				<!-- Географическое распределение -->
-				<div class="graph-container bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden">
+				<div
+					class="graph-container bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden border border-slate-200 dark:border-slate-700">
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
 						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Geography</h3>
 					</div>
@@ -116,7 +118,8 @@
 				</div>
 
 				<!-- Рефереры (Traffic Sources) -->
-				<div class="graph-container bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden">
+				<div
+					class="graph-container bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden border border-slate-200 dark:border-slate-700">
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
 						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Traffic Sources</h3>
 					</div>
@@ -126,7 +129,8 @@
 				</div>
 
 				<!-- Устройства (Devices) -->
-				<div class="graph-container bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden">
+				<div
+					class="graph-container bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden border border-slate-200 dark:border-slate-700">
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
 						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Devices</h3>
 					</div>

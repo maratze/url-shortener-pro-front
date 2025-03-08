@@ -3,8 +3,7 @@
 		<button
 			@click="toggleMenu"
 			class="table-settings-button p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
-			data-tooltip="Table Settings"
-			data-tooltip-position="bottom">
+			title="Table Settings">
 			<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
 				stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -103,6 +102,23 @@
 					</div>
 				</div>
 
+				<!-- Добавляем секцию для выбора количества элементов на странице -->
+				<div class="mb-4">
+					<h4 class="text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">Items Per Page</h4>
+					<div class="flex space-x-2">
+						<button
+							v-for="count in itemsPerPageOptions"
+							:key="count"
+							@click="changeItemsPerPage(count)"
+							class="flex-1 py-1.5 text-xs rounded-md transition-colors"
+							:class="selectedItemsPerPage === count
+								? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
+								: 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400'">
+							{{ count }}
+						</button>
+					</div>
+				</div>
+
 				<div class="flex justify-between">
 					<button
 						@click="resetSettings"
@@ -152,6 +168,8 @@ const isOpen = ref(false);
 const density = useLocalStorage('table-density', 'normal');
 const showBorders = ref(props.showBorders ?? true);
 const showStripes = ref(props.showStripes ?? true);
+const itemsPerPageOptions = [10, 25, 50, 100];
+const selectedItemsPerPage = useLocalStorage('items-per-page', 10);
 
 // Переключение меню
 const toggleMenu = () => {
@@ -170,7 +188,7 @@ const setDensity = (value: string) => {
 	if (value === 'compact') {
 		emit('toggle-compact', true);
 	} else {
-		emit('toggle-compact');
+		emit('toggle-compact', false);
 	}
 };
 
@@ -191,13 +209,33 @@ const toggleStripes = () => {
 	emit('toggle-stripes');
 };
 
+// Изменение количества элементов на странице
+const changeItemsPerPage = (count: number) => {
+	selectedItemsPerPage.value = count;
+	emit('items-per-page-change', count);
+};
+
 // Сброс настроек
 const resetSettings = () => {
+	density.value = 'normal';
+	showBorders.value = true;
+	showStripes.value = true;
+	selectedItemsPerPage.value = 10;
 	emit('reset-settings');
 };
 
 // Сохранение настроек
 const savePreferences = () => {
+	// Применяем настройки
+	if (density.value === 'compact') {
+		emit('toggle-compact', true);
+	} else {
+		emit('toggle-compact', false);
+	}
+	emit('toggle-borders');
+	emit('toggle-stripes');
+	emit('items-per-page-change', selectedItemsPerPage.value);
+
 	// Закрываем выпадающее меню
 	isOpen.value = false;
 	document.removeEventListener('click', closeMenuOnClickOutside);
@@ -226,7 +264,12 @@ onBeforeUnmount(() => {
 onMounted(() => {
 	if (density.value === 'compact') {
 		emit('toggle-compact', true);
+	} else {
+		emit('toggle-compact', false);
 	}
+	emit('toggle-borders');
+	emit('toggle-stripes');
+	emit('items-per-page-change', selectedItemsPerPage.value);
 });
 </script>
 
@@ -240,5 +283,34 @@ onMounted(() => {
 .dark .glass-card {
 	background: rgba(15, 23, 42, 0.7);
 	border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Стили для всплывающей подсказки */
+[data-tooltip] {
+	position: relative;
+}
+
+[data-tooltip]::after {
+	content: attr(data-tooltip);
+	position: absolute;
+	bottom: -35px;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 6px 10px;
+	background-color: rgba(0, 0, 0, 0.8);
+	color: white;
+	border-radius: 6px;
+	font-size: 14px;
+	white-space: nowrap;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.15s, visibility 0.15s;
+	z-index: 100;
+}
+
+[data-tooltip]:hover::after {
+	opacity: 1;
+	visibility: visible;
+	transition-delay: 0.1s;
 }
 </style>
