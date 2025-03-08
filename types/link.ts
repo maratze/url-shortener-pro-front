@@ -14,6 +14,7 @@ export interface LinkData {
     utmSource?: string;
     utmMedium?: string;
     utmCampaign?: string;
+    projectId?: string;
 }
 
 export interface LinkAnalytics {
@@ -33,4 +34,12 @@ export interface SummaryData {
     averageCTR: number;
     activeLinks: number;
     weeklyClicksData: { date: string; count: number }[];
+    linksTrend: number;
+    linksSparkline: number[];
+    clicksTrend: number;
+    clicksSparkline: number[];
+    ctrTrend: number;
+    ctrSparkline: number[];
+    activeTrend: number;
+    activeSparkline: number[];
 }
