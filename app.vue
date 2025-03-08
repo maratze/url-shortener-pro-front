@@ -3,17 +3,19 @@
 		<div
 			v-if="isLoading"
 			class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-100 dark:bg-slate-900 transition-all duration-300"
-			:class="{ 'opacity-0 invisible': isLoadingFadeOut }"
-		>
+			:class="{ 'opacity-0 invisible': isLoadingFadeOut }">
 			<div class="text-center">
-				<div class="w-16 h-16 mx-auto border-4 border-blue-100 dark:border-blue-900 border-t-blue-600 dark:border-t-blue-400 rounded-full animate-spin"></div>
+				<div
+					class="w-16 h-16 mx-auto border-4 border-blue-100 dark:border-blue-900 border-t-blue-600 dark:border-t-blue-400 rounded-full animate-spin">
+				</div>
 			</div>
 		</div>
 		<div :class="{ 'opacity-0': isLoading }">
 			<NuxtLayout>
-				<div class="from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950 transition-colors duration-300">
+				<div
+					class="from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950 transition-colors duration-300">
 					<main class="pt-[74px]">
-						<NuxtPage/>
+						<NuxtPage />
 					</main>
 				</div>
 			</NuxtLayout>
@@ -23,11 +25,13 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import AppHeader from '~/components/layout/AppHeader.vue';
-import AppFooter from '~/components/layout/AppFooter.vue';
+import { useTheme } from '~/composables/useTheme';
 
 const isLoading = ref(true);
 const isLoadingFadeOut = ref(false);
+
+// Инициализируем тему при загрузке приложения
+const { initTheme } = useTheme();
 
 onMounted(() => {
 	document.title = 'TinyLink - Shorten Your URLs';
@@ -63,7 +67,7 @@ onMounted(() => {
 	}
 
 	isLoading.value = false;
-	
+
 	// setTimeout(() => {
 	// 	isLoadingFadeOut.value = true;
 	//
@@ -71,6 +75,10 @@ onMounted(() => {
 	// 		isLoading.value = false;
 	// 	}, 300);
 	// }, 800);
+
+	if (process.client) {
+		initTheme();
+	}
 })
 </script>
 
@@ -94,6 +102,7 @@ body {
 	0% {
 		transform: rotate(0deg);
 	}
+
 	100% {
 		transform: rotate(360deg);
 	}

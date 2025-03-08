@@ -651,40 +651,6 @@ const availableTags = ref<string[]>([]);
 const { generateFingerprint } = useDeviceFingerprint();
 const toastStore = useToastStore();
 
-// Состояние темы
-const isDarkMode = useLocalStorage('dark-mode', true);
-
-// Переключение темы
-const toggleTheme = () => {
-	isDarkMode.value = !isDarkMode.value;
-
-	// Применяем тему и сохраняем в localStorage
-	if (isDarkMode.value) {
-		document.documentElement.classList.add('dark');
-		localStorage.setItem('theme', 'dark');
-	} else {
-		document.documentElement.classList.remove('dark');
-		localStorage.setItem('theme', 'light');
-	}
-};
-
-// Применение темы при загрузке страницы
-onMounted(() => {
-	// Применяем тему из localStorage
-	const theme = localStorage.getItem('theme');
-
-	if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-		isDarkMode.value = true;
-		document.documentElement.classList.add('dark');
-	} else if (theme === 'light') {
-		isDarkMode.value = false;
-		document.documentElement.classList.remove('dark');
-	}
-
-	// Загружаем данные
-	fetchLinks();
-});
-
 // Вычисляемые свойства
 const hasActiveFilters = computed(() => {
 	return filters.status !== 'all' || filters.startDate || filters.endDate || filters.tags.length > 0 || filters.project;
