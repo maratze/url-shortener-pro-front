@@ -62,13 +62,15 @@ onMounted(() => {
 		document.head.appendChild(meta);
 	}
 
-	setTimeout(() => {
-		isLoadingFadeOut.value = true;
-
-		setTimeout(() => {
-			isLoading.value = false;
-		}, 300);
-	}, 800);
+	isLoading.value = false;
+	
+	// setTimeout(() => {
+	// 	isLoadingFadeOut.value = true;
+	//
+	// 	setTimeout(() => {
+	// 		isLoading.value = false;
+	// 	}, 300);
+	// }, 800);
 })
 </script>
 
