@@ -130,25 +130,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { format, formatDistanceToNow } from 'date-fns';
-
-// Define the LinkData interface
-interface LinkData {
-	id: string;
-	originalUrl: string;
-	shortUrl: string;
-	title?: string;
-	clicks: number;
-	clickTrend?: number;
-	isActive: boolean;
-	createdAt: string;
-	customSlug?: string;
-	tags?: string[];
-	password?: string;
-	expiresAt?: string;
-	utmSource?: string;
-	utmMedium?: string;
-	utmCampaign?: string;
-}
+import type { LinkData } from "~/types/link";
 
 // Define props
 const props = defineProps<{
