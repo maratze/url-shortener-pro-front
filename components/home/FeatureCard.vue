@@ -77,7 +77,7 @@ const animationClass = computed(() => {
 	background: rgba(255, 255, 255, 0.85);
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
-	border: 1px solid rgba(255, 255, 255, 0.6);
+	border: 1px solid var(--card-border);
 	box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
 	border-radius: 16px;
 	padding: 32px 24px;

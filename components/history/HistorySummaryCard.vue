@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="glass-card p-5 shadow-sm relative overflow-hidden flex flex-col transition-all duration-200 hover:shadow-md"
+		class="glass-card p-5 shadow-sm relative overflow-hidden flex flex-col transition-all duration-200"
 		:class="{
 			'bg-indigo-50/30 dark:bg-indigo-900/10': color === 'indigo',
 			'bg-green-50/30 dark:bg-green-900/10': color === 'green',
@@ -90,7 +90,7 @@ const getSparklineColor = () => {
 <style scoped>
 .glass-card {
 	backdrop-filter: blur(8px);
-	border: 1px solid rgba(0, 0, 0, 0.1);
+	border: 1px solid var(--card-border);
 }
 
 .dark .glass-card {

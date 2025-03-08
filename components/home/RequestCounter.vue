@@ -158,7 +158,7 @@ onMounted(() => {
 .tooltip-container {
 	@apply absolute z-50 bottom-full left-1/2 w-60 p-3 bg-white dark:bg-slate-800 rounded-lg shadow-xl mb-2;
 	transform: translateX(-50%);
-	filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+	filter: drop-shadow(0 4px 6px var(--card-border));
 }
 
 /* Увеличенный размер текста */

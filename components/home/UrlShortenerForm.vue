@@ -430,7 +430,7 @@ const submitForm = async () => {
 	background: rgba(255, 255, 255, 0.9);
 	backdrop-filter: blur(4px);
 	-webkit-backdrop-filter: blur(4px);
-	border: 1px solid rgba(0, 0, 0, 0.1);
+	border: 1px solid var(--card-border);
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 	border-radius: 12px;
 	padding: 12px 16px;
@@ -507,7 +507,7 @@ const submitForm = async () => {
 	background: rgba(255, 255, 255, 0.5);
 	backdrop-filter: blur(8px);
 	-webkit-backdrop-filter: blur(8px);
-	border: 1px solid rgba(0, 0, 0, 0.1);
+	border: 1px solid var(--card-border);
 	border-radius: 12px;
 	padding: 12px;
 }
@@ -521,7 +521,7 @@ const submitForm = async () => {
 	background: rgba(255, 255, 255, 0.7);
 	backdrop-filter: blur(4px);
 	-webkit-backdrop-filter: blur(4px);
-	border: 1px solid rgba(0, 0, 0, 0.1);
+	border: 1px solid var(--card-border);
 	border-radius: 8px;
 	padding: 8px 12px;
 	color: #334155;
@@ -574,7 +574,7 @@ input::placeholder {
 	background: rgba(255, 255, 255, 0.7);
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
-	border: 1px solid rgba(0, 0, 0, 0.1);
+	border: 1px solid var(--card-border);
 	border-radius: 16px;
 	padding: 16px;
 	position: relative;
@@ -590,7 +590,7 @@ input::placeholder {
 	background: rgba(255, 255, 255, 0.7);
 	backdrop-filter: blur(8px);
 	-webkit-backdrop-filter: blur(8px);
-	border: 1px solid rgba(0, 0, 0, 0.1);
+	border: 1px solid var(--card-border);
 	border-radius: 8px;
 	transition: all 0.3s ease;
 }
@@ -602,7 +602,7 @@ input::placeholder {
 
 .glass-btn-sm:hover {
 	background: rgba(255, 255, 255, 0.9);
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 4px 8px var(--card-border);
 	transform: translateY(-2px);
 }
 

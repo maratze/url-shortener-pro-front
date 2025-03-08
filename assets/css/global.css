@@ -5,6 +5,8 @@
     --glass-bg-dark: rgba(15, 23, 42, 0.7);
     --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
     --glass-shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --card-border: rgba(0, 0, 0, .1);
+    --card-border-dark: rgba(255, 255, 255, .1);
 }
 
 /* Анимации */
@@ -137,7 +139,6 @@
 
 .glass-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
 
 .dark .glass-card:hover {

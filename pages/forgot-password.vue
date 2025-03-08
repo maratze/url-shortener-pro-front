@@ -51,7 +51,7 @@ useHead({
 <style scoped>
 .premium-glass-card {
 	border-radius: 16px;
-	background: rgb(255, 255, 255, .85);
+	background: var(--card-border-dark);
 	border: 1px solid rgb(0, 0, 0, .05);
 }
 

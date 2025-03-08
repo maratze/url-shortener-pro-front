@@ -241,7 +241,7 @@ const qrCode = (url: string) => {
 	background: var(--glass-bg);
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
-	border: 1px solid var(--glass-border);
+	border: 1px solid var(--card-border);
 	box-shadow: var(--glass-shadow);
 	border-radius: 16px;
 	padding: 16px;
@@ -255,13 +255,13 @@ const qrCode = (url: string) => {
 
 .dark .recent-url-card {
 	background: var(--glass-bg-dark);
-	border-color: var(--glass-border-dark);
+	border-color: var(--card-border-dark);
 	box-shadow: var(--glass-shadow-dark);
 }
 
 .recent-url-card:hover {
 	transform: translateY(-5px);
-	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 15px 30px var(--card-border);
 	border-color: rgba(124, 58, 237, 0.3);
 }
 

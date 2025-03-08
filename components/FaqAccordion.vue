@@ -94,7 +94,7 @@ onMounted(() => {
 	background: rgba(255, 255, 255, 0.7);	
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
-	border: 1px solid rgba(0, 0, 0, 0.1);
+	border: 1px solid var(--card-border);
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 	border-radius: 16px;
 	overflow: hidden;
@@ -108,7 +108,7 @@ onMounted(() => {
 }
 
 .faq-item.is-active {
-	box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 8px 15px var(--card-border);
 	border-color: rgba(124, 58, 237, 0.3);
 }
 
