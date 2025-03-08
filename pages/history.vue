@@ -307,7 +307,7 @@
 				<history-table-settings ref="settingsMenuRef" :columns="tableColumns" :is-compact="isCompactTable"
 					:show-borders="showTableBorders" :show-stripes="showTableStripes" @toggle-column="toggleColumn"
 					@toggle-compact="toggleCompact" @toggle-borders="toggleBorders" @toggle-stripes="toggleStripes"
-					@reset-settings="resetTableSettings" />
+					@reset-settings="resetTableSettings" @items-per-page-change="handleItemsPerPageChange" />
 
 				<!-- Импорт/Экспорт (для авторизованных) -->
 				<div v-if="isAuthenticated" class="relative">

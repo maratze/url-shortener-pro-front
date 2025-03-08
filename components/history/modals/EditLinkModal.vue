@@ -32,7 +32,7 @@
 					<!-- Оригинальная ссылка -->
 					<div>
 						<label for="originalUrl"
-							class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+							class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 text-left">
 							Original URL <span class="text-red-500">*</span>
 						</label>
 						<div class="relative">
@@ -67,8 +67,9 @@
 								</svg>
 							</div>
 						</div>
-						<p v-if="validationErrors.originalUrl" class="mt-1 text-xs text-red-500">{{
-							validationErrors.originalUrl }}</p>
+						<div v-if="validationErrors.originalUrl" class="mt-1 text-sm text-red-500">
+							{{ validationErrors.originalUrl }}
+						</div>
 						<p v-else class="text-xs text-slate-500 dark:text-slate-400 mt-1">The original URL you want to
 							shorten</p>
 					</div>
