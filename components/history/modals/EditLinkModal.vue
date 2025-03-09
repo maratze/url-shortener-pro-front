@@ -28,7 +28,7 @@
 				</div>
 
 				<!-- Форма редактирования ссылки -->
-				<form @submit.prevent="saveLink" class="space-y-5">
+				<form @submit.prevent="saveLink" class="space-y-4">
 					<!-- Оригинальная ссылка -->
 					<div>
 						<label for="originalUrl"
@@ -70,8 +70,7 @@
 						<div v-if="validationErrors.originalUrl" class="mt-1 text-sm text-red-500">
 							{{ validationErrors.originalUrl }}
 						</div>
-						<p v-else class="text-xs text-slate-500 dark:text-slate-400 mt-1">The original URL you want to
-							shorten</p>
+						<p v-else class="text-xs text-slate-500 dark:text-slate-400 mt-1 text-left">The original URL you want to shorten</p>
 					</div>
 
 					<!-- Заголовок ссылки и автоматическое заполнение -->
@@ -110,7 +109,7 @@
 							type="text"
 							placeholder="Title for your link"
 							class="form-input" />
-						<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+						<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 text-left">
 							A descriptive title helps identify your link
 						</p>
 					</div>
@@ -123,7 +122,7 @@
 								Custom Path
 							</label>
 						</div>
-						<div class="flex items-center space-x-1">
+						<div class="flex items-center">
 							<div
 								class="flex-shrink-0 text-sm text-slate-500 dark:text-slate-400 px-2 py-2 bg-slate-100 dark:bg-slate-700 rounded-l-md border border-r-0 border-slate-300 dark:border-slate-600">
 								{{ baseUrl }}/
@@ -180,7 +179,7 @@
 								already taken.</p>
 							<p v-else-if="isSlugAvailable === true" class="text-xs text-green-500">Custom path is
 								available!</p>
-							<p v-else class="text-xs text-slate-500 dark:text-slate-400">
+							<p v-else class="text-xs text-slate-500 dark:text-slate-400 text-left">
 								Use only letters, numbers, hyphens and underscores. Leave empty for random path.
 							</p>
 						</div>
@@ -214,9 +213,9 @@
 								@keydown.comma.prevent="addTag"
 								type="text"
 								placeholder="Add tags..."
-								class="flex-grow bg-transparent focus:outline-none text-sm min-w-[100px]" />
+								class="glass-card glass-card-border glass-card-prevent-transform py-2.5 px-4 flex-grow bg-transparent focus:outline-none text-sm min-w-[100px]" />
 						</div>
-						<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+						<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 text-left">
 							Press Enter, Tab, Space or Comma to add a tag
 						</p>
 					</div>
@@ -254,7 +253,7 @@
 										{{ project.name }}
 									</option>
 								</select>
-								<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+								<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 text-left">
 									Assign this link to a project for better organization
 								</p>
 							</div>
@@ -318,7 +317,7 @@
 										Active link
 									</label>
 								</div>
-								<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 ml-6">
+								<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 ml-6 text-left">
 									When inactive, the link will show a "link unavailable" page
 								</p>
 							</div>

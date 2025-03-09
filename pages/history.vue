@@ -147,7 +147,7 @@
 				<!-- Поиск -->
 				<div class="relative flex-grow max-w-md">
 					<input type="text" v-model="searchQuery" placeholder="Search links..."
-						class="glass-card glass-card-border glass-card-prevent-transform pl-10 pr-4 py-2 w-full rounded-lg border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white" />
+						class="glass-card-border glass-card-prevent-transform shadow-sm pl-10 pr-4 py-2 w-full rounded-lg border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white" />
 					<svg class="h-5 w-5 text-slate-400 absolute left-3 top-1/2 transform -translate-y-1/2"
 						xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
