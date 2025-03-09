@@ -171,7 +171,7 @@
 							class="mb-4 bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-slate-200 dark:border-slate-700">
 							<h4 class="text-sm font-medium text-slate-800 dark:text-white mb-3">Daily Performance</h4>
 							<div class="h-52">
-								<line-chart :chart-data="dailyChartData" :options="chartOptions" />
+								<line-chart :chart-data="dailyChartData" :options="chartOptions" class="max-h-full"/>
 							</div>
 						</div>
 
@@ -224,7 +224,7 @@
 							<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 								<div>
 									<div class="h-40">
-										<doughnut-chart :chart-data="deviceChartData" :options="pieChartOptions" />
+										<doughnut-chart :chart-data="deviceChartData" :options="pieChartOptions" class="max-h-full" />
 									</div>
 								</div>
 								<div class="flex items-center">
@@ -258,7 +258,7 @@
 								<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 									<div>
 										<div class="h-40">
-											<doughnut-chart :chart-data="browserChartData" :options="pieChartOptions" />
+											<doughnut-chart :chart-data="browserChartData" :options="pieChartOptions" class="max-h-full" />
 										</div>
 									</div>
 									<div class="flex items-center">
@@ -347,15 +347,15 @@
 								<span class="text-xs text-slate-500 dark:text-slate-400">Last 30 days</span>
 							</div>
 							<div class="h-52">
-								<bar-chart :chart-data="hourlyChartData" :options="barChartOptions" />
+								<bar-chart :chart-data="hourlyChartData" :options="barChartOptions" class="max-h-full" />
 							</div>
 							<div class="mt-4 grid grid-cols-2 gap-4">
-								<div class="bg-slate-50 dark:bg-slate-700/30 p-3 rounded-lg">
+								<div class="bg-slate-50 dark:bg-slate-700/30 p-3 rounded-lg glass-card-border">
 									<div class="text-xs text-slate-500 dark:text-slate-400">Peak Traffic Hours</div>
 									<div class="text-base font-medium text-slate-800 dark:text-white mt-1">14:00 - 18:00
 									</div>
 								</div>
-								<div class="bg-slate-50 dark:bg-slate-700/30 p-3 rounded-lg">
+								<div class="bg-slate-50 dark:bg-slate-700/30 p-3 rounded-lg glass-card-border">
 									<div class="text-xs text-slate-500 dark:text-slate-400">Best Performing Day</div>
 									<div class="text-base font-medium text-slate-800 dark:text-white mt-1">Wednesday
 									</div>
