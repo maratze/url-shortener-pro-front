@@ -4,7 +4,20 @@
             <div v-for="(item, index) in data" :key="index"
                 class="flex items-center py-2 px-3 rounded-md transition-colors duration-200 hover:bg-slate-50 dark:hover:bg-slate-700/30">
                 <div class="w-6 flex-shrink-0 flex justify-center">
-                    <img :src="`https://flagcdn.com/20x15/${getCountryCode(item.country).toLowerCase()}.png`"
+                    <!-- Показываем флаг для стран или иконку для Geography/Others -->
+                    <template v-if="item.country === 'Geography' || item.country === 'Others'">
+                        <svg v-if="item.country === 'Geography'" class="h-4 w-4 text-indigo-600 dark:text-indigo-400"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <svg v-else class="h-4 w-4 text-slate-600 dark:text-slate-400"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                        </svg>
+                    </template>
+                    <img v-else :src="`https://flagcdn.com/20x15/${getCountryCode(item.country).toLowerCase()}.png`"
                         :alt="item.country"
                         class="h-3.5 w-auto rounded-sm shadow-sm" />
                 </div>
@@ -13,15 +26,13 @@
                 </div>
                 <div class="flex-grow ml-3">
                     <div class="bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden shadow-inner">
-                        <div
-                            class="rounded-full h-2 progress-bar"
-                            :class="getColorClass(index)"
+                        <div class="rounded-full h-2 progress-bar" :class="getColorClass(index)"
                             :style="{ width: `${item.percentage}%` }"></div>
                     </div>
                 </div>
                 <div class="ml-3 w-20 text-right flex flex-col items-end">
                     <span class="text-sm font-medium text-slate-700 dark:text-slate-300">{{ formatNumber(item.clicks)
-                    }}</span>
+                        }}</span>
                     <span class="text-xs text-slate-500 dark:text-slate-400">{{ item.percentage }}%</span>
                 </div>
             </div>

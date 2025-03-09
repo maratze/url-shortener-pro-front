@@ -102,33 +102,11 @@
 					</div>
 				</div>
 
-				<!-- Добавляем секцию для выбора количества элементов на странице -->
-				<div class="mb-4">
-					<h4 class="text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">Items Per Page</h4>
-					<div class="flex space-x-2">
-						<button
-							v-for="count in itemsPerPageOptions"
-							:key="count"
-							@click="changeItemsPerPage(count)"
-							class="flex-1 py-1.5 text-xs rounded-md transition-colors"
-							:class="selectedItemsPerPage === count
-								? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
-								: 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400'">
-							{{ count }}
-						</button>
-					</div>
-				</div>
-
 				<div class="flex justify-between">
 					<button
 						@click="resetSettings"
 						class="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300">
 						Reset Settings
-					</button>
-					<button
-						@click="savePreferences"
-						class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded-md">
-						Apply
 					</button>
 				</div>
 			</div>
@@ -137,7 +115,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted, onBeforeUnmount } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
 
 const props = defineProps<{
@@ -153,7 +131,6 @@ const props = defineProps<{
 
 const emit = defineEmits<{
 	(e: 'toggle-column', key: string): void;
-	(e: 'toggle-compact'): void;
 	(e: 'toggle-compact', isCompact: boolean): void;
 	(e: 'toggle-borders'): void;
 	(e: 'toggle-stripes'): void;
@@ -168,8 +145,15 @@ const isOpen = ref(false);
 const density = useLocalStorage('table-density', 'normal');
 const showBorders = ref(props.showBorders ?? true);
 const showStripes = ref(props.showStripes ?? true);
-const itemsPerPageOptions = [10, 25, 50, 100];
-const selectedItemsPerPage = useLocalStorage('items-per-page', 10);
+
+// Устанавливаем начальные значения
+onMounted(() => {
+	showBorders.value = props.showBorders ?? true;
+	showStripes.value = props.showStripes ?? true;
+
+	// При монтировании компонента применяем сохраненные настройки
+	applySettings();
+});
 
 // Переключение меню
 const toggleMenu = () => {
@@ -185,11 +169,8 @@ const toggleMenu = () => {
 // Установка плотности таблицы
 const setDensity = (value: string) => {
 	density.value = value;
-	if (value === 'compact') {
-		emit('toggle-compact', true);
-	} else {
-		emit('toggle-compact', false);
-	}
+	const isCompact = value === 'compact';
+	emit('toggle-compact', isCompact);
 };
 
 // Переключение колонки
@@ -209,10 +190,14 @@ const toggleStripes = () => {
 	emit('toggle-stripes');
 };
 
-// Изменение количества элементов на странице
-const changeItemsPerPage = (count: number) => {
-	selectedItemsPerPage.value = count;
-	emit('items-per-page-change', count);
+// Функция применения настроек
+const applySettings = () => {
+	// Применяем настройки плотности
+	emit('toggle-compact', density.value === 'compact');
+
+	// Применяем настройки границ и полос
+	emit('toggle-borders');
+	emit('toggle-stripes');
 };
 
 // Сброс настроек
@@ -220,25 +205,8 @@ const resetSettings = () => {
 	density.value = 'normal';
 	showBorders.value = true;
 	showStripes.value = true;
-	selectedItemsPerPage.value = 10;
 	emit('reset-settings');
-};
-
-// Сохранение настроек
-const savePreferences = () => {
-	// Применяем настройки
-	if (density.value === 'compact') {
-		emit('toggle-compact', true);
-	} else {
-		emit('toggle-compact', false);
-	}
-	emit('toggle-borders');
-	emit('toggle-stripes');
-	emit('items-per-page-change', selectedItemsPerPage.value);
-
-	// Закрываем выпадающее меню
-	isOpen.value = false;
-	document.removeEventListener('click', closeMenuOnClickOutside);
+	applySettings();
 };
 
 // Закрытие меню при клике вне элемента
@@ -258,18 +226,6 @@ const closeMenuOnClickOutside = (event: MouseEvent) => {
 // Убираем обработчик событий при размонтировании компонента
 onBeforeUnmount(() => {
 	document.removeEventListener('click', closeMenuOnClickOutside);
-});
-
-// Применяем настройки при загрузке
-onMounted(() => {
-	if (density.value === 'compact') {
-		emit('toggle-compact', true);
-	} else {
-		emit('toggle-compact', false);
-	}
-	emit('toggle-borders');
-	emit('toggle-stripes');
-	emit('items-per-page-change', selectedItemsPerPage.value);
 });
 </script>
 
