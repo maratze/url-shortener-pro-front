@@ -42,7 +42,7 @@
 								type="text"
 								placeholder="https://example.com/your-long-url"
 								:class="[
-									'form-input',
+									'form-input !py-2',
 									validationErrors.originalUrl ? 'border-red-300 dark:border-red-500 focus:ring-red-500 focus:border-red-500' : ''
 								]"
 								required
@@ -108,7 +108,7 @@
 							v-model="formData.title"
 							type="text"
 							placeholder="Title for your link"
-							class="form-input" />
+							class="form-input !py-2" />
 						<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 text-left">
 							A descriptive title helps identify your link
 						</p>
