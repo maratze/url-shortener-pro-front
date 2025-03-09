@@ -124,7 +124,7 @@
 						</div>
 						<div class="flex items-center">
 							<div
-								class="flex-shrink-0 text-sm text-slate-500 dark:text-slate-400 px-2 py-2 bg-slate-100 dark:bg-slate-700 rounded-l-md border border-r-0 border-slate-300 dark:border-slate-600">
+								class="flex-shrink-0 text-sm text-slate-500 dark:text-slate-400 px-2 py-2.5 bg-slate-100 dark:bg-slate-700 rounded-l-md border border-r-0 border-slate-300 dark:border-slate-600">
 								{{ baseUrl }}/
 							</div>
 							<input
@@ -133,8 +133,9 @@
 								type="text"
 								placeholder="custom-path"
 								:class="[
-									'rounded-l-none form-input',
-									validationErrors.customSlug ? 'border-red-300 dark:border-red-500 focus:ring-red-500 focus:border-red-500' : ''
+									'form-input short-name !rounded-l-none',
+									validationErrors.customSlug ? 'border-red-300 dark:border-red-500 focus:ring-red-500 focus:border-red-500' : '',
+									formData.customSlug ? '!rounded-r-none' : ''
 								]"
 								@input="validateCustomSlug"
 								@blur="validateCustomSlug" />
@@ -142,7 +143,7 @@
 								v-if="formData.customSlug"
 								type="button"
 								@click="checkSlugAvailability"
-								class="flex-shrink-0 px-3 py-2 bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/50 text-indigo-700 dark:text-indigo-400 text-sm rounded-r-md focus:outline-none"
+								class="flex-shrink-0 px-3 py-2 min-h-[42px] bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/50 text-indigo-700 dark:text-indigo-400 text-sm rounded-r-md focus:outline-none"
 								:disabled="isCheckingSlug || !isCustomSlugValid"
 								title="Check availability">
 								<span v-if="isCheckingSlug">
@@ -173,12 +174,15 @@
 							</button>
 						</div>
 						<div class="mt-1">
-							<p v-if="validationErrors.customSlug" class="text-xs text-red-500">{{
-								validationErrors.customSlug }}</p>
-							<p v-else-if="isSlugAvailable === false" class="text-xs text-red-500">This custom path is
-								already taken.</p>
-							<p v-else-if="isSlugAvailable === true" class="text-xs text-green-500">Custom path is
-								available!</p>
+							<p v-if="validationErrors.customSlug" class="text-xs text-red-500 text-left">
+								{{ validationErrors.customSlug }}
+							</p>
+							<p v-else-if="isSlugAvailable === false" class="text-xs text-red-500 text-left">
+								This custom path is already taken.
+							</p>
+							<p v-else-if="isSlugAvailable === true" class="text-xs text-green-500 text-left">
+								Custom path is available!
+							</p>
 							<p v-else class="text-xs text-slate-500 dark:text-slate-400 text-left">
 								Use only letters, numbers, hyphens and underscores. Leave empty for random path.
 							</p>
@@ -187,11 +191,11 @@
 
 					<!-- Теги -->
 					<div>
-						<label for="tags" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+						<label for="tags" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 text-left">
 							Tags
 						</label>
 						<div
-							class="flex flex-wrap items-center gap-2 p-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 min-h-[42px]">
+							class="glass-card-border flex flex-wrap items-center gap-2 p-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 min-h-[42px]">
 							<div v-for="(tag, index) in formData.tags" :key="index"
 								class="flex items-center bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300 px-2 py-1 rounded-full text-sm">
 								<span>{{ tag }}</span>
@@ -213,7 +217,7 @@
 								@keydown.comma.prevent="addTag"
 								type="text"
 								placeholder="Add tags..."
-								class="glass-card glass-card-border glass-card-prevent-transform py-2.5 px-4 flex-grow bg-transparent focus:outline-none text-sm min-w-[100px]" />
+								class="glass-card glass-card-border glass-card-prevent-transform py-2.5 px-4 flex-grow bg-transparent focus:outline-none text-sm min-w-[100px] rounded-md" />
 						</div>
 						<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 text-left">
 							Press Enter, Tab, Space or Comma to add a tag
@@ -237,17 +241,17 @@
 								Settings</span>
 						</div>
 
-						<div v-if="showAdvanced" class="mt-3 space-y-4 bg-slate-50 dark:bg-slate-700/30 p-3 rounded-lg">
+						<div v-if="showAdvanced" class="glass-card-border mt-3 space-y-4 bg-slate-50 dark:bg-slate-700/30 p-3 rounded-lg">
 							<!-- Проект (для авторизованных пользователей) -->
 							<div v-if="isAuthenticated">
 								<label for="project"
-									class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+									class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 text-left">
 									Project
 								</label>
 								<select
 									id="project"
 									v-model="formData.projectId"
-									class="form-input">
+									class="form-input form-select">
 									<option value="">None</option>
 									<option v-for="project in availableProjects" :key="project.id" :value="project.id">
 										{{ project.name }}
@@ -260,13 +264,13 @@
 
 							<!-- UTM параметры -->
 							<div>
-								<h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">UTM Parameters
+								<h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 text-left">UTM Parameters
 								</h4>
 
 								<div class="space-y-3">
 									<div>
 										<label for="utmSource"
-											class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
+											class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1 text-left">
 											UTM Source
 										</label>
 										<input
@@ -274,12 +278,12 @@
 											v-model="formData.utmSource"
 											type="text"
 											placeholder="e.g. google, newsletter"
-											class="form-input text-sm py-1.5" />
+											class="form-input text-sm py-2.5" />
 									</div>
 
 									<div>
 										<label for="utmMedium"
-											class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
+											class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1 text-left">
 											UTM Medium
 										</label>
 										<input
@@ -287,12 +291,12 @@
 											v-model="formData.utmMedium"
 											type="text"
 											placeholder="e.g. cpc, email"
-											class="form-input text-sm py-1.5" />
+											class="form-input text-sm py-2.5" />
 									</div>
 
 									<div>
 										<label for="utmCampaign"
-											class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
+											class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1 text-left">
 											UTM Campaign
 										</label>
 										<input
@@ -300,7 +304,7 @@
 											v-model="formData.utmCampaign"
 											type="text"
 											placeholder="e.g. summer_sale"
-											class="form-input text-sm py-1.5" />
+											class="form-input text-sm py-2.5" />
 									</div>
 								</div>
 							</div>
@@ -325,9 +329,8 @@
 					</div>
 
 					<!-- Предпросмотр короткой ссылки -->
-					<div v-if="formData.originalUrl && isOriginalUrlValid"
-						class="bg-slate-50 dark:bg-slate-700/30 p-3 rounded-lg">
-						<h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Link Preview</h4>
+					<div v-if="formData.originalUrl && isOriginalUrlValid" class="glass-card-border bg-slate-50 dark:bg-slate-700/30 p-3 rounded-lg">
+						<h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 text-left">Link Preview</h4>
 						<div class="flex items-center">
 							<div class="text-sm text-indigo-600 dark:text-indigo-400 truncate">
 								{{ getShortUrlPreview() }}
@@ -344,7 +347,7 @@
 								</svg>
 							</button>
 						</div>
-						<div class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+						<div class="text-xs text-slate-500 dark:text-slate-400 mt-1 text-left">
 							Points to: <span class="text-slate-600 dark:text-slate-300 truncate">{{
 								truncateUrl(formData.originalUrl || '', 30) }}</span>
 						</div>
@@ -651,6 +654,19 @@ const saveLink = async () => {
 
 <style scoped>
 .form-input {
-	@apply block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md text-slate-800 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm;
+	@apply block w-full px-3 py-2.5 border border-slate-300 dark:border-slate-600 rounded-md text-slate-800 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm;
+}
+
+.form-input.short-name {
+	@apply py-2;
+}
+
+.form-input.short-name:focus {
+	box-shadow: none;
+	outline: none;
+}
+
+.form-select {
+	@apply py-2;
 }
 </style>
