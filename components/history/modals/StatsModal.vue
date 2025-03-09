@@ -12,7 +12,7 @@
 				<!-- Заголовок модального окна -->
 				<div class="flex justify-between items-center mb-5">
 					<div>
-						<h3 class="text-lg font-medium text-slate-800 dark:text-white" id="modal-title">
+						<h3 class="text-lg text-left font-medium text-slate-800 dark:text-white" id="modal-title">
 							Link Analytics
 						</h3>
 						<p class="text-sm text-slate-600 dark:text-slate-400 flex items-center">
@@ -52,7 +52,7 @@
 
 				<div v-else>
 					<!-- Основная информация о ссылке -->
-					<div class="bg-slate-50 dark:bg-slate-700/30 rounded-lg p-4 mb-6">
+					<div class="glass-card-border bg-slate-50 dark:bg-slate-700/30 rounded-lg p-4 mb-4">
 						<div class="grid grid-cols-1 md:grid-cols-12 gap-4">
 							<div class="md:col-span-7">
 								<div class="flex items-center">
@@ -65,7 +65,8 @@
 										{{ truncateUrl(link?.originalUrl, 50) }}
 									</a>
 								</div>
-								<div class="flex items-center mt-2 bg-white dark:bg-slate-800/50 rounded-md px-3 py-2">
+								<div
+									class="glass-card-border flex items-center mt-2 bg-white dark:bg-slate-800/50 rounded-md px-3 py-2">
 									<span class="text-sm text-slate-700 dark:text-slate-300 truncate max-w-xs">
 										{{ link?.shortUrl }}
 									</span>
@@ -81,14 +82,14 @@
 										</svg>
 									</button>
 								</div>
-								<div class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+								<div class="mt-2 text-xs text-slate-500 dark:text-slate-400 text-left">
 									Created {{ formatDate(link?.createdAt) }} • Last visited {{
 										formatDate(link?.lastClickedAt || link?.createdAt) }}
 								</div>
 							</div>
 							<div class="md:col-span-5 flex flex-wrap gap-3 justify-end">
 								<div
-									class="flex-1 min-w-[100px] text-center px-4 py-3 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
+									class="glass-card-border flex-1 min-w-[100px] text-center px-4 py-3 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
 									<div class="text-2xl font-bold text-slate-800 dark:text-white">
 										{{ formatNumber(analytics.totalClicks) }}
 									</div>
@@ -102,7 +103,7 @@
 									</div>
 								</div>
 								<div
-									class="flex-1 min-w-[100px] text-center px-4 py-3 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
+									class="glass-card-border flex-1 min-w-[100px] text-center px-4 py-3 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
 									<div class="text-2xl font-bold text-slate-800 dark:text-white">
 										{{ formatNumber(analytics.uniqueClicks) }}
 									</div>
@@ -113,7 +114,7 @@
 					</div>
 
 					<!-- Вкладки для различных метрик -->
-					<div class="mb-6">
+					<div class="mb-4">
 						<div class="border-b border-slate-200 dark:border-slate-700">
 							<nav class="-mb-px flex space-x-6 overflow-x-auto">
 								<button
@@ -125,7 +126,37 @@
 										? 'border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400'
 										: 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'">
 									<span class="flex items-center">
-										<component :is="tab.icon" class="h-4 w-4 mr-1.5" />
+										<!-- Иконки для табов -->
+										<svg v-if="tab.id === 'daily'" class="h-4 w-4 mr-1.5"
+											xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+											stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+										</svg>
+										<svg v-else-if="tab.id === 'location'" class="h-4 w-4 mr-1.5"
+											xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+											stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+										</svg>
+										<svg v-else-if="tab.id === 'devices'" class="h-4 w-4 mr-1.5"
+											xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+											stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+										</svg>
+										<svg v-else-if="tab.id === 'referrers'" class="h-4 w-4 mr-1.5"
+											xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+											stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+										</svg>
+										<svg v-else-if="tab.id === 'time'" class="h-4 w-4 mr-1.5"
+											xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+											stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+										</svg>
 										{{ tab.name }}
 									</span>
 								</button>
@@ -137,109 +168,123 @@
 					<div>
 						<!-- График по дням -->
 						<div v-if="activeTab === 'daily'"
-							class="h-64 mb-6 bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm">
+							class="mb-4 bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-slate-200 dark:border-slate-700">
 							<h4 class="text-sm font-medium text-slate-800 dark:text-white mb-3">Daily Performance</h4>
-							<line-chart :chart-data="dailyChartData" :options="chartOptions" />
+							<div class="h-52">
+								<line-chart :chart-data="dailyChartData" :options="chartOptions" />
+							</div>
 						</div>
 
 						<!-- Геолокация -->
-						<div v-else-if="activeTab === 'location'" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-							<div class="bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm">
-								<div class="flex justify-between items-center mb-3">
-									<h4 class="text-sm font-medium text-slate-800 dark:text-white">Top Countries</h4>
-									<span class="text-xs text-slate-500 dark:text-slate-400">Last 30 days</span>
-								</div>
-								<div class="space-y-3">
-									<div v-for="(item, index) in analytics.clicksByCountry" :key="index"
-										class="flex items-center">
-										<div class="w-8 text-center">
-											<img :src="`https://flagcdn.com/20x15/${getCountryCode(item.country).toLowerCase()}.png`"
-												:alt="item.country"
-												class="inline-block" />
-										</div>
-										<div class="ml-2 flex-grow">
-											<div class="flex justify-between items-center">
-												<span class="text-xs font-medium text-slate-700 dark:text-slate-300">{{
-													item.country }}</span>
-												<span class="text-xs text-slate-500 dark:text-slate-400">{{ item.count
-												}} clicks ({{ ((item.count / analytics.totalClicks) *
-														100).toFixed(1) }}%)</span>
-											</div>
+						<div v-else-if="activeTab === 'location'"
+							class="mb-4 bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+							<div class="flex justify-between items-center mb-3">
+								<h4 class="text-sm font-medium text-slate-800 dark:text-white">Top Countries</h4>
+								<span class="text-xs text-slate-500 dark:text-slate-400">Last 30 days</span>
+							</div>
+							<div class="space-y-2.5">
+								<div v-for="(item, index) in analytics.clicksByCountry" :key="index"
+									class="flex items-center py-2 px-3 rounded-md transition-colors duration-200 hover:bg-slate-50 dark:hover:bg-slate-700/30">
+									<div class="w-6 flex-shrink-0 flex justify-center">
+										<img :src="`https://flagcdn.com/20x15/${getCountryCode(item.country).toLowerCase()}.png`"
+											:alt="item.country"
+											class="h-3.5 w-auto rounded-sm shadow-sm" />
+									</div>
+									<div
+										class="w-24 ml-2 text-sm font-medium text-slate-700 dark:text-slate-300 truncate text-left">
+										{{ item.country }}
+									</div>
+									<div class="flex-grow ml-3">
+										<div
+											class="bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden shadow-inner">
 											<div
-												class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 mt-1 overflow-hidden">
-												<div class="bg-indigo-600 dark:bg-indigo-500 h-1.5 rounded-full"
-													:style="{ width: `${(item.count / analytics.totalClicks) * 100}%` }">
-												</div>
+												class="rounded-full h-2 progress-bar"
+												:class="getLocationColorClass(index)"
+												:style="{ width: `${(item.count / analytics.totalClicks) * 100}%` }">
 											</div>
 										</div>
 									</div>
-								</div>
-							</div>
-
-							<div class="bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm">
-								<div class="flex justify-between items-center mb-3">
-									<h4 class="text-sm font-medium text-slate-800 dark:text-white">Geographical
-										Distribution</h4>
-									<button class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">View
-										full map</button>
-								</div>
-								<div class="h-[220px] w-full">
-									<!-- Заглушка для карты мира (в реальном проекте здесь был бы компонент с интерактивной картой) -->
-									<div
-										class="h-full w-full flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-lg">
-										<div class="text-center">
-											<p class="text-xs text-slate-500 dark:text-slate-400 mb-2">Interactive world
-												map</p>
-											<button
-												class="text-xs text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 rounded px-2 py-1 hover:bg-indigo-50 dark:hover:bg-indigo-900/30">
-												View detailed report
-											</button>
-										</div>
+									<div class="ml-3 w-20 text-right flex flex-col items-end">
+										<span class="text-sm font-medium text-slate-700 dark:text-slate-300">{{
+											formatNumber(item.count) }}</span>
+										<span class="text-xs text-slate-500 dark:text-slate-400">{{ ((item.count /
+											analytics.totalClicks) * 100).toFixed(1) }}%</span>
 									</div>
 								</div>
 							</div>
 						</div>
 
 						<!-- Устройства -->
-						<div v-else-if="activeTab === 'devices'" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-							<div class="bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm">
-								<div class="flex justify-between items-center mb-3">
-									<h4 class="text-sm font-medium text-slate-800 dark:text-white">Device Types</h4>
-									<span class="text-xs text-slate-500 dark:text-slate-400">Last 30 days</span>
+						<div v-else-if="activeTab === 'devices'"
+							class="mb-4 bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+							<div class="flex justify-between items-center mb-3">
+								<h4 class="text-sm font-medium text-slate-800 dark:text-white">Device Types</h4>
+								<span class="text-xs text-slate-500 dark:text-slate-400">Last 30 days</span>
+							</div>
+							<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div>
+									<div class="h-40">
+										<doughnut-chart :chart-data="deviceChartData" :options="pieChartOptions" />
+									</div>
 								</div>
-								<div class="h-48">
-									<doughnut-chart :chart-data="deviceChartData" :options="pieChartOptions" />
-								</div>
-								<div class="mt-2 grid grid-cols-3 gap-2">
-									<div v-for="(item, index) in deviceChartData.datasets[0].data" :key="index"
-										class="text-center text-xs py-1 rounded-md"
-										:style="{ backgroundColor: `${deviceChartData.datasets[0].backgroundColor[index]}20` }">
-										<span :style="{ color: deviceChartData.datasets[0].backgroundColor[index] }"
-											class="font-medium">
-											{{ item }}%
-										</span>
-										<div class="text-slate-600 dark:text-slate-400 text-[10px]">{{
-											deviceChartData.labels[index] }}</div>
+								<div class="flex items-center">
+									<div class="w-full">
+										<div v-for="(item, index) in deviceChartData.datasets[0].data" :key="index"
+											class="mb-2 flex items-center">
+											<span class="h-3 w-3 rounded-full mr-2"
+												:style="{ backgroundColor: deviceChartData.datasets[0].backgroundColor[index] }"></span>
+											<span class="text-sm text-slate-700 dark:text-slate-300 w-20">
+												{{ deviceChartData.labels[index] }}
+											</span>
+											<div
+												class="flex-grow bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+												<div class="h-2 rounded-full"
+													:style="{
+														width: `${item}%`,
+														backgroundColor: deviceChartData.datasets[0].backgroundColor[index]
+													}">
+												</div>
+											</div>
+											<span class="ml-2 text-xs font-medium text-slate-600 dark:text-slate-400">
+												{{ item }}%
+											</span>
+										</div>
 									</div>
 								</div>
 							</div>
 
-							<div class="bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm">
-								<div class="flex justify-between items-center mb-3">
-									<h4 class="text-sm font-medium text-slate-800 dark:text-white">Browsers</h4>
-									<span class="text-xs text-slate-500 dark:text-slate-400">Last 30 days</span>
-								</div>
-								<div class="h-48">
-									<doughnut-chart :chart-data="browserChartData" :options="pieChartOptions" />
-								</div>
-								<div class="mt-2 space-y-1.5">
-									<div v-for="(item, index) in browserChartData.labels" :key="index"
-										class="flex items-center text-xs">
-										<span class="h-2 w-2 rounded-full mr-2"
-											:style="{ backgroundColor: browserChartData.datasets[0].backgroundColor[index] }"></span>
-										<span class="text-slate-700 dark:text-slate-300">{{ item }}</span>
-										<span class="ml-auto text-slate-500 dark:text-slate-400">{{
-											browserChartData.datasets[0].data[index] }}%</span>
+							<div class="mt-4 border-t border-slate-200 dark:border-slate-700 pt-4">
+								<h4 class="text-sm font-medium text-slate-800 dark:text-white mb-3">Browsers</h4>
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+									<div>
+										<div class="h-40">
+											<doughnut-chart :chart-data="browserChartData" :options="pieChartOptions" />
+										</div>
+									</div>
+									<div class="flex items-center">
+										<div class="w-full">
+											<div v-for="(item, index) in browserChartData.datasets[0].data" :key="index"
+												class="mb-2 flex items-center">
+												<span class="h-3 w-3 rounded-full mr-2"
+													:style="{ backgroundColor: browserChartData.datasets[0].backgroundColor[index] }"></span>
+												<span class="text-sm text-slate-700 dark:text-slate-300 w-20">
+													{{ browserChartData.labels[index] }}
+												</span>
+												<div
+													class="flex-grow bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+													<div class="h-2 rounded-full"
+														:style="{
+															width: `${item}%`,
+															backgroundColor: browserChartData.datasets[0].backgroundColor[index]
+														}">
+													</div>
+												</div>
+												<span
+													class="ml-2 text-xs font-medium text-slate-600 dark:text-slate-400">
+													{{ item }}%
+												</span>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -247,81 +292,61 @@
 
 						<!-- Рефереры -->
 						<div v-else-if="activeTab === 'referrers'"
-							class="bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm">
+							class="mb-4 bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-slate-200 dark:border-slate-700">
 							<div class="flex justify-between items-center mb-3">
 								<h4 class="text-sm font-medium text-slate-800 dark:text-white">Top Referrers</h4>
 								<span class="text-xs text-slate-500 dark:text-slate-400">Last 30 days</span>
 							</div>
-							<div class="overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700">
-								<table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
-									<thead>
-										<tr class="bg-slate-50 dark:bg-slate-700/50">
-											<th
-												class="px-4 py-2 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-												Source</th>
-											<th
-												class="px-4 py-2 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-												Clicks</th>
-											<th
-												class="px-4 py-2 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-												Distribution</th>
-										</tr>
-									</thead>
-									<tbody class="divide-y divide-slate-200 dark:divide-slate-700">
-										<tr v-for="(item, index) in analytics.clicksByReferrer" :key="index"
-											class="hover:bg-slate-50 dark:hover:bg-slate-700/30">
-											<td
-												class="px-4 py-2.5 whitespace-nowrap text-xs text-slate-700 dark:text-slate-300">
-												<div class="flex items-center">
-													<img
-														v-if="item.referrer !== 'Direct'"
-														:src="`https://www.google.com/s2/favicons?domain=${item.referrer}&sz=32`"
-														class="h-4 w-4 rounded-sm mr-2"
-														alt="Site Icon" />
-													<svg
-														v-else
-														xmlns="http://www.w3.org/2000/svg"
-														class="h-4 w-4 text-slate-500 mr-2"
-														fill="none"
-														viewBox="0 0 24 24"
-														stroke="currentColor">
-														<path stroke-linecap="round" stroke-linejoin="round"
-															stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-													</svg>
-													{{ item.referrer }}
-												</div>
-											</td>
-											<td
-												class="px-4 py-2.5 whitespace-nowrap text-xs text-right text-slate-700 dark:text-slate-300">
-												{{ item.count }}
-											</td>
-											<td class="px-4 py-2.5 whitespace-nowrap text-right">
-												<div class="flex items-center justify-end">
-													<span class="text-xs text-slate-700 dark:text-slate-300 mr-2">
-														{{ ((item.count / analytics.totalClicks) * 100).toFixed(1) }}%
-													</span>
-													<div
-														class="w-20 bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
-														<div class="bg-indigo-600 dark:bg-indigo-500 h-1.5 rounded-full"
-															:style="{ width: `${(item.count / analytics.totalClicks) * 100}%` }">
-														</div>
-													</div>
-												</div>
-											</td>
-										</tr>
-									</tbody>
-								</table>
+							<div class="space-y-2.5">
+								<div v-for="(item, index) in analytics.clicksByReferrer" :key="index"
+									class="flex items-center py-2 px-3 rounded-md transition-colors duration-200 hover:bg-slate-50 dark:hover:bg-slate-700/30">
+									<div class="w-6 flex-shrink-0 flex justify-center">
+										<img v-if="item.referrer !== 'Direct'"
+											:src="`https://www.google.com/s2/favicons?domain=${item.referrer}&sz=32`"
+											class="h-4 w-4 rounded-sm"
+											alt="Site Icon" />
+										<svg v-else
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-4 w-4 text-slate-500"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round"
+												stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+										</svg>
+									</div>
+									<div
+										class="w-24 ml-2 text-sm font-medium text-slate-700 dark:text-slate-300 truncate text-left">
+										{{ item.referrer }}
+									</div>
+									<div class="flex-grow ml-3">
+										<div
+											class="bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden shadow-inner">
+											<div
+												class="rounded-full h-2 progress-bar"
+												:class="getReferrerColorClass(index)"
+												:style="{ width: `${(item.count / analytics.totalClicks) * 100}%` }">
+											</div>
+										</div>
+									</div>
+									<div class="ml-3 w-20 text-right flex flex-col items-end">
+										<span class="text-sm font-medium text-slate-700 dark:text-slate-300">{{
+											formatNumber(item.count) }}</span>
+										<span class="text-xs text-slate-500 dark:text-slate-400">{{ ((item.count /
+											analytics.totalClicks) * 100).toFixed(1) }}%</span>
+									</div>
+								</div>
 							</div>
 						</div>
 
 						<!-- Почасовая статистика -->
 						<div v-else-if="activeTab === 'time'"
-							class="bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm">
+							class="mb-4 bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-slate-200 dark:border-slate-700">
 							<div class="flex justify-between items-center mb-3">
 								<h4 class="text-sm font-medium text-slate-800 dark:text-white">Hourly Distribution</h4>
 								<span class="text-xs text-slate-500 dark:text-slate-400">Last 30 days</span>
 							</div>
-							<div class="h-48">
+							<div class="h-52">
 								<bar-chart :chart-data="hourlyChartData" :options="barChartOptions" />
 							</div>
 							<div class="mt-4 grid grid-cols-2 gap-4">
@@ -340,20 +365,20 @@
 					</div>
 
 					<!-- Дополнительные карточки сводной информации -->
-					<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6 mb-6">
-						<div class="bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm">
+					<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 my-4">
+						<div class="glass-card bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm">
 							<div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Avg. Session Duration</div>
 							<div class="text-base font-medium text-slate-800 dark:text-white">2m 45s</div>
 						</div>
-						<div class="bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm">
+						<div class="glass-card bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm">
 							<div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Bounce Rate</div>
 							<div class="text-base font-medium text-slate-800 dark:text-white">34.2%</div>
 						</div>
-						<div class="bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm">
+						<div class="glass-card bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm">
 							<div class="text-xs text-slate-500 dark:text-slate-400 mb-1">New vs. Returning</div>
 							<div class="text-base font-medium text-slate-800 dark:text-white">78% / 22%</div>
 						</div>
-						<div class="bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm">
+						<div class="glass-card bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm">
 							<div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Conversion Rate</div>
 							<div class="text-base font-medium text-slate-800 dark:text-white">3.5%</div>
 						</div>
@@ -469,11 +494,11 @@ const showQRCode = ref(false);
 
 // Табы для разных типов статистики
 const tabs = [
-	{ id: 'daily', name: 'Daily Activity', icon: 'ChartBarIcon' },
-	{ id: 'location', name: 'Locations', icon: 'GlobeEuropeAfricaIcon' },
-	{ id: 'devices', name: 'Devices', icon: 'DevicePhoneMobileIcon' },
-	{ id: 'referrers', name: 'Referrers', icon: 'ShareIcon' },
-	{ id: 'time', name: 'Time Analysis', icon: 'ClockIcon' },
+	{ id: 'daily', name: 'Daily Activity' },
+	{ id: 'location', name: 'Locations' },
+	{ id: 'devices', name: 'Devices' },
+	{ id: 'referrers', name: 'Referrers' },
+	{ id: 'time', name: 'Time Analysis' },
 ];
 
 const activeTab = ref('daily');
@@ -881,10 +906,104 @@ const formatDate = (date: string | undefined): string => {
 	}
 	return 'N/A';
 };
+
+// Функция для получения класса цвета для стран
+const getLocationColorClass = (index: number) => {
+	const colors = [
+		'bg-indigo-500 dark:bg-indigo-400',
+		'bg-blue-500 dark:bg-blue-400',
+		'bg-emerald-500 dark:bg-emerald-400',
+		'bg-orange-500 dark:bg-orange-400',
+		'bg-purple-500 dark:bg-purple-400',
+		'bg-rose-500 dark:bg-rose-400',
+	];
+
+	return colors[index % colors.length];
+};
+
+// Функция для получения класса цвета для рефереров
+const getReferrerColorClass = (index: number) => {
+	const colors = [
+		'bg-indigo-500 dark:bg-indigo-400',
+		'bg-emerald-500 dark:bg-emerald-400',
+		'bg-blue-500 dark:bg-blue-400',
+		'bg-purple-500 dark:bg-purple-400',
+		'bg-orange-500 dark:bg-orange-400',
+		'bg-rose-500 dark:bg-rose-400',
+	];
+
+	return colors[index % colors.length];
+};
 </script>
 
 <style scoped>
 .glass-card {
 	@apply bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 backdrop-blur-md;
+}
+
+.glass-card-border {
+	@apply border border-slate-200 dark:border-slate-700;
+}
+
+.progress-bar {
+	transition: width 1s ease-in-out;
+	background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
+	background-size: 1rem 1rem;
+	animation: progress-bar-stripes 1s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+	from {
+		background-position: 1rem 0;
+	}
+
+	to {
+		background-position: 0 0;
+	}
+}
+
+/* Стили для всплывающих подсказок */
+[data-tooltip] {
+	position: relative;
+}
+
+[data-tooltip]::after {
+	content: attr(data-tooltip);
+	position: absolute;
+	bottom: -35px;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 6px 10px;
+	background-color: rgba(0, 0, 0, 0.8);
+	color: white;
+	border-radius: 6px;
+	font-size: 14px;
+	white-space: nowrap;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.15s, visibility 0.15s;
+	z-index: 100;
+}
+
+[data-tooltip]:hover::after {
+	opacity: 1;
+	visibility: visible;
+	transition-delay: 0.1s;
+}
+
+[data-tooltip-position="left"]::after {
+	left: auto;
+	right: 0;
+	transform: translateX(0);
+}
+
+[data-tooltip-position="right"]::after {
+	left: 100%;
+	transform: translateX(0);
+}
+
+[data-tooltip-position="top"]::after {
+	bottom: auto;
+	top: -35px;
 }
 </style>
