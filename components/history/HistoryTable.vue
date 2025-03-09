@@ -79,7 +79,7 @@
 		</div>
 
 		<table
-			class="min-w-full divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-800 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
+			class="glass-card-border min-w-full divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-800 rounded-lg overflow-hidden">
 			<thead class="bg-slate-50 dark:bg-slate-800/60">
 				<tr>
 					<th scope="col"

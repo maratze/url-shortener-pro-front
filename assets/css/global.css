@@ -145,6 +145,14 @@
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
 }
 
+.glass-card-border {
+    border: 1px solid var(--card-border);
+}
+
+.glass-card-prevent-transform:hover {
+    transform: translateY(0);
+}
+
 .glass-panel {
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
