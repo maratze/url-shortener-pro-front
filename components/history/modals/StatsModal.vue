@@ -73,13 +73,22 @@
 									<button
 										@click="copyShortUrl"
 										class="ml-2 p-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-500 dark:text-slate-400 transition-colors"
-										data-tooltip="Copy to clipboard"
-										data-tooltip-position="right">
-										<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-											viewBox="0 0 24 24" stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-												d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-										</svg>
+										title="Copy to clipboard">
+										<span v-if="isCopied" class="text-green-500">
+											<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+												fill="currentColor">
+												<path fill-rule="evenodd"
+													d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+													clip-rule="evenodd" />
+											</svg>
+										</span>
+										<span v-else>
+											<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+												viewBox="0 0 24 24" stroke="currentColor">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+													d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+											</svg>
+										</span>
 									</button>
 								</div>
 								<div class="mt-2 text-xs text-slate-500 dark:text-slate-400 text-left">
@@ -171,7 +180,7 @@
 							class="mb-4 bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-slate-200 dark:border-slate-700">
 							<h4 class="text-sm font-medium text-slate-800 dark:text-white mb-3">Daily Performance</h4>
 							<div class="h-52">
-								<line-chart :chart-data="dailyChartData" :options="chartOptions" class="max-h-full"/>
+								<line-chart :chart-data="dailyChartData" :options="chartOptions" class="max-h-full" />
 							</div>
 						</div>
 
@@ -218,13 +227,15 @@
 						<div v-else-if="activeTab === 'devices'"
 							class="mb-4 bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-slate-200 dark:border-slate-700">
 							<div class="flex justify-between items-center mb-3">
-								<h4 class="text-sm font-medium text-slate-800 dark:text-white">Device Types</h4>
+								<h4 class="text-sm font-medium text-slate-800 dark:text-white text-left">Device Types
+								</h4>
 								<span class="text-xs text-slate-500 dark:text-slate-400">Last 30 days</span>
 							</div>
 							<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 								<div>
-									<div class="h-40">
-										<doughnut-chart :chart-data="deviceChartData" :options="pieChartOptions" class="max-h-full" />
+									<div class="h-48">
+										<doughnut-chart :chart-data="deviceChartData" :options="pieChartOptions"
+											class="max-h-full" />
 									</div>
 								</div>
 								<div class="flex items-center">
@@ -233,7 +244,7 @@
 											class="mb-2 flex items-center">
 											<span class="h-3 w-3 rounded-full mr-2"
 												:style="{ backgroundColor: deviceChartData.datasets[0].backgroundColor[index] }"></span>
-											<span class="text-sm text-slate-700 dark:text-slate-300 w-20">
+											<span class="text-sm text-slate-700 dark:text-slate-300 w-20 text-left">
 												{{ deviceChartData.labels[index] }}
 											</span>
 											<div
@@ -254,11 +265,13 @@
 							</div>
 
 							<div class="mt-4 border-t border-slate-200 dark:border-slate-700 pt-4">
-								<h4 class="text-sm font-medium text-slate-800 dark:text-white mb-3">Browsers</h4>
+								<h4 class="text-sm font-medium text-slate-800 dark:text-white mb-3 text-left">Browsers
+								</h4>
 								<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 									<div>
-										<div class="h-40">
-											<doughnut-chart :chart-data="browserChartData" :options="pieChartOptions" class="max-h-full" />
+										<div class="h-48">
+											<doughnut-chart :chart-data="browserChartData" :options="pieChartOptions"
+												class="max-h-full" />
 										</div>
 									</div>
 									<div class="flex items-center">
@@ -267,7 +280,7 @@
 												class="mb-2 flex items-center">
 												<span class="h-3 w-3 rounded-full mr-2"
 													:style="{ backgroundColor: browserChartData.datasets[0].backgroundColor[index] }"></span>
-												<span class="text-sm text-slate-700 dark:text-slate-300 w-20">
+												<span class="text-sm text-slate-700 dark:text-slate-300 w-20 text-left">
 													{{ browserChartData.labels[index] }}
 												</span>
 												<div
@@ -347,7 +360,8 @@
 								<span class="text-xs text-slate-500 dark:text-slate-400">Last 30 days</span>
 							</div>
 							<div class="h-52">
-								<bar-chart :chart-data="hourlyChartData" :options="barChartOptions" class="max-h-full" />
+								<bar-chart :chart-data="hourlyChartData" :options="barChartOptions"
+									class="max-h-full" />
 							</div>
 							<div class="mt-4 grid grid-cols-2 gap-4">
 								<div class="bg-slate-50 dark:bg-slate-700/30 p-3 rounded-lg glass-card-border">
@@ -389,8 +403,7 @@
 						<button
 							@click="generateQRCode"
 							class="px-3 py-1.5 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none flex items-center text-sm"
-							data-tooltip="Generate QR code for sharing"
-							data-tooltip-position="top">
+							title="Generate QR code for sharing">
 							<svg class="h-4 w-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none"
 								viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -399,10 +412,10 @@
 							QR Code
 						</button>
 						<button
+							style="display: none;"
 							@click="exportData"
 							class="px-3 py-1.5 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none flex items-center text-sm"
-							data-tooltip="Export analytics data as CSV or JSON"
-							data-tooltip-position="top">
+							title="Export analytics data as CSV or JSON">
 							<svg class="h-4 w-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none"
 								viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -413,8 +426,7 @@
 						<button
 							@click="generateReport"
 							class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg focus:outline-none flex items-center text-sm"
-							data-tooltip="Generate PDF report"
-							data-tooltip-position="top">
+							title="Generate PDF report">
 							<svg class="h-4 w-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none"
 								viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -491,6 +503,9 @@ const loading = ref(true);
 
 // Состояние QR-кода
 const showQRCode = ref(false);
+
+// Состояние копирования
+const isCopied = ref(false);
 
 // Табы для разных типов статистики
 const tabs = [
@@ -737,11 +752,7 @@ const pieChartOptions = {
 	maintainAspectRatio: false,
 	plugins: {
 		legend: {
-			position: 'bottom',
-			labels: {
-				padding: 20,
-				usePointStyle: true
-			}
+			display: false
 		},
 		tooltip: {
 			backgroundColor: 'rgba(17, 24, 39, 0.9)',
@@ -761,7 +772,7 @@ const pieChartOptions = {
 			}
 		}
 	},
-	cutout: '50%'
+	cutout: '60%'
 };
 
 // Хелперы для работы с URL
@@ -794,6 +805,10 @@ const copyShortUrl = () => {
 		navigator.clipboard.writeText(props.link?.shortUrl)
 			.then(() => {
 				toastStore.success('Link copied to clipboard');
+				isCopied.value = true;
+				setTimeout(() => {
+					isCopied.value = false;
+				}, 2000);
 			})
 			.catch(() => {
 				toastStore.error('Failed to copy link');
