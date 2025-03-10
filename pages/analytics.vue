@@ -581,12 +581,10 @@ import type { LinkData, SummaryData } from '~/types/link';
 import { useDeviceFingerprint } from '~/composables/useDeviceFingerprint';
 import { useToastStore } from '~/stores/toast';
 import { useAuth } from '~/composables/useAuth';
-import { useLocalStorage } from '@vueuse/core';
 import Preloader from '~/components/common/Preloader.vue';
 
 // Импортируем компоненты
 import SummaryCard from '~/components/analytics/SummaryCard.vue';
-import Insights from '~/components/analytics/Insights.vue';
 import Table from '~/components/analytics/Table.vue';
 import Card from '~/components/analytics/Card.vue';
 import TableSettings from '~/components/analytics/TableSettings.vue';
@@ -601,7 +599,6 @@ import DeleteLinkModal from '~/components/analytics/modals/DeleteLinkModal.vue';
 import StatsModal from '~/components/analytics/modals/StatsModal.vue';
 import ImportLinksModal from '~/components/analytics/modals/ImportLinksModal.vue';
 import PageHeader from '~/components/common/PageHeader.vue';
-import { load } from "yaml-ast-parser";
 
 interface TableColumn {
 	id: string;
