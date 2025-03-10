@@ -20,9 +20,7 @@
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 							d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 					</svg>
-					<span>You are using the basic version. <NuxtLink to="/login"
-							class="text-indigo-600 dark:text-indigo-400 hover:underline">Log in</NuxtLink> for access to
-						advanced analytics.</span>
+					<span>You are using the basic version. <NuxtLink to="/login" class="text-indigo-600 dark:text-indigo-400 hover:underline">Log in</NuxtLink> for access to advanced analytics.</span>
 				</div>
 			</template>
 		</PageHeader>
@@ -66,16 +64,14 @@
 			<SummaryCard
 				title="Average CTR"
 				unit="%"
-				color="blue"
+				color="orange"
 				:value="summary.averageCtr"
 				:trend="summary.ctrTrend"
 				:sparkline-data="summary.ctrSparkline"
 				:loading="loading">
 				<template #icon>
-					<svg class="h-5 w-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg"
-						 fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+					<svg class="h-5 w-5 text-orange-600 dark:text-orange-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
 					</svg>
 				</template>
 			</SummaryCard>

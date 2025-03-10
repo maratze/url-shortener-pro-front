@@ -104,7 +104,7 @@ interface Props {
 	title: string;
 	value: string | number;
 	subtitle?: string;
-	color?: 'indigo' | 'green' | 'blue' | 'purple';
+	color?: 'indigo' | 'green' | 'blue' | 'purple' | 'orange';
 	trend?: number;
 	sparklineData?: number[];
 	description?: string;
@@ -134,7 +134,8 @@ const getSparklineColor = () => {
 		indigo: '#6366F1',
 		green: '#10B981',
 		blue: '#3B82F6',
-		purple: '#8B5CF6'
+		purple: '#8B5CF6',
+		orange: 'orange'
 	};
 	return colors[props.color];
 };
