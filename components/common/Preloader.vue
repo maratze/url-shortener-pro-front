@@ -3,7 +3,6 @@
     <div
         :class="[
             fullscreen ? 'fixed inset-0 z-[1000] flex items-center justify-center' : 'relative flex items-center justify-center',
-            fullscreen ? 'bg-slate-100 dark:bg-slate-900' : '',
             containerClass
         ]"
         :style="containerStyle"

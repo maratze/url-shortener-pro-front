@@ -126,7 +126,7 @@
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
-    transition: all 0.3s ease;
+    transition: all 0.2s linear;
     position: relative;
     overflow: hidden;
 }

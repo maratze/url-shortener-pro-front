@@ -34,7 +34,7 @@
 }
 
 .glass-card-highlight {
-	background: linear-gradient(135deg, rgba(79, 70, 229, 0.9), rgba(124, 58, 237, 0.9));
+	background: linear-gradient(135deg, rgba(79, 70, 229, 1), rgba(124, 58, 237, 1));
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
 	border: 1px solid rgba(255, 255, 255, 0.2);
