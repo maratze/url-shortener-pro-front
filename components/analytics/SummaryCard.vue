@@ -27,7 +27,7 @@
 					:spinner-base-color="color" />
 			</template>
 			<template v-else>
-				<span class="text-3xl font-bold text-slate-800 dark:text-white">{{ value }}</span>
+				<span class="text-3xl font-bold text-slate-800 dark:text-white">{{ formattedValue }}</span>
 				<span v-if="unit" class="ml-1 text-sm text-slate-500 dark:text-slate-400">{{ unit }}</span>
 			</template>
 		</div>
@@ -120,6 +120,13 @@ const props = withDefaults(defineProps<Props>(), {
 	description: undefined,
 	unit: undefined,
 	loading: false
+});
+
+const formattedValue = computed(() => {
+	if (typeof props.value === 'number') {
+		return new Intl.NumberFormat('fr-CH', { useGrouping: true }).format(props.value);
+	}
+	return props.value;
 });
 
 const getSparklineColor = () => {

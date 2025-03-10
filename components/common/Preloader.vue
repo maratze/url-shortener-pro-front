@@ -2,7 +2,7 @@
     <!-- Контейнер для прелоадера, может быть полноэкранным или встроенным -->
     <div
         :class="[
-            fullscreen ? 'fixed inset-0 z-[9999] flex items-center justify-center' : 'relative flex items-center justify-center',
+            fullscreen ? 'fixed inset-0 z-[1000] flex items-center justify-center' : 'relative flex items-center justify-center',
             fullscreen ? 'bg-slate-100 dark:bg-slate-900' : '',
             containerClass
         ]"
@@ -11,16 +11,19 @@
         :data-testid="testId">
         <div class="text-center" :style="{ opacity: opacity || 1 }">
             <!-- Спиннер (вращающееся кольцо) -->
-            <div
-                v-if="type === 'spinner'"
-                :class="[
-                    'border-4 rounded-full animate-spin',
-                    `border-${spinnerBaseColor}-100 dark:border-${spinnerBaseColor}-900 border-t-${spinnerBaseColor}-600 dark:border-t-${spinnerBaseColor}-400`
-                ]"
-                :style="{
+			<svg
+				v-if="type === 'spinner'"
+				:class="`animate-spin text-${spinnerBaseColor}-600 mb-4`" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+				:style="{
                     width: size,
                     height: size
-                }"></div>
+                }"
+			>
+				<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+				<path class="opacity-75" fill="currentColor"
+					  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+				</path>
+			</svg>
 
             <!-- Пульсирующие точки -->
             <div v-else-if="type === 'dots'" class="flex space-x-2">
@@ -82,8 +85,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
     fullscreen: false,
     type: 'spinner',
-    size: '4rem',
-    spinnerBaseColor: 'blue',
+    size: '3rem',
+    spinnerBaseColor: 'indigo',
     opacity: 1,
     containerClass: '',
     containerStyle: () => ({}),

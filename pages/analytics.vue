@@ -29,50 +29,70 @@
 
 		<!-- Блоки статистики -->
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-			<SummaryCard title="Total Links" :value="summary.totalLinks" unit="links"
+			<SummaryCard
+				title="Total Links"
+				unit="links"
+				color="indigo"
+				:value="summary.totalLinks"
 				:trend="summary.linksTrend"
-				color="indigo" :sparkline-data="summary.linksSparkline" :loading="loading">
+				:sparkline-data="summary.linksSparkline"
+				:loading="loading">
 				<template #icon>
 					<svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg"
-						fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						 fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+							  d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
 					</svg>
 				</template>
 			</SummaryCard>
 
-			<SummaryCard title="Total Clicks" :value="summary.totalClicks" unit="clicks"
+			<SummaryCard
+				title="Total Clicks"
+				:value="summary.totalClicks"
 				:trend="summary.clicksTrend"
-				color="green" :sparkline-data="summary.clicksSparkline" :loading="loading">
+				unit="clicks"
+				color="green"
+				:sparkline-data="summary.clicksSparkline"
+				:loading="loading">
 				<template #icon>
 					<svg class="h-5 w-5 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg"
-						fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						 fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+							  d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/>
 					</svg>
 				</template>
 			</SummaryCard>
 
-			<SummaryCard title="Average CTR" :value="summary.averageCtr.toFixed(1)" unit="%"
+			<SummaryCard
+				title="Average CTR"
+				unit="%"
+				color="blue"
+				:value="summary.averageCtr"
 				:trend="summary.ctrTrend"
-				color="blue" :sparkline-data="summary.ctrSparkline" :loading="loading">
+				:sparkline-data="summary.ctrSparkline"
+				:loading="loading">
 				<template #icon>
 					<svg class="h-5 w-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg"
-						fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						 fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+							  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
 					</svg>
 				</template>
 			</SummaryCard>
 
-			<SummaryCard title="Active Links" :value="summary.activeLinks" unit="active"
-				:trend="summary.activeLinksTrend" color="blue" :sparkline-data="summary.activeLinksSparkline"
+			<SummaryCard
+				title="Active Links"
+				unit="active"
+				color="blue"
+				:value="summary.activeLinks"
+				:trend="summary.activeLinksTrend"
+				:sparkline-data="summary.activeLinksSparkline"
 				:loading="loading">
 				<template #icon>
 					<svg class="h-5 w-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-						viewBox="0 0 24 24" stroke="currentColor">
+						 viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+							  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
 					</svg>
 				</template>
 			</SummaryCard>
@@ -99,17 +119,21 @@
 				</div>
 				<div class="p-4">
 					<div class="h-64 relative">
-						<Preloader
-							:active="loading"
-							type="skeleton"
-							skeleton-width="100%"
-							skeleton-height="100%"
-							container-class="absolute inset-0 flex items-center justify-center"/>
-						<div :class="{ 'opacity-0': loading }">
+						<template v-if="loading">
+							<Preloader
+								:active="loading"
+								:fullscreen="true"
+								type="dots"
+								skeleton-width="100px"
+								skeleton-height="100px"
+								container-class="absolute inset-0 flex items-center justify-center"
+							/>
+						</template>
+						<template v-else>
 							<ClicksChart
 								:data="chartData[activeTimePeriod as keyof ChartDataTypes]"
 								:period="activeTimePeriod"/>
-						</div>
+						</template>
 					</div>
 				</div>
 			</div>
@@ -121,15 +145,19 @@
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
 						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Geography</h3>
 					</div>
-					<div class="p-4 relative">
-						<Preloader
-							:active="loading"
-							type="skeleton"
-							skeleton-width="100%"
-							skeleton-height="200px"
-							container-class="absolute inset-0 flex items-center justify-center"/>
-						<div :class="{ 'opacity-0': loading }">
-							<GeoDistribution :data="geoData" />
+					<div class="p-4">
+						<div class="p-4 relative min-h-[200px]">
+							<template v-if="loading">
+								<Preloader
+									:active="loading"
+									:fullscreen="true"
+									type="dots"
+									container-class="absolute inset-0 flex items-center justify-center"
+								/>
+							</template>
+							<template v-else>
+								<GeoDistribution :data="geoData" />
+							</template>
 						</div>
 					</div>
 				</div>
@@ -140,15 +168,19 @@
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
 						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Traffic Sources</h3>
 					</div>
-					<div class="p-4 relative">
-						<Preloader
-							:active="loading"
-							type="skeleton"
-							skeleton-width="100%"
-							skeleton-height="200px"
-							container-class="absolute inset-0 flex items-center justify-center"/>
-						<div :class="{ 'opacity-0': loading }">
-							<ReferrersChart :data="referrersData" />
+					<div class="p-4">
+						<div class="p-4 relative min-h-[200px]">
+							<template v-if="loading">
+								<Preloader
+									:active="loading"
+									:fullscreen="true"
+									type="dots"
+									container-class="absolute inset-0 flex items-center justify-center"
+								/>
+							</template>
+							<template v-else>
+								<ReferrersChart :data="referrersData" />
+							</template>
 						</div>
 					</div>
 				</div>
@@ -159,11 +191,21 @@
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
 						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Devices</h3>
 					</div>
-					<div class="p-4 relative">
-						<Preloader :active="loading" type="skeleton" skeleton-width="100%" skeleton-height="200px"
-							container-class="absolute inset-0 flex items-center justify-center" />
-						<div :class="{ 'opacity-0': loading }">
-							<devices-chart :data="devicesData" />
+					<div class="p-4">
+						<div class="p-4 relative min-h-[200px]">
+							<template v-if="loading">
+								<Preloader
+									:active="loading"
+									type="dots"
+									:fullscreen="true"
+									skeleton-width="100%"
+									skeleton-height="200px"
+									container-class="absolute inset-0 flex items-center justify-center"
+								/>
+							</template>
+							<template v-else>
+								<DevicesChart :data="devicesData"/>
+							</template>
 						</div>
 					</div>
 				</div>
@@ -175,8 +217,13 @@
 			<div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 space-y-3 sm:space-y-0">
 				<!-- Поиск -->
 				<div class="relative flex-grow max-w-md">
-					<input type="text" v-model="searchQuery" placeholder="Search links..."
-						class="glass-card-border glass-card-prevent-transform shadow-sm pl-10 pr-4 py-2 w-full rounded-lg border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white" />
+					<input 
+						type="text" 
+						v-model="searchQuery" 
+						placeholder="Search links..."
+						class="glass-card-border glass-card-prevent-transform shadow-sm pl-10 pr-4 py-2 w-full rounded-lg border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
+						:disabled="loading"
+					/>
 					<svg class="h-5 w-5 text-slate-400 absolute left-3 top-1/2 transform -translate-y-1/2"
 						xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -438,16 +485,15 @@
 			</div>
 
 			<!-- Сообщение при отсутствии данных -->
-			<div v-if="loading" class="my-12 flex flex-col items-center justify-center">
-				<svg class="animate-spin h-12 w-12 text-indigo-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-					viewBox="0 0 24 24">
-					<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-					<path class="opacity-75" fill="currentColor"
-						d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-					</path>
-				</svg>
-				<p class="text-slate-600 dark:text-slate-400">Loading your links...</p>
-			</div>
+			<template v-if="loading">
+				<div class="py-24">
+					<Preloader
+						:active="true"
+						type="spinner"
+						skeleton-width="80px"
+						skeleton-height="2rem"/>
+				</div>
+			</template>
 
 			<div v-else-if="filteredLinks.length === 0" class="my-12 flex flex-col items-center justify-center">
 				<div class="bg-slate-100 dark:bg-slate-700 rounded-full p-6 mb-4">
@@ -475,7 +521,7 @@
 			</div>
 
 			<!-- Основная часть страницы - список ссылок -->
-			<div class="mt-4">
+			<div class="mt-4" v-else>
 				<!-- Таблица с историей ссылок -->
 				<div v-if="viewType === 'table'">
 					<Table :links="paginatedLinks" @edit="openEditModal" @delete="openDeleteModal"
@@ -494,7 +540,7 @@
 			</div>
 
 			<!-- Пагинация -->
-			<div class="mt-6 flex justify-between items-center flex-wrap">
+			<div class="mt-6 flex justify-between items-center flex-wrap" v-if="!loading">
 				<div class="text-sm text-slate-600 dark:text-slate-400">
 					Showing {{ paginationStart }}-{{ paginationEnd }} of {{ totalLinks }} links
 				</div>
@@ -559,6 +605,7 @@ import DeleteLinkModal from '~/components/analytics/modals/DeleteLinkModal.vue';
 import StatsModal from '~/components/analytics/modals/StatsModal.vue';
 import ImportLinksModal from '~/components/analytics/modals/ImportLinksModal.vue';
 import PageHeader from '~/components/common/PageHeader.vue';
+import { load } from "yaml-ast-parser";
 
 interface TableColumn {
 	id: string;
@@ -1064,7 +1111,7 @@ const fetchLinks = async () => {
 		toastStore.error('Failed to load links');
 	} finally {
 		// TODO: Uncomment
-		// loading.value = false;
+		loading.value = false;
 	}
 };
 

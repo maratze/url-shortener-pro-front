@@ -1,6 +1,6 @@
 <template>
 	<header
-		class="fixed top-0 left-0 right-0 z-40 py-4 transition-all duration-300"
+		class="fixed top-0 left-0 right-0 z-40 py-4 transition-all duration-300 z-[2000]"
 		:class="{ 
       'backdrop-blur-md bg-white/80 dark:bg-slate-900/80 shadow-md': isScrolled,
       'bg-transparent': !isScrolled
