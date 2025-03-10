@@ -21,7 +21,6 @@
 
 				<!-- Центральная часть: Навигация -->
 				<nav class="hidden md:flex items-center justify-center space-x-6">
-					<NuxtLink to="/history" class="nav-link" active-class="router-link-active">History</NuxtLink>
 					<NuxtLink to="/analytics" class="nav-link" active-class="router-link-active">Analytics</NuxtLink>
 					<NuxtLink to="/pricing" class="nav-link" active-class="router-link-active">Pricing</NuxtLink>
 					<NuxtLink to="/about" class="nav-link" active-class="router-link-active">About</NuxtLink>

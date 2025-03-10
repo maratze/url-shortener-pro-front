@@ -102,14 +102,14 @@
 					</div>
 
 					<div class="text-center mt-16">
-						<NuxtLink to="/history" class="glass-btn inline-flex items-center">
+						<NuxtLink to="/analytics" class="glass-btn inline-flex items-center">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
 								 fill="currentColor">
 								<path fill-rule="evenodd"
 									  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
 									  clip-rule="evenodd"/>
 							</svg>
-							View All History
+							View All Links
 						</NuxtLink>
 					</div>
 				</div>
