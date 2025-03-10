@@ -141,20 +141,20 @@
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
 						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Geography</h3>
 					</div>
-					<div class="p-4">
-						<div class="p-4 relative min-h-[200px]">
-							<template v-if="loading">
+					<div class="p-4 relative min-h-[200px]">
+						<template v-if="loading">
+							<div class="p-4">
 								<Preloader
 									:active="loading"
 									:fullscreen="true"
 									type="dots"
 									container-class="absolute inset-0 flex items-center justify-center"
 								/>
-							</template>
-							<template v-else>
-								<GeoDistribution :data="geoData" />
-							</template>
-						</div>
+							</div>
+						</template>
+						<template v-else>
+							<GeoDistribution :data="geoData"/>
+						</template>
 					</div>
 				</div>
 
@@ -164,20 +164,20 @@
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
 						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Traffic Sources</h3>
 					</div>
-					<div class="p-4">
-						<div class="p-4 relative min-h-[200px]">
-							<template v-if="loading">
+					<div class="p-4 relative min-h-[200px]">
+						<template v-if="loading">
+							<div class="p-4">
 								<Preloader
 									:active="loading"
 									:fullscreen="true"
 									type="dots"
 									container-class="absolute inset-0 flex items-center justify-center"
 								/>
-							</template>
-							<template v-else>
-								<ReferrersChart :data="referrersData" />
-							</template>
-						</div>
+							</div>
+						</template>
+						<template v-else>
+							<ReferrersChart :data="referrersData" />
+						</template>
 					</div>
 				</div>
 
@@ -187,9 +187,9 @@
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
 						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Devices</h3>
 					</div>
-					<div class="p-4">
-						<div class="p-4 relative min-h-[200px]">
-							<template v-if="loading">
+					<div class="p-4 relative min-h-[200px]">
+						<template v-if="loading">
+							<div class="p-4">
 								<Preloader
 									:active="loading"
 									type="dots"
@@ -198,11 +198,11 @@
 									skeleton-height="200px"
 									container-class="absolute inset-0 flex items-center justify-center"
 								/>
-							</template>
-							<template v-else>
-								<DevicesChart :data="devicesData"/>
-							</template>
-						</div>
+							</div>
+						</template>
+						<template v-else>
+							<DevicesChart :data="devicesData"/>
+						</template>
 					</div>
 				</div>
 			</div>
