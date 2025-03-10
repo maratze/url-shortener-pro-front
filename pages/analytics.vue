@@ -6,9 +6,9 @@
 					@click="openCreateModal"
 					class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg flex items-center justify-center">
 					<svg class="h-5 w-5 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-						 stroke="currentColor">
+						stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							  d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+							d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
 					</svg>
 					Create New Link
 				</button>
@@ -16,12 +16,12 @@
 			<template #subtitle v-if="!isAuthenticated">
 				<div class="mt-2 text-sm text-slate-500 dark:text-slate-400 flex items-center">
 					<svg class="h-4 w-4 mr-1.5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-						 viewBox="0 0 24 24" stroke="currentColor">
+						viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+							d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 					</svg>
 					<span>You are using the basic version. <NuxtLink to="/login"
-																	 class="text-indigo-600 dark:text-indigo-400 hover:underline">Log in</NuxtLink> for access to
+							class="text-indigo-600 dark:text-indigo-400 hover:underline">Log in</NuxtLink> for access to
 						advanced analytics.</span>
 				</div>
 			</template>
@@ -29,52 +29,53 @@
 
 		<!-- Блоки статистики -->
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-			<history-summary-card title="Total Links" :value="summary.totalLinks" unit="links"
-								  :trend="summary.linksTrend"
-								  color="indigo" :sparkline-data="summary.linksSparkline">
+			<SummaryCard title="Total Links" :value="summary.totalLinks" unit="links"
+				:trend="summary.linksTrend"
+				color="indigo" :sparkline-data="summary.linksSparkline" :loading="loading">
 				<template #icon>
 					<svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg"
-						 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							  d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+							d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
 					</svg>
 				</template>
-			</history-summary-card>
+			</SummaryCard>
 
-			<history-summary-card title="Total Clicks" :value="summary.totalClicks" unit="clicks"
-								  :trend="summary.clicksTrend"
-								  color="green" :sparkline-data="summary.clicksSparkline">
+			<SummaryCard title="Total Clicks" :value="summary.totalClicks" unit="clicks"
+				:trend="summary.clicksTrend"
+				color="green" :sparkline-data="summary.clicksSparkline" :loading="loading">
 				<template #icon>
 					<svg class="h-5 w-5 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg"
-						 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							  d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+							d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
 					</svg>
 				</template>
-			</history-summary-card>
+			</SummaryCard>
 
-			<history-summary-card title="Average CTR" :value="summary.averageCtr.toFixed(1)" unit="%"
-								  :trend="summary.ctrTrend"
-								  color="blue" :sparkline-data="summary.ctrSparkline">
+			<SummaryCard title="Average CTR" :value="summary.averageCtr.toFixed(1)" unit="%"
+				:trend="summary.ctrTrend"
+				color="blue" :sparkline-data="summary.ctrSparkline" :loading="loading">
 				<template #icon>
 					<svg class="h-5 w-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg"
-						 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+							d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
 					</svg>
 				</template>
-			</history-summary-card>
+			</SummaryCard>
 
-			<history-summary-card title="Active Links" :value="summary.activeLinks" unit="active"
-								  :trend="summary.activeLinksTrend" color="blue" :sparkline-data="summary.activeLinksSparkline">
+			<SummaryCard title="Active Links" :value="summary.activeLinks" unit="active"
+				:trend="summary.activeLinksTrend" color="blue" :sparkline-data="summary.activeLinksSparkline"
+				:loading="loading">
 				<template #icon>
 					<svg class="h-5 w-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-						 viewBox="0 0 24 24" stroke="currentColor">
+						viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+							d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
 					</svg>
 				</template>
-			</history-summary-card>
+			</SummaryCard>
 		</div>
 
 		<!-- Графики и расширенная аналитика (только для авторизованных пользователей) -->
@@ -85,8 +86,8 @@
 					<h3 class="text-lg font-medium text-slate-900 dark:text-white">Clicks Analytics</h3>
 					<div class="flex space-x-2">
 						<button v-for="(period, index) in timePeriods" :key="index"
-								@click="activeTimePeriod = period.value"
-								:class="[
+							@click="activeTimePeriod = period.value"
+							:class="[
 								'px-2 py-1 text-xs rounded-md',
 								activeTimePeriod === period.value
 									? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
@@ -97,10 +98,18 @@
 					</div>
 				</div>
 				<div class="p-4">
-					<div class="h-64">
-						<!-- Здесь будет внедрен график кликов -->
-						<history-clicks-chart :data="chartData[activeTimePeriod as keyof ChartDataTypes]"
-											  :period="activeTimePeriod" />
+					<div class="h-64 relative">
+						<Preloader
+							:active="loading"
+							type="skeleton"
+							skeleton-width="100%"
+							skeleton-height="100%"
+							container-class="absolute inset-0 flex items-center justify-center"/>
+						<div :class="{ 'opacity-0': loading }">
+							<ClicksChart
+								:data="chartData[activeTimePeriod as keyof ChartDataTypes]"
+								:period="activeTimePeriod"/>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -112,8 +121,16 @@
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
 						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Geography</h3>
 					</div>
-					<div class="p-4">
-						<history-geo-distribution :data="geoData" />
+					<div class="p-4 relative">
+						<Preloader
+							:active="loading"
+							type="skeleton"
+							skeleton-width="100%"
+							skeleton-height="200px"
+							container-class="absolute inset-0 flex items-center justify-center"/>
+						<div :class="{ 'opacity-0': loading }">
+							<GeoDistribution :data="geoData" />
+						</div>
 					</div>
 				</div>
 
@@ -123,8 +140,16 @@
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
 						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Traffic Sources</h3>
 					</div>
-					<div class="p-4">
-						<history-referrers-chart :data="referrersData" />
+					<div class="p-4 relative">
+						<Preloader
+							:active="loading"
+							type="skeleton"
+							skeleton-width="100%"
+							skeleton-height="200px"
+							container-class="absolute inset-0 flex items-center justify-center"/>
+						<div :class="{ 'opacity-0': loading }">
+							<ReferrersChart :data="referrersData" />
+						</div>
 					</div>
 				</div>
 
@@ -134,8 +159,12 @@
 					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
 						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Devices</h3>
 					</div>
-					<div class="p-4">
-						<history-devices-chart :data="devicesData" />
+					<div class="p-4 relative">
+						<Preloader :active="loading" type="skeleton" skeleton-width="100%" skeleton-height="200px"
+							container-class="absolute inset-0 flex items-center justify-center" />
+						<div :class="{ 'opacity-0': loading }">
+							<devices-chart :data="devicesData" />
+						</div>
 					</div>
 				</div>
 			</div>
@@ -147,11 +176,11 @@
 				<!-- Поиск -->
 				<div class="relative flex-grow max-w-md">
 					<input type="text" v-model="searchQuery" placeholder="Search links..."
-						   class="glass-card-border glass-card-prevent-transform shadow-sm pl-10 pr-4 py-2 w-full rounded-lg border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white" />
+						class="glass-card-border glass-card-prevent-transform shadow-sm pl-10 pr-4 py-2 w-full rounded-lg border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white" />
 					<svg class="h-5 w-5 text-slate-400 absolute left-3 top-1/2 transform -translate-y-1/2"
-						 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+							d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
 					</svg>
 				</div>
 
@@ -165,9 +194,9 @@
 								: 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
 						]" title="Table view">
 							<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-								 stroke="currentColor">
+								stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									  d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+									d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
 							</svg>
 						</button>
 						<button @click="viewType = 'grid'" :class="[
@@ -177,9 +206,9 @@
 								: 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
 						]" title="Grid view">
 							<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-								 stroke="currentColor">
+								stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									  d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+									d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
 							</svg>
 						</button>
 					</div>
@@ -187,18 +216,18 @@
 					<!-- Фильтры -->
 					<div class="relative" style="display: none;">
 						<button @click="toggleFilters"
-								class="filters-button p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
-								:class="{ 'filter-active': hasActiveFilters }" title="Filters">
+							class="filters-button p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
+							:class="{ 'filter-active': hasActiveFilters }" title="Filters">
 							<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-								 stroke="currentColor">
+								stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+									d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
 							</svg>
 						</button>
 
 						<!-- Выпадающая панель фильтров -->
 						<div v-if="showFilters"
-							 class="filters-menu absolute right-0 mt-2 w-72 rounded-lg shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-10">
+							class="filters-menu absolute right-0 mt-2 w-72 rounded-lg shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-10">
 							<div class="p-4 space-y-4">
 								<div>
 									<label
@@ -241,13 +270,13 @@
 										<div class="flex items-center">
 											<span class="text-sm text-slate-600 dark:text-slate-400 w-16">From:</span>
 											<input type="date" v-model="filters.startDate"
-												   class="w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white">
+												class="w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white">
 										</div>
 
 										<div class="flex items-center">
 											<span class="text-sm text-slate-600 dark:text-slate-400 w-16">To:</span>
 											<input type="date" v-model="filters.endDate"
-												   class="w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white">
+												class="w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white">
 										</div>
 									</div>
 								</div>
@@ -257,7 +286,7 @@
 										class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Sort
 										by</label>
 									<select v-model="filters.sortBy"
-											class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
+										class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
 										<option value="created-desc">Newest first</option>
 										<option value="created-asc">Oldest first</option>
 										<option value="clicks-desc">Most clicks</option>
@@ -271,10 +300,10 @@
 									<label
 										class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Projects</label>
 									<select v-model="filters.project"
-											class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
+										class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
 										<option value="">All projects</option>
 										<option v-for="project in availableProjects" :key="project.id"
-												:value="project.id">
+											:value="project.id">
 											{{ project.name }}
 										</option>
 									</select>
@@ -285,7 +314,7 @@
 										class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tags</label>
 									<div class="max-h-40 overflow-y-auto flex flex-wrap gap-1">
 										<button v-for="tag in availableTags" :key="tag" @click="toggleTagFilter(tag)"
-												:class="[
+											:class="[
 												'px-2 py-1 text-xs rounded-full',
 												filters.tags.includes(tag)
 													? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
@@ -298,7 +327,7 @@
 
 								<div class="flex justify-end pt-2">
 									<button @click="clearFilters"
-											class="px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">
+										class="px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">
 										Clear filters
 									</button>
 								</div>
@@ -308,46 +337,40 @@
 
 					<!-- Настройки таблицы -->
 					<div style="display: none;">
-						<HistoryTableSettings
-							ref="settingsMenuRef"
-							:columns="tableColumns"
-							:is-compact="isCompactTable"
-							:show-borders="showTableBorders"
-							:show-stripes="showTableStripes"
+						<TableSettings ref="settingsMenuRef" :columns="tableColumns" :is-compact="isCompactTable"
+							:show-borders="showTableBorders" :show-stripes="showTableStripes"
 							@toggle-column="toggleColumn"
-							@toggle-compact="toggleCompact"
-							@toggle-borders="toggleBorders"
+							@toggle-compact="toggleCompact" @toggle-borders="toggleBorders"
 							@toggle-stripes="toggleStripes"
-							@reset-settings="resetTableSettings"
-							@items-per-page-change="handleItemsPerPageChange"/>
+							@reset-settings="resetTableSettings" @items-per-page-change="handleItemsPerPageChange" />
 					</div>
 
 					<!-- Импорт/Экспорт (для авторизованных) -->
 					<div v-if="isAuthenticated" class="relative" style="display: none;">
 						<button @click="toggleImportExport"
-								class="import-export-button p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
-								title="Import/Export">
+							class="import-export-button p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
+							title="Import/Export">
 							<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-								 stroke="currentColor">
+								stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									  d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20" />
+									d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20" />
 							</svg>
 						</button>
 
 						<!-- Выпадающая панель импорта/экспорта -->
 						<div v-if="showImportExport"
-							 class="import-export-menu absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-10">
+							class="import-export-menu absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-10">
 							<div class="p-2">
 								<button @click="openImportModal"
-										class="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md">
+									class="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md">
 									Import from CSV/JSON
 								</button>
 								<button @click="exportLinks"
-										class="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md">
+									class="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md">
 									Export selected
 								</button>
 								<button @click="exportAllLinks"
-										class="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md">
+									class="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md">
 									Export all links
 								</button>
 							</div>
@@ -363,11 +386,11 @@
 				<div v-if="filters.status !== 'all'" class="active-filter">
 					Status: {{ filters.status }}
 					<button @click="setStatusFilter('all')"
-							class="ml-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+						class="ml-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
 						<svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-							 stroke="currentColor">
+							stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-								  d="M6 18L18 6M6 6l12 12" />
+								d="M6 18L18 6M6 6l12 12" />
 						</svg>
 					</button>
 				</div>
@@ -375,11 +398,11 @@
 				<div v-if="filters.startDate || filters.endDate" class="active-filter">
 					Date: {{ formatDateFilter() }}
 					<button @click="clearDateFilter"
-							class="ml-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+						class="ml-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
 						<svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-							 stroke="currentColor">
+							stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-								  d="M6 18L18 6M6 6l12 12" />
+								d="M6 18L18 6M6 6l12 12" />
 						</svg>
 					</button>
 				</div>
@@ -387,11 +410,11 @@
 				<div v-if="filters.project" class="active-filter">
 					Project: {{ getProjectName(filters.project) }}
 					<button @click="filters.project = ''"
-							class="ml-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+						class="ml-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
 						<svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-							 stroke="currentColor">
+							stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-								  d="M6 18L18 6M6 6l12 12" />
+								d="M6 18L18 6M6 6l12 12" />
 						</svg>
 					</button>
 				</div>
@@ -399,17 +422,17 @@
 				<div v-for="tag in filters.tags" :key="tag" class="active-filter">
 					Tag: {{ tag }}
 					<button @click="toggleTagFilter(tag)"
-							class="ml-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+						class="ml-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
 						<svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-							 stroke="currentColor">
+							stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-								  d="M6 18L18 6M6 6l12 12" />
+								d="M6 18L18 6M6 6l12 12" />
 						</svg>
 					</button>
 				</div>
 
 				<button @click="clearFilters"
-						class="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300">
+					class="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300">
 					Clear all
 				</button>
 			</div>
@@ -417,10 +440,10 @@
 			<!-- Сообщение при отсутствии данных -->
 			<div v-if="loading" class="my-12 flex flex-col items-center justify-center">
 				<svg class="animate-spin h-12 w-12 text-indigo-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-					 viewBox="0 0 24 24">
+					viewBox="0 0 24 24">
 					<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
 					<path class="opacity-75" fill="currentColor"
-						  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+						d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
 					</path>
 				</svg>
 				<p class="text-slate-600 dark:text-slate-400">Loading your links...</p>
@@ -429,22 +452,23 @@
 			<div v-else-if="filteredLinks.length === 0" class="my-12 flex flex-col items-center justify-center">
 				<div class="bg-slate-100 dark:bg-slate-700 rounded-full p-6 mb-4">
 					<svg class="h-12 w-12 text-slate-400 dark:text-slate-500" xmlns="http://www.w3.org/2000/svg"
-						 fill="none"
-						 viewBox="0 0 24 24" stroke="currentColor">
+						fill="none"
+						viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+							d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
 					</svg>
 				</div>
 				<h3 class="text-xl font-medium text-slate-800 dark:text-white mb-2">No links found</h3>
 				<p class="text-slate-600 dark:text-slate-400 text-center mb-4">
 					{{ searchQuery ? 'Try adjusting your search or filter criteria.' : 'You have not created any links yet.' }}
 				</p>
-				<button @click="openCreateModal"
-						class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg flex items-center justify-center">
+				<button 
+					@click="openCreateModal"
+					class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg flex items-center justify-center">
 					<svg class="h-4 w-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-						 stroke="currentColor">
+						stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							  d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+							d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
 					</svg>
 					Create your first link
 				</button>
@@ -454,18 +478,18 @@
 			<div class="mt-4">
 				<!-- Таблица с историей ссылок -->
 				<div v-if="viewType === 'table'">
-					<history-table :links="paginatedLinks" @edit="openEditModal" @delete="openDeleteModal"
-								   @view-stats="openStatsModal" @copy="copyToClipboard" @toggle-active="toggleLinkActive"
-								   @bulk-copy="bulkCopy" @bulk-activate="bulkActivate" @bulk-delete="bulkDelete"
-								   @bulk-export="bulkExport"
-								   @items-per-page-change="handleItemsPerPageChange" />
+					<Table :links="paginatedLinks" @edit="openEditModal" @delete="openDeleteModal"
+						@view-stats="openStatsModal" @copy="copyToClipboard" @toggle-active="toggleLinkActive"
+						@bulk-copy="bulkCopy" @bulk-activate="bulkActivate" @bulk-delete="bulkDelete"
+						@bulk-export="bulkExport"
+						@items-per-page-change="handleItemsPerPageChange" />
 				</div>
 
 				<!-- Вид карточками -->
 				<div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-					<history-card v-for="link in filteredLinks" :key="link.id" :link="link" @edit="openEditModal"
-								  @delete="openDeleteModal" @view-stats="openStatsModal" @copy="copyToClipboard"
-								  @toggle-active="toggleLinkActive" />
+					<Card v-for="link in filteredLinks" :key="link.id" :link="link" @edit="openEditModal"
+						@delete="openDeleteModal" @view-stats="openStatsModal" @copy="copyToClipboard"
+						@toggle-active="toggleLinkActive" />
 				</div>
 			</div>
 
@@ -475,22 +499,37 @@
 					Showing {{ paginationStart }}-{{ paginationEnd }} of {{ totalLinks }} links
 				</div>
 
-				<pagination-controls :total-pages="totalPages" :current-page="currentPage" @page-change="setPage" />
+				<PaginationControls :total-pages="totalPages" :current-page="currentPage" @page-change="setPage" />
 			</div>
 		</div>
 
 		<!-- Модальные окна -->
-		<CreateLinkModal v-if="showCreateModal" @close="showCreateModal = false" @create="createLink" />
+		<CreateLinkModal
+			v-if="showCreateModal"
+			@close="showCreateModal = false"
+			@create="createLink"/>
 
-		<EditLinkModal v-if="showEditModal && selectedLink" :link="selectedLink" @close="showEditModal = false"
-					   @save="updateLink" />
+		<EditLinkModal
+			v-if="showEditModal && selectedLink"
+			:link="selectedLink"
+			@close="showEditModal = false"
+			@save="updateLink"/>
 
-		<DeleteLinkModal v-if="showDeleteModal && selectedLink" :link="selectedLink" @close="showDeleteModal = false"
-						 @confirm="deleteLink" />
+		<DeleteLinkModal
+			v-if="showDeleteModal && selectedLink"
+			:link="selectedLink"
+			@close="showDeleteModal = false"
+			@confirm="deleteLink"/>
 
-		<StatsModal v-if="showStatsModal && selectedLink" :link="selectedLink" @close="showStatsModal = false" />
+		<StatsModal
+			v-if="showStatsModal && selectedLink"
+			:link="selectedLink"
+			@close="showStatsModal = false"/>
 
-		<import-links-modal v-if="showImportModal" @close="showImportModal = false" @import="importLinks" />
+		<import-links-modal
+			v-if="showImportModal"
+			@close="showImportModal = false"
+			@import="importLinks"/>
 	</div>
 </template>
 
@@ -501,23 +540,24 @@ import { useDeviceFingerprint } from '~/composables/useDeviceFingerprint';
 import { useToastStore } from '~/stores/toast';
 import { useAuth } from '~/composables/useAuth';
 import { useLocalStorage } from '@vueuse/core';
+import Preloader from '~/components/common/Preloader.vue';
 
 // Импортируем компоненты
-import HistorySummaryCard from '~/components/history/HistorySummaryCard.vue';
-import HistoryInsights from '~/components/history/HistoryInsights.vue';
-import HistoryTable from '~/components/history/HistoryTable.vue';
-import HistoryCard from '~/components/history/HistoryCard.vue';
-import HistoryTableSettings from '~/components/history/HistoryTableSettings.vue';
-import HistoryClicksChart from '~/components/history/charts/HistoryClicksChart.vue';
-import HistoryGeoDistribution from '~/components/history/charts/HistoryGeoDistribution.vue';
-import HistoryDevicesChart from '~/components/history/charts/HistoryDevicesChart.vue';
-import HistoryReferrersChart from '~/components/history/charts/HistoryReferrersChart.vue';
+import SummaryCard from '~/components/analytics/SummaryCard.vue';
+import Insights from '~/components/analytics/Insights.vue';
+import Table from '~/components/analytics/Table.vue';
+import Card from '~/components/analytics/Card.vue';
+import TableSettings from '~/components/analytics/TableSettings.vue';
+import ClicksChart from '~/components/analytics/charts/ClicksChart.vue';
+import GeoDistribution from '~/components/analytics/charts/GeoDistribution.vue';
+import DevicesChart from '~/components/analytics/charts/DevicesChart.vue';
+import ReferrersChart from '~/components/analytics/charts/ReferrersChart.vue';
 import PaginationControls from '~/components/common/PaginationControls.vue';
-import CreateLinkModal from '~/components/history/modals/CreateLinkModal.vue';
-import EditLinkModal from '~/components/history/modals/EditLinkModal.vue';
-import DeleteLinkModal from '~/components/history/modals/DeleteLinkModal.vue';
-import StatsModal from '~/components/history/modals/StatsModal.vue';
-import ImportLinksModal from '~/components/history/modals/ImportLinksModal.vue';
+import CreateLinkModal from '~/components/analytics/modals/CreateLinkModal.vue';
+import EditLinkModal from '~/components/analytics/modals/EditLinkModal.vue';
+import DeleteLinkModal from '~/components/analytics/modals/DeleteLinkModal.vue';
+import StatsModal from '~/components/analytics/modals/StatsModal.vue';
+import ImportLinksModal from '~/components/analytics/modals/ImportLinksModal.vue';
 import PageHeader from '~/components/common/PageHeader.vue';
 
 interface TableColumn {
@@ -1023,7 +1063,8 @@ const fetchLinks = async () => {
 		console.error('Error fetching links:', error);
 		toastStore.error('Failed to load links');
 	} finally {
-		loading.value = false;
+		// TODO: Uncomment
+		// loading.value = false;
 	}
 };
 

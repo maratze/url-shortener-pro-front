@@ -1,15 +1,5 @@
 <template>
 	<div class="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950 transition-colors duration-300">
-		<div
-			v-if="isLoading"
-			class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-100 dark:bg-slate-900 transition-all duration-300"
-			:class="{ 'opacity-0 invisible': isLoadingFadeOut }">
-			<div class="text-center">
-				<div
-					class="w-16 h-16 mx-auto border-4 border-blue-100 dark:border-blue-900 border-t-blue-600 dark:border-t-blue-400 rounded-full animate-spin">
-				</div>
-			</div>
-		</div>
 		<div :class="{ 'opacity-0': isLoading }">
 			<NuxtLayout>
 				<div
@@ -24,11 +14,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { onMounted } from 'vue';
 import { useTheme } from '~/composables/useTheme';
-
-const isLoading = ref(true);
-const isLoadingFadeOut = ref(false);
 
 // Инициализируем тему при загрузке приложения
 const { initTheme } = useTheme();
@@ -65,16 +52,6 @@ onMounted(() => {
 		meta.content = 'Create short, memorable links with TinyLink URL shortener.';
 		document.head.appendChild(meta);
 	}
-
-	isLoading.value = false;
-
-	// setTimeout(() => {
-	// 	isLoadingFadeOut.value = true;
-	//
-	// 	setTimeout(() => {
-	// 		isLoading.value = false;
-	// 	}, 300);
-	// }, 800);
 
 	if (process.client) {
 		initTheme();
