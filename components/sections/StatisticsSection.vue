@@ -1,5 +1,5 @@
 <template>
-	<section class="statistics-section py-24 relative overflow-hidden">
+	<section class="statistics-section py-30 relative overflow-hidden">
 		<div class="container mx-auto max-w-7xl relative px-6">
 			<!-- Обновленный заголовок в соответствии с предыдущими блоками -->
 			<div class="text-center max-w-3xl mx-auto mb-16">

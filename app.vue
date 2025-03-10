@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950 transition-colors duration-300">
 		<div
 			v-if="isLoading"
 			class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-100 dark:bg-slate-900 transition-all duration-300"

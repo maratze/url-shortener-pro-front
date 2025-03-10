@@ -1,6 +1,6 @@
 <template>
 	<section class="relative min-h-[calc(100vh-74px)] flex items-center">
-		<div class="container mx-auto px-4 py-24">
+		<div class="container mx-auto px-4 py-30">
 			<!-- Заголовок и описание по центру -->
 			<div class="text-center max-w-4xl mx-auto mb-10 animate-fade-in">
 				<h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-slate-800 dark:text-white leading-tight">

@@ -33,6 +33,9 @@ module.exports = {
                 'none': 'none',
                 'blur': 'blur(20px)',
             },
+            padding: {
+                '30': '7.5rem',
+            },
         },
     },
     plugins: [
