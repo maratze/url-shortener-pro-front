@@ -2,7 +2,7 @@
 	<div class="container mx-auto px-4 py-16 max-w-7xl">
 		<!-- Hero Section -->
 		<div class="text-center mb-16">
-			<h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-slate-800 dark:text-white leading-tight">
+			<h1 class="text-5xl font-bold mb-6 text-slate-800 dark:text-white leading-tight">
 				Choose your
 				<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">TinyLink</span>
 				plan
