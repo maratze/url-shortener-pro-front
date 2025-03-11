@@ -1,5 +1,5 @@
 <template>
-	<div class="container mx-auto px-6 py-6 max-w-7xl">
+	<div class="container mx-auto p-6 max-w-7xl">
 		<PageHeader title="Analytics">
 			<template #button>
 				<button
