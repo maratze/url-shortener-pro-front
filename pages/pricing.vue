@@ -1,7 +1,7 @@
 <template>
-	<div class="container mx-auto px-4 py-16 max-w-7xl">
+	<div class="container mx-auto px-6 py-20 max-w-7xl">
 		<!-- Hero Section -->
-		<div class="text-center mb-16">
+		<div class="text-center mb-20">
 			<h1 class="text-5xl font-bold mb-6 text-slate-800 dark:text-white leading-tight">
 				Choose your
 				<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">TinyLink</span>
@@ -42,7 +42,7 @@
 		</div>
 
 		<!-- Pricing Cards -->
-		<div class="grid gap-8 lg:grid-cols-2 max-w-5xl mx-auto relative pt-6">
+		<div class="grid gap-8 lg:grid-cols-2 max-w-5xl mx-auto relative">
 			<!-- Free Tier -->
 			<div
 				class="glass-card glass-card-border p-8 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -220,7 +220,7 @@
 		</div>
 
 		<!-- Comparison Table -->
-		<div class="mt-20 max-w-5xl mx-auto glass-card glass-card-border p-6 rounded-xl">
+		<div class="mt-20 max-w-5xl mx-auto glass-card glass-card-border glass-card-prevent-transform p-6 rounded-xl">
 			<h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-8 text-center">
 				Detailed Plan Comparison
 			</h2>
@@ -376,12 +376,12 @@
 						}
 					]"
 					:key="index"
-					class="glass-card glass-card-border !p-0 rounded-lg overflow-hidden hover:shadow-md transition-all duration-300"
+					class="glass-card glass-card-border glass-card-prevent-transform !p-0 rounded-lg overflow-hidden hover:shadow-md"
 					:class="{ 'shadow-md': activeFaq === index }">
 					<button
 						class="w-full py-4 px-5 text-left flex justify-between items-center"
 						@click="toggleFaq(index)">
-						<h3 class="font-medium text-slate-800 dark:text-white text-base">{{ faq.question }}</h3>
+						<span class="font-medium text-slate-800 dark:text-white text-base">{{ faq.question }}</span>
 						<svg
 							class="h-5 w-5 text-slate-600 dark:text-slate-400 transform transition-transform duration-500"
 							:class="{ 'rotate-180': activeFaq === index }"
@@ -392,35 +392,12 @@
 						</svg>
 					</button>
 					<div
-						class="overflow-hidden transition-all duration-500 ease-in-out"
-						:style="{ maxHeight: activeFaq === index ? '300px' : '0' }">
+						class="overflow-hidden transition-all duration-200 ease-linear"
+						:style="{ maxHeight: activeFaq === index ? '55px' : '0' }">
 						<p class="px-5 pb-4 text-slate-600 dark:text-slate-400 text-sm">
 							{{ faq.answer }}
 						</p>
 					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Call to Action -->
-		<div class="mt-20 max-w-3xl mx-auto text-center">
-			<div
-				class="glass-card glass-card-border glass-card-prevent-transform p-10 rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20">
-				<h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-4">
-					Ready to get started?
-				</h2>
-				<p class="text-slate-600 dark:text-slate-400 mb-8">
-					Start for free today or contact us to learn more about Pro features for your business.
-				</p>
-				<div class="flex flex-col sm:flex-row gap-4 justify-center">
-					<button
-						class="px-6 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition">
-						Start for free
-					</button>
-					<button
-						class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg transition shadow-lg hover:shadow-xl">
-						Contact Sales
-					</button>
 				</div>
 			</div>
 		</div>
@@ -447,27 +424,3 @@ useHead({
 	]
 })
 </script>
-
-<style scoped>
-.glass-card {
-	backdrop-filter: blur(8px);
-	border: 1px solid var(--card-border);
-}
-
-.dark .glass-card {
-	border-color: rgba(255, 255, 255, 0.05);
-}
-
-.gradient-text {
-	@apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600;
-}
-
-/* Добавьте стили для темной темы градиентного текста */
-.dark .gradient-text {
-	@apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400;
-}
-
-.glass-card-prevent-transform {
-	transform: none !important;
-}
-</style>
