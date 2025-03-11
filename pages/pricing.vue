@@ -74,17 +74,17 @@
 					</div>
 					<div class="flex items-start">
 						<svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400 mr-3 mt-0.5 flex-shrink-0" fill="none"
-							viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-						</svg>
-						<span>Basic analytics (clicks, devices)</span>
-					</div>
-					<div class="flex items-start">
-						<svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400 mr-3 mt-0.5 flex-shrink-0" fill="none"
-							viewBox="0 0 24 24" stroke="currentColor">
+							 viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
 						</svg>
 						<span>30 days data storage</span>
+					</div>
+					<div class="flex items-start">
+						<svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400 mr-3 mt-0.5 flex-shrink-0" fill="none"
+							 viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+						</svg>
+						<span>Basic support</span>
 					</div>
 					<div class="flex items-start">
 						<svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400 mr-3 mt-0.5 flex-shrink-0" fill="none"
@@ -166,28 +166,28 @@
 					</div>
 					<div class="flex items-start">
 						<svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400 mr-3 mt-0.5 flex-shrink-0" fill="none"
-							viewBox="0 0 24 24" stroke="currentColor">
+							 viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
 						</svg>
-						<span>Advanced analytics (traffic sources, geo)</span>
+						<span>Unlimited data storage</span>
 					</div>
 					<div class="flex items-start">
 						<svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400 mr-3 mt-0.5 flex-shrink-0" fill="none"
-							viewBox="0 0 24 24" stroke="currentColor">
+							 viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
 						</svg>
-						<span>Data storage from 1 year</span>
+						<span>Priority support</span>
 					</div>
 					<div class="flex items-start">
 						<svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400 mr-3 mt-0.5 flex-shrink-0" fill="none"
-							viewBox="0 0 24 24" stroke="currentColor">
+							 viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
 						</svg>
 						<span>Custom short URLs</span>
 					</div>
 					<div class="flex items-start">
 						<svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400 mr-3 mt-0.5 flex-shrink-0" fill="none"
-							viewBox="0 0 24 24" stroke="currentColor">
+							 viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
 						</svg>
 						<span>Custom domains</span>
@@ -197,14 +197,14 @@
 							viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
 						</svg>
-						<span>Team access</span>
+						<span>Advanced analytics</span>
 					</div>
 					<div class="flex items-start">
 						<svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400 mr-3 mt-0.5 flex-shrink-0" fill="none"
 							viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
 						</svg>
-						<span>Priority support</span>
+						<span>Team access</span>
 					</div>
 				</div>
 
@@ -239,39 +239,21 @@
 						<tr class="border-b border-slate-200 dark:border-slate-700">
 							<td class="py-3 px-3 text-slate-800 dark:text-white">Links per month</td>
 							<td class="py-3 px-3 text-center text-slate-600 dark:text-slate-400">30</td>
-							<td class="py-3 px-3 text-center text-slate-600 dark:text-slate-400">∞</td>
+							<td class="py-3 px-3 text-center text-slate-600 dark:text-slate-400">Unlimited</td>
 						</tr>
 						<tr class="border-b border-slate-200 dark:border-slate-700">
 							<td class="py-3 px-3 text-slate-800 dark:text-white">Data storage</td>
 							<td class="py-3 px-3 text-center text-slate-600 dark:text-slate-400">30 days</td>
-							<td class="py-3 px-3 text-center text-slate-600 dark:text-slate-400">From 1 year</td>
+							<td class="py-3 px-3 text-center text-slate-600 dark:text-slate-400">Unlimited</td>
 						</tr>
 						<tr class="border-b border-slate-200 dark:border-slate-700">
 							<td class="py-3 px-3 text-slate-800 dark:text-white">Support</td>
 							<td class="py-3 px-3 text-center text-slate-600 dark:text-slate-400">Basic</td>
 							<td class="py-3 px-3 text-center text-slate-600 dark:text-slate-400">Priority</td>
 						</tr>
-
 						<!-- Features with green checkmarks -->
 						<tr class="border-b border-slate-200 dark:border-slate-700">
 							<td class="py-3 px-3 text-slate-800 dark:text-white">Custom short URLs</td>
-							<td class="py-3 px-3 text-center">
-								<svg class="h-5 w-5 text-green-500 mx-auto" fill="none" viewBox="0 0 24 24"
-									stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-										d="M5 13l4 4L19 7" />
-								</svg>
-							</td>
-							<td class="py-3 px-3 text-center">
-								<svg class="h-5 w-5 text-green-500 mx-auto" fill="none" viewBox="0 0 24 24"
-									stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-										d="M5 13l4 4L19 7" />
-								</svg>
-							</td>
-						</tr>
-						<tr class="border-b border-slate-200 dark:border-slate-700">
-							<td class="py-3 px-3 text-slate-800 dark:text-white">Basic analytics</td>
 							<td class="py-3 px-3 text-center">
 								<svg class="h-5 w-5 text-green-500 mx-auto" fill="none" viewBox="0 0 24 24"
 									stroke="currentColor">
