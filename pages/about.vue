@@ -72,8 +72,6 @@
 			</div>
 		</div>
 		
-		
-
 		<!-- Testimonials Section -->
 		<div class="mb-20 max-w-5xl mx-auto" v-if="false">
 			<h2 class="text-3xl font-semibold mb-10 text-slate-800 dark:text-white text-center">What Our Users Say</h2>
