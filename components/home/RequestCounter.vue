@@ -4,18 +4,31 @@
 		<div class="counter-container">
 			<div class="flex items-center justify-between w-full">
 				<div class="flex items-start">
-					<span class="counter-text">{{ remainingRequests }} free shortens remaining</span>
+					<!-- Разный текст для бесплатных и PRO пользователей -->
+					<span v-if="isPremiumUser" class="counter-text flex items-center">
+						<svg xmlns="http://www.w3.org/2000/svg"
+							class="h-4 w-4 mr-1 text-purple-600 dark:text-purple-400" viewBox="0 0 20 20"
+							fill="currentColor">
+							<path fill-rule="evenodd"
+								d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+								clip-rule="evenodd" />
+						</svg>
+						Неограниченное количество сокращений (PRO)
+					</span>
+					<span v-else class="counter-text">{{ remainingRequests }} бесплатных сокращений осталось</span>
 
-					<!-- Иконка с улучшенной подсказкой -->
-					<div class="relative ml-1.5">
+					<!-- Иконка с улучшенной подсказкой (только для бесплатных пользователей) -->
+					<div v-if="!isPremiumUser" class="relative ml-1.5">
 						<button
 							@click="toggleTooltip"
 							type="button"
 							class="info-icon-button"
-							aria-label="More information"
-						>
-							<svg xmlns="http://www.w3.org/2000/svg" class="info-icon" viewBox="0 0 20 20" fill="currentColor">
-								<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+							aria-label="More information">
+							<svg xmlns="http://www.w3.org/2000/svg" class="info-icon" viewBox="0 0 20 20"
+								fill="currentColor">
+								<path fill-rule="evenodd"
+									d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+									clip-rule="evenodd" />
 							</svg>
 						</button>
 
@@ -26,12 +39,12 @@
 								class="tooltip-container"
 								@mouseleave="startCloseTimer"
 								@mouseenter="clearCloseTimer"
-								ref="tooltip"
-							>
-								<p class="tooltip-text">Free accounts are limited to {{ totalFreeRequests }} shortened URLs per month</p>
+								ref="tooltip">
+								<p class="tooltip-text">Бесплатные аккаунты ограничены {{ totalFreeRequests }}
+									сокращениями URL в месяц</p>
 								<div class="tooltip-divider"></div>
 								<NuxtLink to="/pricing" class="tooltip-link">
-									Upgrade account
+									Улучшить аккаунт
 								</NuxtLink>
 								<div class="tooltip-arrow"></div>
 							</div>
@@ -39,22 +52,24 @@
 					</div>
 				</div>
 
-				<!-- Визуальный индикатор использования -->
-				<NuxtLink to="/pricing" class="upgrade-link" v-if="usageRatio >= 0.7">
-					Upgrade
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-						<path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+				<!-- Визуальный индикатор использования и кнопка апгрейда (только для бесплатных пользователей с высоким уровнем использования) -->
+				<NuxtLink to="/pricing" class="upgrade-link" v-if="!isPremiumUser && usageRatio >= 0.7">
+					Улучшить
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20"
+						fill="currentColor">
+						<path fill-rule="evenodd"
+							d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
+							clip-rule="evenodd" />
 					</svg>
 				</NuxtLink>
 			</div>
 
-			<!-- Прогресс-бар -->
-			<div class="progress-bar-container">
+			<!-- Прогресс-бар (только для бесплатных пользователей) -->
+			<div v-if="!isPremiumUser" class="progress-bar-container">
 				<div
 					class="progress-bar"
 					:class="progressBarClass"
-					:style="{ width: `${usagePercentage}%` }"
-				></div>
+					:style="{ width: `${usagePercentage}%` }"></div>
 			</div>
 		</div>
 	</div>
@@ -63,12 +78,19 @@
 <script setup>
 import { ref, computed, onBeforeUnmount, onMounted } from 'vue';
 import { useUrlStore } from '~/stores/url';
+import { useAuthStore } from '~/stores/auth';
 
-// Получаем хранилище URL
+// Получаем хранилища
 const urlStore = useUrlStore();
+const authStore = useAuthStore();
+
+// Проверяем, является ли пользователь премиум-пользователем
+const isPremiumUser = computed(() => {
+	return authStore.isAuthenticated && authStore.user?.isPremium;
+});
 
 // Общее количество бесплатных запросов в месяц (из конфигурации или констант)
-const totalFreeRequests = computed(() => urlStore.totalFreeRequests || 30); // Используем значение из стора или дефолтное
+const totalFreeRequests = computed(() => urlStore.totalFreeRequests || 30);
 
 // Получаем оставшееся количество бесплатных запросов
 const remainingRequests = computed(() => urlStore.remainingFreeRequests);
@@ -178,7 +200,8 @@ onMounted(() => {
 /* Исправленная стрелка подсказки - частично внутри контейнера */
 .tooltip-arrow {
 	@apply absolute left-1/2 w-2.5 h-2.5 bg-white dark:bg-slate-800 transform -translate-x-1/2 rotate-45;
-	top: calc(100% - 4px); /* Стрелка теперь частично внутри подсказки */
+	top: calc(100% - 4px);
+	/* Стрелка теперь частично внутри подсказки */
 }
 
 .progress-bar-container {

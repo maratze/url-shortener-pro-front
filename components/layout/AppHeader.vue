@@ -1,11 +1,10 @@
 <template>
 	<header
 		class="fixed top-0 left-0 right-0 z-40 py-4 transition-all duration-300 z-[2000]"
-		:class="{ 
-      'backdrop-blur-md bg-white/80 dark:bg-slate-900/80 shadow-md': isScrolled,
-      'bg-transparent': !isScrolled
-    }"
-	>
+		:class="{
+			'backdrop-blur-md bg-white/80 dark:bg-slate-900/80 shadow-md': isScrolled,
+			'bg-transparent': !isScrolled
+		}">
 		<div class="container mx-auto px-6 max-w-7xl">
 			<div class="flex items-center justify-between">
 				<!-- Левая часть: Логотип -->
@@ -15,7 +14,8 @@
 							class="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold">
 							TL
 						</div>
-						<span class="text-xl font-bold text-slate-900 dark:text-white hidden sm:inline-block">TinyLink</span>
+						<span
+							class="text-xl font-bold text-slate-900 dark:text-white hidden sm:inline-block">TinyLink</span>
 					</NuxtLink>
 				</div>
 
@@ -26,10 +26,16 @@
 					<NuxtLink to="/about" class="nav-link" active-class="router-link-active">About</NuxtLink>
 				</nav>
 
-				<!-- Правая часть: Кнопки авторизации -->
+				<!-- Правая часть: Кнопки авторизации или Меню пользователя -->
 				<div class="flex items-center space-x-3">
-					<NuxtLink to="/register" class="register-btn hidden sm:flex">Register</NuxtLink>
-					<NuxtLink to="/login" class="login-btn">Login</NuxtLink>
+					<!-- Показываем кнопки регистрации и входа для неавторизованных пользователей -->
+					<template v-if="!authStore.isAuthenticated">
+						<NuxtLink to="/register" class="register-btn hidden sm:flex">Register</NuxtLink>
+						<NuxtLink to="/login" class="login-btn">Login</NuxtLink>
+					</template>
+
+					<!-- Показываем меню пользователя для авторизованных пользователей -->
+					<UserMenu v-else />
 				</div>
 			</div>
 		</div>
@@ -40,12 +46,41 @@
 				<nav class="px-4 py-6 space-y-4">
 					<div class="border-t dark:border-slate-700"></div>
 					<!-- Мобильное меню -->
-					<NuxtLink to="/history" class="mobile-nav-link" active-class="text-purple-600 dark:text-purple-400 font-semibold" @click="mobileMenuOpen = false">History</NuxtLink>
-					<NuxtLink to="/analytics" class="mobile-nav-link" active-class="text-purple-600 dark:text-purple-400 font-semibold" @click="mobileMenuOpen = false">Analytics</NuxtLink>
-					<NuxtLink to="/pricing" class="mobile-nav-link" active-class="text-purple-600 dark:text-purple-400 font-semibold" @click="mobileMenuOpen = false">Pricing</NuxtLink>
-					<NuxtLink to="/about" class="mobile-nav-link" active-class="text-purple-600 dark:text-purple-400 font-semibold" @click="mobileMenuOpen = false">About</NuxtLink>
-					<NuxtLink to="/register" class="mobile-nav-link text-purple-600 dark:text-purple-400 font-semibold" @click="mobileMenuOpen = false">Register</NuxtLink>
-					<NuxtLink to="/login" class="mobile-nav-link" @click="mobileMenuOpen = false">Login</NuxtLink>
+					<NuxtLink to="/analytics" class="mobile-nav-link"
+						active-class="text-purple-600 dark:text-purple-400 font-semibold"
+						@click="mobileMenuOpen = false">
+						Analytics</NuxtLink>
+					<NuxtLink to="/pricing" class="mobile-nav-link"
+						active-class="text-purple-600 dark:text-purple-400 font-semibold"
+						@click="mobileMenuOpen = false">
+						Pricing
+					</NuxtLink>
+					<NuxtLink to="/about" class="mobile-nav-link"
+						active-class="text-purple-600 dark:text-purple-400 font-semibold"
+						@click="mobileMenuOpen = false">About
+					</NuxtLink>
+
+					<!-- Показываем кнопки регистрации/входа или профиль пользователя -->
+					<template v-if="!authStore.isAuthenticated">
+						<NuxtLink to="/register"
+							class="mobile-nav-link text-purple-600 dark:text-purple-400 font-semibold"
+							@click="mobileMenuOpen = false">Register</NuxtLink>
+						<NuxtLink to="/login" class="mobile-nav-link" @click="mobileMenuOpen = false">Login</NuxtLink>
+					</template>
+					<template v-else>
+						<div class="mobile-nav-link">
+							<div class="flex items-center space-x-2">
+								<div
+									class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+									{{ userInitials }}
+								</div>
+								<div class="font-medium text-slate-800 dark:text-white truncate">{{
+									authStore.user?.email }}</div>
+							</div>
+						</div>
+						<button @click="logout"
+							class="mobile-nav-link w-full text-left text-red-600 dark:text-red-400">Log out</button>
+					</template>
 				</nav>
 			</div>
 		</Transition>
@@ -53,10 +88,27 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { useAuthStore } from '~/stores/auth';
+import UserMenu from './UserMenu.vue';
 
+const authStore = useAuthStore();
 const mobileMenuOpen = ref(false);
 const isScrolled = ref(false);
+
+// Вычисляем инициалы для аватара (для мобильного меню)
+const userInitials = computed(() => {
+	if (!authStore.user?.email) return '?';
+	return authStore.user.email.charAt(0).toUpperCase();
+});
+
+// Функция выхода для мобильного меню
+const logout = () => {
+	authStore.logout();
+	mobileMenuOpen.value = false;
+	// Перенаправляем на главную страницу
+	navigateTo('/');
+};
 
 const checkScroll = () => {
 	isScrolled.value = window.scrollY > 10;
@@ -65,6 +117,9 @@ const checkScroll = () => {
 onMounted(() => {
 	window.addEventListener('scroll', checkScroll);
 	checkScroll();
+
+	// Получаем данные о текущем пользователе при загрузке
+	authStore.fetchCurrentUser();
 });
 
 onUnmounted(() => {

@@ -1,4 +1,6 @@
-import { ref } from 'vue';
+import { computed } from 'vue';
+import { useAuthStore } from '~/stores/auth';
+import type { LoginRequest, RegisterRequest, UserResponse } from '~/types/auth';
 
 /**
  * Хук для работы с аутентификацией пользователя
@@ -6,41 +8,55 @@ import { ref } from 'vue';
  * сессиями и обращениями к API
  */
 export const useAuth = () => {
-    // Флаг аутентификации пользователя
-    const isAuthenticated = ref(true); // Для демонстрации установим true, чтобы показать все возможности
+    // Получаем хранилище аутентификации
+    const authStore = useAuthStore();
+
+    // Флаг аутентификации пользователя - используем computed, чтобы реагировать на изменения
+    const isAuthenticated = computed(() => authStore.isAuthenticated);
+
+    // Текущий пользователь
+    const user = computed(() => authStore.user);
+
+    // Флаг загрузки
+    const loading = computed(() => authStore.loading);
+
+    // Проверка на премиум статус
+    const isPremium = computed(() => authStore.isAuthenticated && authStore.user?.isPremium);
 
     /**
      * Функция для входа пользователя
-     * @param email Электронная почта
-     * @param password Пароль
+     * @param credentials Данные для входа (email и пароль)
      * @returns Результат входа
      */
-    const login = async (email: string, password: string) => {
-        // В реальном приложении здесь будет запрос к API
-        isAuthenticated.value = true;
-        return { success: true };
+    const login = async (credentials: LoginRequest) => {
+        try {
+            const result = await authStore.login(credentials);
+            return { success: true, user: result };
+        } catch (error: any) {
+            return { success: false, error: error.message };
+        }
     };
 
     /**
      * Функция для выхода пользователя
      */
     const logout = async () => {
-        // В реальном приложении здесь будет запрос к API и очистка токенов
-        isAuthenticated.value = false;
+        authStore.logout();
         return { success: true };
     };
 
     /**
      * Функция для регистрации пользователя
-     * @param email Электронная почта
-     * @param password Пароль
-     * @param name Имя пользователя
+     * @param userData Данные для регистрации
      * @returns Результат регистрации
      */
-    const register = async (email: string, password: string, name: string) => {
-        // В реальном приложении здесь будет запрос к API
-        isAuthenticated.value = true;
-        return { success: true };
+    const register = async (userData: RegisterRequest) => {
+        try {
+            const result = await authStore.register(userData);
+            return { success: true, user: result };
+        } catch (error: any) {
+            return { success: false, error: error.message };
+        }
     };
 
     /**
@@ -48,12 +64,25 @@ export const useAuth = () => {
      * @returns Обещание с результатом проверки
      */
     const checkAuthStatus = async () => {
-        // В реальном приложении здесь будет запрос к API для проверки токена
-        return { isAuthenticated: isAuthenticated.value };
+        try {
+            const user = await authStore.fetchCurrentUser();
+            return {
+                isAuthenticated: authStore.isAuthenticated,
+                user: user
+            };
+        } catch (error) {
+            return {
+                isAuthenticated: false,
+                user: null
+            };
+        }
     };
 
     return {
         isAuthenticated,
+        user,
+        isPremium,
+        loading,
         login,
         logout,
         register,

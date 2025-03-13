@@ -43,4 +43,10 @@ export interface SummaryData {
     ctrSparkline: number[];
     activeLinksSparkline: number[];
     weeklyClicksData: Array<{ day: string, clicks: number }>;
+    conversionRate: number;
+    conversionTrend: number;
+    conversionSparkline: number[];
+    uniqueVisitors: number;
+    visitorsTrend: number;
+    visitorsSparkline: number[];
 }

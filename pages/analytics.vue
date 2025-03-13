@@ -4,7 +4,13 @@
 			<template #button>
 				<button
 					@click="openCreateModal"
-					class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg flex items-center justify-center">
+					:disabled="!isAuthenticated || (!isPremium && isLinkLimitExceeded)"
+					:class="[
+						'px-4 py-2 rounded-lg flex items-center justify-center',
+						(!isAuthenticated || (!isPremium && isLinkLimitExceeded))
+							? 'bg-slate-400 dark:bg-slate-700 text-white cursor-not-allowed'
+							: 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white'
+					]">
 					<svg class="h-5 w-5 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
 						stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -20,523 +26,278 @@
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 							d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 					</svg>
-					<span>You are using the basic version. <NuxtLink to="/login" class="text-indigo-600 dark:text-indigo-400 hover:underline">Log in</NuxtLink> for access to advanced analytics.</span>
+					<span>You're using the basic version. <NuxtLink to="/login"
+							class="text-indigo-600 dark:text-indigo-400 hover:underline">Log in</NuxtLink> for access to
+						advanced analytics.</span>
+				</div>
+			</template>
+			<!-- Notification for free authorized users -->
+			<template #subtitle v-else-if="isAuthenticated && !isPremium">
+				<div class="mt-2 text-sm text-slate-500 dark:text-slate-400 flex items-center">
+					<svg class="h-4 w-4 mr-1.5 text-amber-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+						viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					<span>
+						You're using a free account with limited functionality.
+						<NuxtLink to="/pricing" class="text-indigo-600 dark:text-indigo-400 hover:underline">Upgrade to
+							PRO</NuxtLink>
+						for access to full analytics and unlimited links.
+					</span>
 				</div>
 			</template>
 		</PageHeader>
 
 		<!-- Блоки статистики -->
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-			<SummaryCard
-				title="Total Links"
-				unit="links"
-				color="indigo"
-				:value="summary.totalLinks"
+			<SummaryCard title="Total Links" unit="links" color="indigo" :value="summary.totalLinks"
 				:trend="summary.linksTrend"
-				:sparkline-data="summary.linksSparkline"
+				:sparkline-data="isPremium ? summary.linksSparkline : summary.linksSparkline.slice(0, FREE_LIMITS.historyDays)"
 				:loading="loading">
 				<template #icon>
 					<svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg"
-						 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							  d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+							d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
 					</svg>
 				</template>
 			</SummaryCard>
 
-			<SummaryCard
-				title="Total Clicks"
-				:value="summary.totalClicks"
-				:trend="summary.clicksTrend"
-				unit="clicks"
-				color="green"
-				:sparkline-data="summary.clicksSparkline"
-				:loading="loading">
+			<SummaryCard title="Total Clicks" :value="summary.totalClicks" :trend="summary.clicksTrend"
+				:sparkline-data="isPremium ? summary.clicksSparkline : summary.clicksSparkline.slice(0, FREE_LIMITS.historyDays)"
+				unit="clicks" color="green" :loading="loading">
 				<template #icon>
 					<svg class="h-5 w-5 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg"
-						 fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							  d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/>
-					</svg>
-				</template>
-			</SummaryCard>
-
-			<SummaryCard
-				title="Average CTR"
-				unit="%"
-				color="orange"
-				:value="summary.averageCtr"
-				:trend="summary.ctrTrend"
-				:sparkline-data="summary.ctrSparkline"
-				:loading="loading">
-				<template #icon>
-					<svg class="h-5 w-5 text-orange-600 dark:text-orange-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-					</svg>
-				</template>
-			</SummaryCard>
-
-			<SummaryCard
-				title="Active Links"
-				unit="active"
-				color="blue"
-				:value="summary.activeLinks"
-				:trend="summary.activeLinksTrend"
-				:sparkline-data="summary.activeLinksSparkline"
-				:loading="loading">
-				<template #icon>
-					<svg class="h-5 w-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-						 viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-					</svg>
-				</template>
-			</SummaryCard>
-		</div>
-
-		<!-- Графики и расширенная аналитика (только для авторизованных пользователей) -->
-		<div v-if="isAuthenticated" class="mb-4">
-			<div
-				class="graph-container glass-card glass-card-prevent-transform !p-0 bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden mb-4 border border-slate-200 dark:border-slate-700">
-				<div class="p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
-					<h3 class="text-lg font-medium text-slate-900 dark:text-white">Clicks Analytics</h3>
-					<div class="flex space-x-2">
-						<button v-for="(period, index) in timePeriods" :key="index"
-							@click="activeTimePeriod = period.value"
-							:class="[
-								'px-2 py-1 text-xs rounded-md',
-								activeTimePeriod === period.value
-									? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
-									: 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
-							]">
-							{{ period.label }}
-						</button>
-					</div>
-				</div>
-				<div class="p-4">
-					<div class="h-64 relative">
-						<template v-if="loading">
-							<Preloader
-								:active="loading"
-								:fullscreen="true"
-								type="dots"
-								skeleton-width="100px"
-								skeleton-height="100px"
-								container-class="absolute inset-0 flex items-center justify-center"
-							/>
-						</template>
-						<template v-else>
-							<ClicksChart
-								:data="chartData[activeTimePeriod as keyof ChartDataTypes]"
-								:period="activeTimePeriod"/>
-						</template>
-					</div>
-				</div>
-			</div>
-
-			<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
-				<!-- Географическое распределение -->
-				<div
-					class="graph-container glass-card glass-card-prevent-transform !p-0 bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden border border-slate-200 dark:border-slate-700">
-					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
-						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Geography</h3>
-					</div>
-					<div class="p-4 relative min-h-[200px]">
-						<template v-if="loading">
-							<div class="p-4">
-								<Preloader
-									:active="loading"
-									:fullscreen="true"
-									type="dots"
-									container-class="absolute inset-0 flex items-center justify-center"
-								/>
-							</div>
-						</template>
-						<template v-else>
-							<GeoDistribution :data="geoData"/>
-						</template>
-					</div>
-				</div>
-
-				<!-- Рефереры (Traffic Sources) -->
-				<div
-					class="graph-container glass-card glass-card-prevent-transform !p-0 bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden border border-slate-200 dark:border-slate-700">
-					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
-						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Traffic Sources</h3>
-					</div>
-					<div class="p-4 relative min-h-[200px]">
-						<template v-if="loading">
-							<div class="p-4">
-								<Preloader
-									:active="loading"
-									:fullscreen="true"
-									type="dots"
-									container-class="absolute inset-0 flex items-center justify-center"
-								/>
-							</div>
-						</template>
-						<template v-else>
-							<ReferrersChart :data="referrersData" />
-						</template>
-					</div>
-				</div>
-
-				<!-- Устройства (Devices) -->
-				<div
-					class="graph-container glass-card glass-card-prevent-transform !p-0 bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden border border-slate-200 dark:border-slate-700">
-					<div class="p-4 border-b border-slate-200 dark:border-slate-700">
-						<h3 class="text-lg font-medium text-slate-900 dark:text-white">Devices</h3>
-					</div>
-					<div class="p-4 relative min-h-[200px]">
-						<template v-if="loading">
-							<div class="p-4">
-								<Preloader
-									:active="loading"
-									type="dots"
-									:fullscreen="true"
-									skeleton-width="100%"
-									skeleton-height="200px"
-									container-class="absolute inset-0 flex items-center justify-center"
-								/>
-							</div>
-						</template>
-						<template v-else>
-							<DevicesChart :data="devicesData"/>
-						</template>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="glass-card glass-card-border glass-card-prevent-transform flex flex-col bg-white p-4">
-			<!-- Панель управления, фильтры и переключатели вида -->
-			<div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 space-y-3 sm:space-y-0">
-				<!-- Поиск -->
-				<div class="relative flex-grow max-w-md">
-					<input 
-						type="text" 
-						v-model="searchQuery" 
-						placeholder="Search links..."
-						class="glass-card-border glass-card-prevent-transform shadow-sm pl-10 pr-4 py-2 w-full rounded-lg border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-						:disabled="loading"
-					/>
-					<svg class="h-5 w-5 text-slate-400 absolute left-3 top-1/2 transform -translate-y-1/2"
-						xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-					</svg>
-				</div>
-
-				<div class="flex items-center space-x-2 sm:justify-end">
-					<!-- Переключатель режима отображения -->
-					<div class="flex border border-slate-300 dark:border-slate-600 rounded-lg overflow-hidden">
-						<button @click="viewType = 'table'" :class="[
-							'p-2 flex items-center justify-center',
-							viewType === 'table'
-								? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
-								: 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
-						]" title="Table view">
-							<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-								stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-							</svg>
-						</button>
-						<button @click="viewType = 'grid'" :class="[
-							'p-2 flex items-center justify-center',
-							viewType === 'grid'
-								? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
-								: 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
-						]" title="Grid view">
-							<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-								stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-							</svg>
-						</button>
-					</div>
-
-					<!-- Фильтры -->
-					<div class="relative" v-if="false">
-						<button @click="toggleFilters"
-							class="filters-button p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
-							:class="{ 'filter-active': hasActiveFilters }" title="Filters">
-							<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-								stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-							</svg>
-						</button>
-
-						<!-- Выпадающая панель фильтров -->
-						<div v-if="showFilters"
-							class="filters-menu absolute right-0 mt-2 w-72 rounded-lg shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-10">
-							<div class="p-4 space-y-4">
-								<div>
-									<label
-										class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Status</label>
-									<div class="flex space-x-2">
-										<button @click="setStatusFilter('all')" :class="[
-											'px-3 py-1.5 text-xs rounded-md',
-											filters.status === 'all'
-												? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
-												: 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
-										]">
-											All
-										</button>
-										<button @click="setStatusFilter('active')" :class="[
-											'px-3 py-1.5 text-xs rounded-md',
-											filters.status === 'active'
-												? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-												: 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
-										]">
-											Active
-										</button>
-										<button @click="setStatusFilter('inactive')" :class="[
-											'px-3 py-1.5 text-xs rounded-md',
-											filters.status === 'inactive'
-												? 'bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-slate-200'
-												: 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
-										]">
-											Inactive
-										</button>
-									</div>
-								</div>
-
-								<!-- Фильтр по дате -->
-								<div class="mb-4">
-									<label class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 block">
-										Date Range
-									</label>
-
-									<div class="flex flex-col space-y-3">
-										<div class="flex items-center">
-											<span class="text-sm text-slate-600 dark:text-slate-400 w-16">From:</span>
-											<input type="date" v-model="filters.startDate"
-												class="w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white">
-										</div>
-
-										<div class="flex items-center">
-											<span class="text-sm text-slate-600 dark:text-slate-400 w-16">To:</span>
-											<input type="date" v-model="filters.endDate"
-												class="w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white">
-										</div>
-									</div>
-								</div>
-
-								<div>
-									<label
-										class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Sort
-										by</label>
-									<select v-model="filters.sortBy"
-										class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
-										<option value="created-desc">Newest first</option>
-										<option value="created-asc">Oldest first</option>
-										<option value="clicks-desc">Most clicks</option>
-										<option value="clicks-asc">Least clicks</option>
-										<option value="title-asc">Title (A-Z)</option>
-										<option value="title-desc">Title (Z-A)</option>
-									</select>
-								</div>
-
-								<div v-if="isAuthenticated">
-									<label
-										class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Projects</label>
-									<select v-model="filters.project"
-										class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
-										<option value="">All projects</option>
-										<option v-for="project in availableProjects" :key="project.id"
-											:value="project.id">
-											{{ project.name }}
-										</option>
-									</select>
-								</div>
-
-								<div>
-									<label
-										class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tags</label>
-									<div class="max-h-40 overflow-y-auto flex flex-wrap gap-1">
-										<button v-for="tag in availableTags" :key="tag" @click="toggleTagFilter(tag)"
-											:class="[
-												'px-2 py-1 text-xs rounded-full',
-												filters.tags.includes(tag)
-													? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
-													: 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
-											]">
-											{{ tag }}
-										</button>
-									</div>
-								</div>
-
-								<div class="flex justify-end pt-2">
-									<button @click="clearFilters"
-										class="px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">
-										Clear filters
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<!-- Настройки таблицы -->
-					<div v-if="false">
-						<TableSettings ref="settingsMenuRef" :columns="tableColumns" :is-compact="isCompactTable"
-							:show-borders="showTableBorders" :show-stripes="showTableStripes"
-							@toggle-column="toggleColumn"
-							@toggle-compact="toggleCompact" @toggle-borders="toggleBorders"
-							@toggle-stripes="toggleStripes"
-							@reset-settings="resetTableSettings" @items-per-page-change="handleItemsPerPageChange" />
-					</div>
-
-					<!-- Импорт/Экспорт (для авторизованных) -->
-					<div v-if="false && isAuthenticated" class="relative">
-						<button @click="toggleImportExport"
-							class="import-export-button p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
-							title="Import/Export">
-							<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-								stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20" />
-							</svg>
-						</button>
-
-						<!-- Выпадающая панель импорта/экспорта -->
-						<div v-if="showImportExport"
-							class="import-export-menu absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-10">
-							<div class="p-2">
-								<button @click="openImportModal"
-									class="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md">
-									Import from CSV/JSON
-								</button>
-								<button @click="exportLinks"
-									class="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md">
-									Export selected
-								</button>
-								<button @click="exportAllLinks"
-									class="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md">
-									Export all links
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Индикаторы активных фильтров -->
-			<div v-if="hasActiveFilters" class="flex flex-wrap items-center mb-4 space-x-2">
-				<span class="text-xs text-slate-500 dark:text-slate-400">Active filters:</span>
-
-				<div v-if="filters.status !== 'all'" class="active-filter">
-					Status: {{ filters.status }}
-					<button @click="setStatusFilter('all')"
-						class="ml-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
-						<svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-							stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-								d="M6 18L18 6M6 6l12 12" />
-						</svg>
-					</button>
-				</div>
-
-				<div v-if="filters.startDate || filters.endDate" class="active-filter">
-					Date: {{ formatDateFilter() }}
-					<button @click="clearDateFilter"
-						class="ml-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
-						<svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-							stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-								d="M6 18L18 6M6 6l12 12" />
-						</svg>
-					</button>
-				</div>
-
-				<div v-if="filters.project" class="active-filter">
-					Project: {{ getProjectName(filters.project) }}
-					<button @click="filters.project = ''"
-						class="ml-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
-						<svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-							stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-								d="M6 18L18 6M6 6l12 12" />
-						</svg>
-					</button>
-				</div>
-
-				<div v-for="tag in filters.tags" :key="tag" class="active-filter">
-					Tag: {{ tag }}
-					<button @click="toggleTagFilter(tag)"
-						class="ml-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
-						<svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-							stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-								d="M6 18L18 6M6 6l12 12" />
-						</svg>
-					</button>
-				</div>
-
-				<button @click="clearFilters"
-					class="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300">
-					Clear all
-				</button>
-			</div>
-
-			<!-- Сообщение при отсутствии данных -->
-			<template v-if="loading">
-				<div class="py-24">
-					<Preloader
-						:active="true"
-						type="spinner"
-						skeleton-width="80px"
-						skeleton-height="2rem"/>
-				</div>
-			</template>
-
-			<div v-else-if="filteredLinks.length === 0" class="my-12 flex flex-col items-center justify-center">
-				<div class="bg-slate-100 dark:bg-slate-700 rounded-full p-6 mb-4">
-					<svg class="h-12 w-12 text-slate-400 dark:text-slate-500" xmlns="http://www.w3.org/2000/svg"
 						fill="none"
 						viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+							d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
 					</svg>
-				</div>
-				<h3 class="text-xl font-medium text-slate-800 dark:text-white mb-2">No links found</h3>
-				<p class="text-slate-600 dark:text-slate-400 text-center mb-4">
-					{{ searchQuery ? 'Try adjusting your search or filter criteria.' : 'You have not created any links yet.' }}
-				</p>
-				<button 
-					@click="openCreateModal"
-					class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg flex items-center justify-center">
-					<svg class="h-4 w-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-						stroke="currentColor">
+				</template>
+			</SummaryCard>
+
+			<SummaryCard title="Conversion Rate" :value="summary.conversionRate" :trend="summary.conversionTrend"
+				:sparkline-data="isPremium ? summary.conversionSparkline : summary.conversionSparkline.slice(0, FREE_LIMITS.historyDays)"
+				unit="%" color="blue" :loading="loading">
+				<template #icon>
+					<svg class="h-5 w-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+						viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+							d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
 					</svg>
-					Create your first link
-				</button>
-			</div>
+				</template>
+			</SummaryCard>
 
-			<!-- Основная часть страницы - список ссылок -->
-			<div class="mt-4" v-else>
-				<!-- Таблица с историей ссылок -->
-				<div v-if="viewType === 'table'">
-					<Table :links="paginatedLinks" @edit="openEditModal" @delete="openDeleteModal"
-						@view-stats="openStatsModal" @copy="copyToClipboard" @toggle-active="toggleLinkActive"
-						@bulk-copy="bulkCopy" @bulk-activate="bulkActivate" @bulk-delete="bulkDelete"
-						@bulk-export="bulkExport"
-						@items-per-page-change="handleItemsPerPageChange" />
+			<!-- Запрещаем доступ к этой карточке для бесплатных пользователей -->
+			<SummaryCard v-if="isPremium || !isAuthenticated" title="Unique Visitors" :value="summary.uniqueVisitors"
+				:trend="summary.visitorsTrend"
+				:sparkline-data="isPremium ? summary.visitorsSparkline : summary.visitorsSparkline.slice(0, FREE_LIMITS.historyDays)"
+				unit="visitors" color="purple" :loading="loading" :locked="!isPremium && isAuthenticated">
+				<template #icon>
+					<svg class="h-5 w-5 text-purple-600 dark:text-purple-400" xmlns="http://www.w3.org/2000/svg"
+						fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+					</svg>
+				</template>
+			</SummaryCard>
+
+			<!-- Карточка блокировки для бесплатных пользователей -->
+			<div v-else class="bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden 
+                    flex flex-col items-center justify-center p-5 border border-slate-200 dark:border-slate-700">
+				<div class="text-center">
+					<div
+						class="w-12 h-12 mx-auto mb-3 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+						<svg class="w-6 h-6 text-slate-500 dark:text-slate-400" xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+						</svg>
+					</div>
+					<h3 class="text-base font-medium text-slate-900 dark:text-white mb-1">Unique Visitors</h3>
+					<p class="text-sm text-slate-500 dark:text-slate-400 mb-3">Available only for PRO</p>
+					<NuxtLink to="/pricing"
+						class="text-sm text-indigo-600 dark:text-indigo-400 font-medium hover:underline">
+						Upgrade to PRO
+					</NuxtLink>
+				</div>
+			</div>
+		</div>
+
+		<!-- Фильтры и действия -->
+		<div
+			class="mb-4 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-4">
+			<!-- Верхняя панель с поиском и управлением видом -->
+			<div class="flex flex-wrap gap-2 items-center justify-between">
+
+				<!-- Поиск и фильтры (левая часть) -->
+				<div class="flex flex-wrap gap-2 items-center">
+					<!-- Поле поиска -->
+					<div class="relative w-full sm:w-64">
+						<input type="text" v-model="searchQuery" placeholder="Search links..."
+							class="block w-full px-4 py-2 text-sm rounded-lg bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 
+							text-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-600">
+						<span class="absolute right-3 top-2.5 text-slate-400">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+								stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+							</svg>
+						</span>
+					</div>
+
+					<!-- Кнопка фильтрации -->
+					<button @click="showFilters = !showFilters"
+						class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-white border border-slate-200 dark:border-slate-600">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24"
+							stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+						</svg>
+						Filters
+						<span v-if="activeFiltersCount > 0"
+							class="ml-1.5 px-1.5 py-0.5 text-xs font-medium bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 rounded-full">
+							{{ activeFiltersCount }}
+						</span>
+					</button>
+
+					<!-- Кнопка импорта (только для PRO) -->
+					<button @click="showImportModal = true" v-if="canAccessFeature('import')"
+						class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-white border border-slate-200 dark:border-slate-600">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24"
+							stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+						</svg>
+						Import
+					</button>
 				</div>
 
-				<!-- Вид карточками -->
-				<div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-					<Card v-for="link in filteredLinks" :key="link.id" :link="link" @edit="openEditModal"
-						@delete="openDeleteModal" @view-stats="openStatsModal" @copy="copyToClipboard"
-						@toggle-active="toggleLinkActive" />
+				<!-- Переключение вида (правая часть) -->
+				<div class="flex items-center space-x-2">
+					<!-- Кнопка для вида таблицей -->
+					<button @click="viewType = 'table'" :class="[
+						'inline-flex items-center justify-center p-2 rounded-lg',
+						viewType === 'table'
+							? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400'
+							: 'bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-white'
+					]">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+							stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+						</svg>
+					</button>
+
+					<!-- Кнопка для вида карточками -->
+					<button @click="viewType = 'cards'" :class="[
+						'inline-flex items-center justify-center p-2 rounded-lg',
+						viewType === 'cards'
+							? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400'
+							: 'bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-white'
+					]">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+							stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+						</svg>
+					</button>
 				</div>
 			</div>
 
-			<!-- Пагинация -->
-			<div class="mt-6 flex justify-between items-center flex-wrap" v-if="!loading">
+			<!-- Развернутая панель фильтров -->
+			<transition name="collapse">
+				<div v-if="showFilters" class="mt-4 border-t border-slate-200 dark:border-slate-700 pt-4">
+					<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+						<!-- Фильтр по статусу -->
+						<div>
+							<label
+								class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Status</label>
+							<select v-model="filters.status"
+								class="block w-full px-3 py-2 text-sm rounded-lg bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-600">
+								<option value="all">All</option>
+								<option value="active">Active</option>
+								<option value="inactive">Inactive</option>
+								<option value="expired">Expired</option>
+							</select>
+						</div>
+
+						<!-- Фильтр по дате -->
+						<div>
+							<label
+								class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Date</label>
+							<div class="flex flex-col space-y-3">
+								<div class="flex items-center">
+									<span class="text-sm text-slate-600 dark:text-slate-400 w-16">From:</span>
+									<input type="date" v-model="filters.startDate"
+										class="w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white">
+								</div>
+								<div class="flex items-center">
+									<span class="text-sm text-slate-600 dark:text-slate-400 w-16">To:</span>
+									<input type="date" v-model="filters.endDate"
+										class="w-full border border-slate-300 dark:border-slate-600 rounded-md px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white">
+								</div>
+							</div>
+						</div>
+
+						<!-- Фильтр по проекту -->
+						<div>
+							<label
+								class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Project</label>
+							<select v-model="filters.project"
+								class="block w-full px-3 py-2 text-sm rounded-lg bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-600">
+								<option value="">All Projects</option>
+								<option v-for="project in availableProjects" :key="project.id" :value="project.id">
+									{{ project.name }}
+								</option>
+							</select>
+						</div>
+
+						<!-- Фильтр по тегам -->
+						<div>
+							<label
+								class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Tags</label>
+							<div class="max-h-40 overflow-y-auto flex flex-wrap gap-1">
+								<button v-for="tag in availableTags" :key="tag" @click="toggleTagFilter(tag)" :class="[
+									'px-2 py-1 text-xs rounded-full',
+									filters.tags.includes(tag)
+										? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
+										: 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+								]">
+									{{ tag }}
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</transition>
+		</div>
+
+		<!-- Основная часть страницы - список ссылок -->
+		<div class="mt-4" v-if="!loading && filteredLinks.length > 0">
+			<!-- Таблица с историей ссылок -->
+			<div v-if="viewType === 'table'">
+				<Table :links="paginatedLinks" @edit="openEditModal" @delete="openDeleteModal"
+					@view-stats="openStatsModal"
+					@copy="copyToClipboard" @toggle-active="toggleLinkActive" @bulk-copy="bulkCopy"
+					@bulk-activate="bulkActivate" @bulk-delete="bulkDelete" @bulk-export="bulkExport"
+					@items-per-page-change="handleItemsPerPageChange" />
+			</div>
+
+			<!-- Вид карточками -->
+			<div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+				<Card v-for="link in filteredLinks" :key="link.id" :link="link" @edit="openEditModal"
+					@delete="openDeleteModal"
+					@view-stats="openStatsModal" @copy="copyToClipboard" @toggle-active="toggleLinkActive" />
+			</div>
+		</div>
+
+		<!-- Пагинация -->
+		<div
+			class="mt-6 mb-4 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-4">
+			<div class="flex flex-wrap gap-2 items-center justify-between">
 				<div class="text-sm text-slate-600 dark:text-slate-400">
 					Showing {{ paginationStart }}-{{ paginationEnd }} of {{ totalLinks }} links
 				</div>
@@ -544,35 +305,20 @@
 				<PaginationControls :total-pages="totalPages" :current-page="currentPage" @page-change="setPage" />
 			</div>
 		</div>
-
-		<!-- Модальные окна -->
-		<CreateLinkModal
-			v-if="showCreateModal"
-			@close="showCreateModal = false"
-			@create="createLink"/>
-
-		<EditLinkModal
-			v-if="showEditModal && selectedLink"
-			:link="selectedLink"
-			@close="showEditModal = false"
-			@save="updateLink"/>
-
-		<DeleteLinkModal
-			v-if="showDeleteModal && selectedLink"
-			:link="selectedLink"
-			@close="showDeleteModal = false"
-			@confirm="deleteLink"/>
-
-		<StatsModal
-			v-if="showStatsModal && selectedLink"
-			:link="selectedLink"
-			@close="showStatsModal = false"/>
-
-		<import-links-modal
-			v-if="showImportModal"
-			@close="showImportModal = false"
-			@import="importLinks"/>
 	</div>
+
+	<!-- Модальные окна -->
+	<CreateLinkModal v-if="showCreateModal" @close="showCreateModal = false" @create="createLink" />
+
+	<EditLinkModal v-if="showEditModal && selectedLink" :link="selectedLink" @close="showEditModal = false"
+		@save="updateLink" />
+
+	<DeleteLinkModal v-if="showDeleteModal && selectedLink" :link="selectedLink" @close="showDeleteModal = false"
+		@confirm="deleteLink" />
+
+	<StatsModal v-if="showStatsModal && selectedLink" :link="selectedLink" @close="showStatsModal = false" />
+
+	<import-links-modal v-if="showImportModal" @close="showImportModal = false" @import="importLinks" />
 </template>
 
 <script setup lang="ts">
@@ -618,7 +364,55 @@ interface TimePeriod {
 }
 
 // Хук для проверки аутентификации
-const { isAuthenticated } = useAuth();
+const { isAuthenticated, isPremium } = useAuth();
+
+// Ограничения для бесплатных аккаунтов
+const FREE_LIMITS = {
+	maxLinks: 10,            // Максимальное количество ссылок
+	maxMetrics: 3,           // Базовые метрики
+	historyDays: 7,          // История за 7 дней
+	noAdvancedAnalytics: true // Нет доступа к расширенной аналитике
+};
+
+// Проверяем, превышен ли лимит для бесплатного аккаунта
+const isLinkLimitExceeded = computed(() => {
+	if (isPremium.value) return false;
+	return (filteredLinks.value.length >= FREE_LIMITS.maxLinks);
+});
+
+// Ограничиваем список ссылок для бесплатных пользователей
+const accessibleLinks = computed(() => {
+	if (isPremium.value) return filteredLinks.value;
+
+	// Для неавторизованных и бесплатных аккаунтов - ограничиваем
+	return filteredLinks.value.slice(0, FREE_LIMITS.maxLinks);
+});
+
+// Ограничиваем данные графиков для бесплатных пользователей
+const getChartLimitedData = (data: any[], limit = 7) => {
+	if (isPremium.value) return data;
+	return data.slice(0, limit);
+};
+
+// Проверяем доступ к функционалу
+const canAccessFeature = (feature: string): boolean => {
+	if (isPremium.value) return true;
+
+	switch (feature) {
+		case 'bulkOperations':
+		case 'export':
+		case 'advancedAnalytics':
+		case 'geoData':
+		case 'customDomain':
+		case 'apiAccess':
+			return false;
+		case 'basicStats':
+		case 'simpleSharing':
+			return true;
+		default:
+			return false;
+	}
+};
 
 // Состояние загрузки данных
 const loading = ref(true);
@@ -734,7 +528,13 @@ const summary = reactive<SummaryData>({
 	ctrTrend: -2,
 	ctrSparkline: [3.2, 4.5, 4.2, 3.8, 3.5, 3.3, 3.7],
 	activeLinksTrend: 0,
-	activeLinksSparkline: [8, 12, 15, 14, 15, 18, 18]
+	activeLinksSparkline: [8, 12, 15, 14, 15, 18, 18],
+	conversionRate: 3.8,
+	conversionTrend: 1.5,
+	conversionSparkline: [3.5, 3.8, 3.6, 3.9, 4.0, 3.8, 4.2],
+	uniqueVisitors: 825,
+	visitorsTrend: 15,
+	visitorsSparkline: [120, 150, 180, 230, 270, 310, 350]
 });
 
 // Массив ссылок
@@ -750,10 +550,20 @@ const hasActiveFilters = computed(() => {
 	return filters.status !== 'all' || filters.startDate || filters.endDate || filters.tags.length > 0 || filters.project;
 });
 
+// Добавим счетчик активных фильтров
+const activeFiltersCount = computed(() => {
+	let count = 0;
+	if (filters.status !== 'all') count++;
+	if (filters.startDate || filters.endDate) count++;
+	if (filters.tags.length > 0) count++;
+	if (filters.project) count++;
+	return count;
+});
+
 // Функция для получения названия проекта по ID
 const getProjectName = (projectId: string): string => {
 	const project = availableProjects.value.find(p => p.id === projectId);
-	return project ? project.name : 'Неизвестный проект';
+	return project ? project.name : 'Unknown project';
 };
 
 // Фильтрация ссылок
@@ -1296,7 +1106,7 @@ const openImportModal = () => {
 
 const exportLinks = () => {
 	// Экспорт выбранных ссылок
-	toastStore.success('Выбранные ссылки успешно экспортированы');
+	toastStore.success('Selected links exported successfully');
 	showImportExport.value = false;
 };
 
@@ -1310,7 +1120,7 @@ const exportAllLinks = () => {
 	downloadAnchorNode.click();
 	downloadAnchorNode.remove();
 
-	toastStore.success('Все ссылки успешно экспортированы');
+	toastStore.success('All links exported successfully');
 	showImportExport.value = false;
 };
 
