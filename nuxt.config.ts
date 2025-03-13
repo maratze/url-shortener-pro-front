@@ -16,7 +16,15 @@ export default defineNuxtConfig({
         '@nuxtjs/tailwindcss',
         '@pinia/nuxt',
         '@nuxtjs/color-mode',
+        '@sidebase/nuxt-auth'
     ],
+
+    auth: {
+        provider: {
+            type: 'authjs',
+        },
+        globalAppMiddleware: false
+    },
 
     colorMode: {
         classSuffix: '',
@@ -47,6 +55,9 @@ export default defineNuxtConfig({
 
     runtimeConfig: {
         apiSecret: process.env.API_SECRET,
+        googleClientId: process.env.GOOGLE_CLIENT_ID,
+        googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        authSecret: process.env.AUTH_SECRET || 'your-development-secret-key',
 
         public: {
             apiBase: process.env.API_BASE_URL || 'https://localhost:7095',

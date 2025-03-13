@@ -1,5 +1,5 @@
 import { $fetch } from 'ohmyfetch'
-import type { RegisterRequest, LoginRequest, UserResponse } from '~/types/auth'
+import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest } from '~/types/auth'
 
 // Добавляем функцию для получения базового URL API
 const getApiBaseUrl = () => {
@@ -81,6 +81,22 @@ export const userApi = {
         } catch (error) {
             console.error('Error checking email availability:', error);
             throw new Error('Failed to check email availability')
+        }
+    },
+
+    loginWithOAuth: async (oauthData: OAuthRequest): Promise<UserResponse> => {
+        try {
+            const apiBaseUrl = getApiBaseUrl();
+            console.log(`Making OAuth API request to ${apiBaseUrl}/api/users/oauth/${oauthData.provider}`);
+
+            return await $fetch(`${apiBaseUrl}/api/users/oauth/${oauthData.provider}`, {
+                method: 'POST',
+                body: oauthData
+            })
+        } catch (error: any) {
+            console.error('OAuth login error:', error);
+            const message = error.response?._data?.message || 'Error during OAuth authentication'
+            throw new Error(message)
         }
     }
 }

@@ -6,6 +6,14 @@ export interface RegisterRequest {
 export interface LoginRequest {
     email: string;
     password: string;
+    remember?: boolean;
+}
+
+export interface OAuthRequest {
+    provider: string;
+    token: string;
+    email?: string;
+    name?: string;
 }
 
 export interface UserResponse {

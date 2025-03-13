@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { userApi } from '~/services/api/userApi'
-import type { RegisterRequest, LoginRequest, UserResponse } from '~/types/auth'
+import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest } from '~/types/auth'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -19,6 +19,23 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await userApi.register(userData)
 
+                // Просто возвращаем ответ от API без авторизации
+                return response
+            } catch (error: any) {
+                this.error = error.message
+                throw error
+            } finally {
+                this.loading = false
+            }
+        },
+
+        async login(loginData: LoginRequest) {
+            this.loading = true
+            this.error = ''
+
+            try {
+                const response = await userApi.login(loginData)
+
                 this.user = response
                 this.token = response.token
                 this.isAuthenticated = true
@@ -35,12 +52,12 @@ export const useAuthStore = defineStore('auth', {
             }
         },
 
-        async login(loginData: LoginRequest) {
+        async loginWithOAuth(oauthData: OAuthRequest) {
             this.loading = true
             this.error = ''
 
             try {
-                const response = await userApi.login(loginData)
+                const response = await userApi.loginWithOAuth(oauthData)
 
                 this.user = response
                 this.token = response.token

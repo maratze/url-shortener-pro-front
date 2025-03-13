@@ -1,13 +1,13 @@
 import { computed } from 'vue';
 import { useAuthStore } from '~/stores/auth';
-import type { LoginRequest, RegisterRequest, UserResponse } from '~/types/auth';
+import type { LoginRequest, RegisterRequest, UserResponse, OAuthRequest } from '~/types/auth';
 
 /**
  * Хук для работы с аутентификацией пользователя
  * В реальном приложении здесь будет полноценная логика с JWT-токенами, 
  * сессиями и обращениями к API
  */
-export const useAuth = () => {
+export const useAuthService = () => {
     // Получаем хранилище аутентификации
     const authStore = useAuthStore();
 
@@ -60,6 +60,20 @@ export const useAuth = () => {
     };
 
     /**
+     * Функция для аутентификации через OAuth
+     * @param oauthData Данные для OAuth аутентификации
+     * @returns Результат OAuth аутентификации
+     */
+    const loginWithOAuth = async (oauthData: OAuthRequest) => {
+        try {
+            const result = await authStore.loginWithOAuth(oauthData);
+            return { success: true, user: result };
+        } catch (error: any) {
+            return { success: false, error: error.message };
+        }
+    };
+
+    /**
      * Проверка статуса аутентификации
      * @returns Обещание с результатом проверки
      */
@@ -86,6 +100,7 @@ export const useAuth = () => {
         login,
         logout,
         register,
+        loginWithOAuth,
         checkAuthStatus
     };
 }; 

@@ -326,7 +326,7 @@ import { ref, reactive, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import type { LinkData, SummaryData } from '~/types/link';
 import { useDeviceFingerprint } from '~/composables/useDeviceFingerprint';
 import { useToastStore } from '~/stores/toast';
-import { useAuth } from '~/composables/useAuth';
+import { useAuthService } from '~/composables/useAuth';
 import Preloader from '~/components/common/Preloader.vue';
 
 // Импортируем компоненты
@@ -364,7 +364,7 @@ interface TimePeriod {
 }
 
 // Хук для проверки аутентификации
-const { isAuthenticated, isPremium } = useAuth();
+const { isAuthenticated, isPremium } = useAuthService();
 
 // Ограничения для бесплатных аккаунтов
 const FREE_LIMITS = {
