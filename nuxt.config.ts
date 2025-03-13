@@ -1,53 +1,67 @@
 export default defineNuxtConfig({
-  ssr: true,
-  devtools: { enabled: true },
+    ssr: true,
+    devtools: { enabled: true },
 
-  typescript: {
-      strict: true,
-      typeCheck: true
-  },
+    typescript: {
+        strict: true,
+        typeCheck: true
+    },
 
-  css: [
-      '~/assets/css/main.css',
-      '~/assets/css/global.css'
-  ],
+    css: [
+        '~/assets/css/main.css',
+        '~/assets/css/global.css'
+    ],
 
-  modules: [
-      '@nuxtjs/tailwindcss',
-      '@pinia/nuxt',
-      '@nuxtjs/color-mode',
-  ],
+    modules: [
+        '@nuxtjs/tailwindcss',
+        '@pinia/nuxt',
+        '@nuxtjs/color-mode',
+    ],
 
-  colorMode: {
-      classSuffix: '',
-      preference: 'system', // default theme
-      dataValue: 'theme', // data-theme attribute
-      fallback: 'light'
-  },
+    colorMode: {
+        classSuffix: '',
+        preference: 'system', // default theme
+        dataValue: 'theme', // data-theme attribute
+        fallback: 'light'
+    },
 
-  app: {
-      head: {
-          title: 'TinyLink - Shorten Your URLs',
-          meta: [
-              { charset: 'utf-8' },
-              { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-              {
-                  hid: 'description',
-                  name: 'description',
-                  content: 'Shorten your URLs quickly and securely with TinyLink. Simple, fast, and reliable URL shortening service.'
-              }
-          ],
-          link: [
-              { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-          ]
-      }
-  },
+    app: {
+        head: {
+            title: 'TinyLink - Shorten Your URLs',
+            meta: [
+                { charset: 'utf-8' },
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                {
+                    hid: 'description',
+                    name: 'description',
+                    content: 'Shorten your URLs quickly and securely with TinyLink. Simple, fast, and reliable URL shortening service.'
+                }
+            ],
+            link: [
+                { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+            ]
+        }
+    },
 
-  runtimeConfig: {
-      public: {
-          apiBase: process.env.API_BASE_URL || 'https://localhost:7095'
-      }
-  },
+    compatibilityDate: '2025-03-04',
 
-  compatibilityDate: '2025-03-04'
+    runtimeConfig: {
+        apiSecret: process.env.API_SECRET,
+
+        public: {
+            apiBase: process.env.API_BASE_URL || 'https://localhost:7095',
+            baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+        }
+    },
+
+    nitro: {
+        devProxy: {
+            '/api': {
+                target: process.env.API_BASE_URL || 'https://localhost:7095',
+                changeOrigin: true,
+                secure: false,
+                ws: true
+            }
+        }
+    }
 })
