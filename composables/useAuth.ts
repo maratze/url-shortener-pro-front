@@ -1,36 +1,52 @@
 import { computed } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import type { LoginRequest, RegisterRequest, UserResponse, OAuthRequest } from '~/types/auth';
+import { useAuth } from '#imports';
 
 /**
- * Хук для работы с аутентификацией пользователя
- * В реальном приложении здесь будет полноценная логика с JWT-токенами, 
- * сессиями и обращениями к API
+ * Композабл для работы с аутентификацией
+ * Объединяет работу с Auth.js/NextAuth и нашим кастомным API
  */
 export const useAuthService = () => {
-    // Получаем хранилище аутентификации
+    const { data: session, status, signOut } = useAuth();
     const authStore = useAuthStore();
 
-    // Флаг аутентификации пользователя - используем computed, чтобы реагировать на изменения
-    const isAuthenticated = computed(() => authStore.isAuthenticated);
-
-    // Текущий пользователь
-    const user = computed(() => authStore.user);
-
-    // Флаг загрузки
-    const loading = computed(() => authStore.loading);
-
-    // Проверка на премиум статус
-    const isPremium = computed(() => authStore.isAuthenticated && authStore.user?.isPremium);
+    /**
+     * Статус аутентификации на основе Auth.js и пользовательского API
+     */
+    const isAuthenticated = computed(() => {
+        return authStore.isAuthenticated || (status.value === 'authenticated');
+    });
 
     /**
-     * Функция для входа пользователя
-     * @param credentials Данные для входа (email и пароль)
+     * Данные пользователя, объединенные из всех источников
+     */
+    const user = computed(() => {
+        return authStore.user || session.value?.user;
+    });
+
+    /**
+     * Имеет ли пользователь премиум статус
+     */
+    const isPremium = computed(() => {
+        return !!authStore.user?.isPremium;
+    });
+
+    /**
+     * Статус загрузки
+     */
+    const loading = computed(() => {
+        return authStore.loading || status.value === 'loading';
+    });
+
+    /**
+     * Функция для входа в систему
+     * @param loginData Данные для входа
      * @returns Результат входа
      */
-    const login = async (credentials: LoginRequest) => {
+    const login = async (loginData: LoginRequest) => {
         try {
-            const result = await authStore.login(credentials);
+            const result = await authStore.login(loginData);
             return { success: true, user: result };
         } catch (error: any) {
             return { success: false, error: error.message };
@@ -38,11 +54,20 @@ export const useAuthService = () => {
     };
 
     /**
-     * Функция для выхода пользователя
+     * Функция для выхода из системы
      */
     const logout = async () => {
-        authStore.logout();
-        return { success: true };
+        try {
+            // Сначала выходим из нашего API хранилища
+            await authStore.logout();
+
+            // Затем из Auth.js
+            await signOut({ callbackUrl: '/' });
+
+            return { success: true };
+        } catch (error: any) {
+            return { success: false, error: error.message };
+        }
     };
 
     /**
@@ -79,10 +104,21 @@ export const useAuthService = () => {
      */
     const checkAuthStatus = async () => {
         try {
-            const user = await authStore.fetchCurrentUser();
+            // Сначала проверяем сессию Auth.js
+            if (status.value === 'authenticated' && session.value) {
+                // Для NextAuth, токен обычно не доступен напрямую в session
+                // Можно использовать JWT из cookies или полагаться на встроенную аутентификацию NextAuth
+
+                // Получаем полные данные пользователя с нашего API
+                await authStore.fetchCurrentUser();
+            } else {
+                // Если сессии нет, проверяем наш API
+                await authStore.fetchCurrentUser();
+            }
+
             return {
-                isAuthenticated: authStore.isAuthenticated,
-                user: user
+                isAuthenticated: isAuthenticated.value,
+                user: user.value
             };
         } catch (error) {
             return {
@@ -103,4 +139,4 @@ export const useAuthService = () => {
         loginWithOAuth,
         checkAuthStatus
     };
-}; 
+};

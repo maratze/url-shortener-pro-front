@@ -1,13 +1,20 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-    // Get the authentication status from the auth store
-    const authStore = useAuthStore();
+import { useAuthStore } from "~/stores/auth";
+import { useAuth } from "#imports";
 
-    // If the user is not authenticated and is trying to access a protected route
-    if (!authStore.isAuthenticated) {
-        // Redirect to the login page with a redirect back to the original route
+export default defineNuxtRouteMiddleware(async (to, from) => {
+    // Получаем статус аутентификации из Auth.js и нашего хранилища
+    const authStore = useAuthStore();
+    const { status } = useAuth();
+
+    // Проверяем статус аутентификации - используем .value для получения значения из ComputedRef
+    const isAuthenticated = authStore.isAuthenticated || status.value === 'authenticated';
+
+    // Если пользователь не аутентифицирован и пытается получить доступ к защищенному маршруту
+    if (!isAuthenticated) {
+        // Перенаправляем на страницу входа с редиректом обратно на исходный маршрут
         return navigateTo({
             path: '/login',
             query: { redirect: to.fullPath }
         });
     }
-});
+}); 

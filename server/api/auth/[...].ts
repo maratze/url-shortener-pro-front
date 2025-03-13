@@ -8,7 +8,7 @@ const config = useRuntimeConfig()
 export default NuxtAuthHandler({
   // Секрет для шифрования cookies и JWT
   secret: config.authSecret,
-  
+
   providers: [
     // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
     GoogleProvider.default({
@@ -22,76 +22,91 @@ export default NuxtAuthHandler({
         }
       }
     }),
-    
+
     // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
     CredentialsProvider.default({
-      name: 'credentials',
+      // Настройка формы авторизации (не используется в нашем кейсе, т.к. у нас своя форма)
+      name: 'Credentials',
       credentials: {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' }
       },
-      async authorize(credentials: any) {
-        // Здесь можно интегрировать с существующей системой авторизации
-        // Это позволит использовать как OAuth, так и обычную авторизацию
-        
-        try {
-          // Для тестирования
-          if (credentials.email === 'admin@example.com' && credentials.password === 'password') {
-            return {
-              id: '1',
-              name: 'Admin User',
-              email: 'admin@example.com'
-            }
-          }
-          
-          // В реальной интеграции здесь должен быть запрос к API
-          // const url = `${config.public.apiBase}/api/users/login`
-          // const response = await fetch(url, {
-          //   method: 'POST',
-          //   headers: { 'Content-Type': 'application/json' },
-          //   body: JSON.stringify(credentials)
-          // })
-          
-          // if (!response.ok) {
-          //   throw new Error('Invalid credentials')
-          // }
-          
-          // const user = await response.json()
-          // return user
-          
-          return null
-        } catch (error) {
-          console.error('Authentication error:', error)
-          return null
-        }
+      async authorize(credentials: { email: string, password: string }) {
+        // Логика авторизации по email/паролю
+        // В нашем случае мы не используем этот метод, т.к. у нас свои формы авторизации
+        return null
       }
     })
   ],
-  
-  // Настройка сессии и JWT
-  session: {
-    strategy: 'jwt'
-  },
-  
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.user = user
-      }
-      return token
-    },
-    async session({ session, token }) {
-      if (token.user) {
-        session.user = token.user as any
-      }
-      return session
-    }
-  },
-  
+
+  // Настройка страниц для авторизации
   pages: {
     signIn: '/login',
     signOut: '/',
-    error: '/login',
-    newUser: '/register'
+    error: '/login', // Ошибки авторизации
+  },
+
+  // Настройка коллбэков
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      if (account?.provider === 'google') {
+        try {
+          // Отправляем данные в наш API для обработки
+          const apiBaseUrl = config.public.apiBase || 'https://localhost:7095';
+
+          // Создаем запрос для нашего API
+          const response = await fetch(`${apiBaseUrl}/api/users/oauth/google`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              provider: 'google',
+              token: account.access_token,
+              email: profile?.email,
+              name: profile?.name
+            }),
+          });
+
+          if (!response.ok) {
+            console.error('Ошибка при обработке Google OAuth:', await response.text());
+            return false;
+          }
+
+          const data = await response.json();
+
+          // Добавляем токен к пользователю чтобы использовать его в приложении
+          // @ts-ignore - добавляем свойство token к объекту user
+          user.token = data.token;
+
+          return true;
+        } catch (error) {
+          console.error('Ошибка при входе через Google:', error);
+          return false;
+        }
+      }
+
+      return true;
+    },
+
+    async session({ session, token }) {
+      // Добавляем токен и другие данные в сессию
+      if (token.token) {
+        // @ts-ignore - добавляем свойство token к объекту session
+        session.token = token.token;
+      }
+
+      return session;
+    },
+
+    async jwt({ token, user, account }) {
+      // Сохраняем токен и другие данные в JWT
+      if (user) {
+        // @ts-ignore - читаем свойство token из объекта user
+        token.token = user.token;
+      }
+
+      return token;
+    }
   }
 }) 

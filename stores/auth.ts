@@ -52,6 +52,12 @@ export const useAuthStore = defineStore('auth', {
             }
         },
 
+        setToken(token: string) {
+            this.token = token
+            localStorage.setItem('token', token)
+            this.isAuthenticated = true
+        },
+
         async loginWithOAuth(oauthData: OAuthRequest) {
             this.loading = true
             this.error = ''
