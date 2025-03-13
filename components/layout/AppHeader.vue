@@ -21,9 +21,9 @@
 
 				<!-- Центральная часть: Навигация -->
 				<nav class="hidden md:flex items-center justify-center space-x-6">
-					<NuxtLink to="/analytics" class="nav-link" active-class="router-link-active">Analytics</NuxtLink>
-					<NuxtLink to="/pricing" class="nav-link" active-class="router-link-active">Pricing</NuxtLink>
-					<NuxtLink to="/about" class="nav-link" active-class="router-link-active">About</NuxtLink>
+					<NuxtLink v-if="authStore.isAuthenticated" to="/analytics" class="nav-link" active-class="router-link-active">Analytics</NuxtLink>
+					<NuxtLink v-if="!authStore.isAuthenticated" to="/pricing" class="nav-link" active-class="router-link-active">Pricing</NuxtLink>
+					<NuxtLink v-if="!authStore.isAuthenticated" to="/about" class="nav-link" active-class="router-link-active">About</NuxtLink>
 				</nav>
 
 				<!-- Правая часть: Кнопки авторизации или Меню пользователя -->
@@ -46,16 +46,16 @@
 				<nav class="px-4 py-6 space-y-4">
 					<div class="border-t dark:border-slate-700"></div>
 					<!-- Мобильное меню -->
-					<NuxtLink to="/analytics" class="mobile-nav-link"
+					<NuxtLink v-if="authStore.isAuthenticated" to="/analytics" class="mobile-nav-link"
 						active-class="text-purple-600 dark:text-purple-400 font-semibold"
 						@click="mobileMenuOpen = false">
 						Analytics</NuxtLink>
-					<NuxtLink to="/pricing" class="mobile-nav-link"
+					<NuxtLink v-if="!authStore.isAuthenticated" to="/pricing" class="mobile-nav-link"
 						active-class="text-purple-600 dark:text-purple-400 font-semibold"
 						@click="mobileMenuOpen = false">
 						Pricing
 					</NuxtLink>
-					<NuxtLink to="/about" class="mobile-nav-link"
+					<NuxtLink v-if="!authStore.isAuthenticated" to="/about" class="mobile-nav-link"
 						active-class="text-purple-600 dark:text-purple-400 font-semibold"
 						@click="mobileMenuOpen = false">About
 					</NuxtLink>

@@ -41,18 +41,18 @@
 				<div>
 					<h4 class="text-lg font-medium text-slate-900 dark:text-white mb-4">Product</h4>
 					<ul class="space-y-2 text-sm">
-						<li>
-							<NuxtLink to="/features" class="footer-link">Features</NuxtLink>
-						</li>
+<!--						<li>-->
+<!--							<NuxtLink to="/features" class="footer-link">Features</NuxtLink>-->
+<!--						</li>-->
 						<li>
 							<NuxtLink to="/pricing" class="footer-link">Pricing</NuxtLink>
 						</li>
-						<li>
-							<NuxtLink to="/api" class="footer-link">API</NuxtLink>
-						</li>
-						<li>
-							<NuxtLink to="/integrations" class="footer-link">Integrations</NuxtLink>
-						</li>
+<!--						<li>-->
+<!--							<NuxtLink to="/api" class="footer-link">API</NuxtLink>-->
+<!--						</li>-->
+<!--						<li>-->
+<!--							<NuxtLink to="/integrations" class="footer-link">Integrations</NuxtLink>-->
+<!--						</li>-->
 					</ul>
 				</div>
 
@@ -62,15 +62,15 @@
 						<li>
 							<NuxtLink to="/blog" class="footer-link">Blog</NuxtLink>
 						</li>
-						<li>
-							<NuxtLink to="/documentation" class="footer-link">Documentation</NuxtLink>
-						</li>
-						<li>
-							<NuxtLink to="/support" class="footer-link">Support</NuxtLink>
-						</li>
-						<li>
-							<NuxtLink to="/status" class="footer-link">Status</NuxtLink>
-						</li>
+<!--						<li>-->
+<!--							<NuxtLink to="/documentation" class="footer-link">Documentation</NuxtLink>-->
+<!--						</li>-->
+<!--						<li>-->
+<!--							<NuxtLink to="/support" class="footer-link">Support</NuxtLink>-->
+<!--						</li>-->
+<!--						<li>-->
+<!--							<NuxtLink to="/status" class="footer-link">Status</NuxtLink>-->
+<!--						</li>-->
 					</ul>
 				</div>
 
@@ -80,9 +80,9 @@
 						<li>
 							<NuxtLink to="/about" class="footer-link">About</NuxtLink>
 						</li>
-						<li>
-							<NuxtLink to="/careers" class="footer-link">Careers</NuxtLink>
-						</li>
+<!--						<li>-->
+<!--							<NuxtLink to="/careers" class="footer-link">Careers</NuxtLink>-->
+<!--						</li>-->
 						<li>
 							<NuxtLink to="/privacy" class="footer-link">Privacy Policy</NuxtLink>
 						</li>
