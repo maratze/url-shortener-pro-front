@@ -15,10 +15,18 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import { useTheme } from '~/composables/useTheme';
 
-// Инициализируем тему при загрузке приложения
-const { initTheme } = useTheme();
+useHead({
+	style: [{
+		children: `
+		html.not-ready body {
+			opacity: 0;
+      	}
+      	body {
+        	transition: opacity 0.2s ease;
+      	}`
+	}]
+});
 
 onMounted(() => {
 	document.title = 'TinyLink - Shorten Your URLs';
@@ -51,10 +59,6 @@ onMounted(() => {
 		meta.setAttribute('property', 'og:description');
 		meta.content = 'Create short, memorable links with TinyLink URL shortener.';
 		document.head.appendChild(meta);
-	}
-
-	if (process.client) {
-		initTheme();
 	}
 })
 </script>

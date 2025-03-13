@@ -1,68 +1,86 @@
-import { defineStore } from 'pinia';
-import type { User, LoginRequest, RegisterRequest, AuthResponse } from '~/types/auth';
-
-interface AuthState {
-    user: User | null;
-    token: string | null;
-    loading: boolean;
-    error: string | null;
-}
+import { defineStore } from 'pinia'
+import { userApi } from '~/services/api/userApi'
+import type { RegisterRequest, LoginRequest, UserResponse } from '~/types/auth'
 
 export const useAuthStore = defineStore('auth', {
-    state: (): AuthState => ({
-        user: null,
-        token: null,
+    state: () => ({
+        user: null as UserResponse | null,
+        token: '',
+        error: '',
         loading: false,
-        error: null
+        isAuthenticated: false
     }),
 
-    getters: {
-        isAuthenticated(): boolean {
-            return !!this.token;
-        },
-        isPremium(): boolean {
-            return this.user?.isPremium || false;
-        }
-    },
-
     actions: {
-        // Placeholder functions for future implementation
-        async login(credentials: LoginRequest): Promise<void> {
-            this.loading = true;
-            this.error = null;
+        async register(userData: RegisterRequest) {
+            this.loading = true
+            this.error = ''
 
             try {
-                // Placeholder for API integration
-                // const response = await fetch(`${apiBaseUrl}/api/auth/login`, {...});
-                // const data: AuthResponse = await response.json();
+                const response = await userApi.register(userData)
 
-                // For now, just set a placeholder message
-                this.error = "Authentication functionality is not yet implemented";
+                this.user = response
+                this.token = response.token
+                this.isAuthenticated = true
+
+                // Сохранение токена
+                localStorage.setItem('token', response.token)
+
+                return response
             } catch (error: any) {
-                this.error = error.message;
+                this.error = error.message
+                throw error
             } finally {
-                this.loading = false;
+                this.loading = false
             }
         },
 
-        async register(userData: RegisterRequest): Promise<void> {
-            this.loading = true;
-            this.error = null;
+        async login(loginData: LoginRequest) {
+            this.loading = true
+            this.error = ''
 
             try {
-                // Placeholder for API integration
-                this.error = "Registration functionality is not yet implemented";
+                const response = await userApi.login(loginData)
+
+                this.user = response
+                this.token = response.token
+                this.isAuthenticated = true
+
+                // Сохранение токена
+                localStorage.setItem('token', response.token)
+
+                return response
             } catch (error: any) {
-                this.error = error.message;
+                this.error = error.message
+                throw error
             } finally {
-                this.loading = false;
+                this.loading = false
             }
         },
 
-        logout(): void {
-            this.user = null;
-            this.token = null;
-            localStorage.removeItem('auth-token');
+        async fetchCurrentUser() {
+            if (!localStorage.getItem('token')) return null
+
+            this.loading = true
+
+            try {
+                const user = await userApi.getCurrentUser()
+                this.user = user
+                this.isAuthenticated = true
+                return user
+            } catch (error) {
+                this.logout()
+                return null
+            } finally {
+                this.loading = false
+            }
+        },
+
+        logout() {
+            this.user = null
+            this.token = ''
+            this.isAuthenticated = false
+            localStorage.removeItem('token')
         }
     }
-});
+})

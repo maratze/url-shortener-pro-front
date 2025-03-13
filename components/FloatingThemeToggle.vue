@@ -1,23 +1,48 @@
 <template>
 	<button
+		v-if="ready"
 		@click="toggleDarkMode"
 		class="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:transform hover:scale-110 theme-toggle-btn"
-		:class="{ 'bg-slate-800 text-yellow-300': !isDark, 'bg-blue-100 text-slate-800': isDark }"
+		:class="{
+			'bg-slate-800 text-yellow-300': !isDark,
+			'bg-blue-100 text-slate-800': isDark
+		}"
 		aria-label="Toggle Dark Mode"
 		data-tooltip="Toggle dark mode"
-		data-tooltip-position="left">
+		data-tooltip-position="left"
+	>
+		<!-- Show sun icon when in dark mode (to switch to light) -->
 		<span v-if="isDark" class="sun-icon">
-			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-				stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-					d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="h-6 w-6"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+				/>
 			</svg>
 		</span>
+		<!-- Show moon icon when in light mode (to switch to dark) -->
 		<span v-else class="moon-icon">
-			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-				stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-					d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="h-6 w-6"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+			>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				stroke-width="2"
+				d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+			/>
 			</svg>
 		</span>
 	</button>
@@ -26,8 +51,7 @@
 <script setup lang="ts">
 import { useTheme } from '~/composables/useTheme';
 
-// Используем централизованный composable для работы с темой
-const { isDark, toggleDarkMode } = useTheme();
+const { isDark, toggleDarkMode, ready } = useTheme();
 </script>
 
 <style scoped>
@@ -60,7 +84,6 @@ const { isDark, toggleDarkMode } = useTheme();
 		transform: rotate(-180deg) scale(0.5);
 		opacity: 0;
 	}
-
 	100% {
 		transform: rotate(0deg) scale(1);
 		opacity: 1;

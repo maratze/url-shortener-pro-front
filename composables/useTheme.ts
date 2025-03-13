@@ -1,18 +1,46 @@
-import { ref, onMounted, watch } from 'vue';
-import { useLocalStorage } from '@vueuse/core';
+import { ref, onMounted, computed } from 'vue';
+
+// Use a global variable to track if initialization has occurred
+let isInitialized = false;
 
 export function useTheme() {
-    // Используем useLocalStorage для сохранения темы между сессиями
-    const isDark = useLocalStorage('dark-mode', true);
+    // Theme state
+    const isDark = ref(false);
 
-    // Функция переключения темы
-    const toggleDarkMode = () => {
-        isDark.value = !isDark.value;
+    // Track initialization state
+    const ready = ref(isInitialized);
+
+    // Read theme from localStorage or system preference
+    const initializeTheme = () => {
+        if (typeof window === 'undefined') return;
+
+        // Get the saved theme
+        const savedTheme = localStorage.getItem('theme');
+
+        // Determine what theme to use
+        if (savedTheme === 'dark') {
+            isDark.value = true;
+        } else if (savedTheme === 'light') {
+            isDark.value = false;
+        } else {
+            // Use system preference
+            isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            // Save the preference
+            localStorage.setItem('theme', isDark.value ? 'dark' : 'light');
+        }
+
+        // Apply the theme to document
         applyTheme();
+
+        // Mark as initialized
+        ready.value = true;
+        isInitialized = true;
     };
 
-    // Функция применения темы
+    // Apply theme to document
     const applyTheme = () => {
+        if (typeof window === 'undefined') return;
+
         if (isDark.value) {
             document.documentElement.classList.add('dark');
             localStorage.setItem('theme', 'dark');
@@ -22,63 +50,27 @@ export function useTheme() {
         }
     };
 
-    // Инициализация темы при загрузке компонента
-    const initTheme = () => {
-        const theme = localStorage.getItem('theme');
-        if (theme === 'light') {
-            isDark.value = false;
-        } else if (theme === 'dark') {
-            isDark.value = true;
-        } else {
-            // Если тема не задана, проверяем системные предпочтения
-            isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        }
+    // Toggle theme function
+    const toggleDarkMode = () => {
+        isDark.value = !isDark.value;
         applyTheme();
-
-        // Настраиваем слушатель изменений системных предпочтений
-        setupSystemPreferenceListener();
     };
 
-    // Настройка слушателя системных предпочтений
-    const setupSystemPreferenceListener = () => {
-        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    // Run initialization if client-side and not already initialized
+    if (typeof window !== 'undefined' && !isInitialized) {
+        initializeTheme();
+    }
 
-        // Обработчик изменения системных предпочтений
-        const handleSystemPreferenceChange = (event: MediaQueryListEvent) => {
-            // Применяем системные предпочтения, если пользователь
-            // явно выбрал следовать системным настройкам (опция "system")
-            const currentTheme = localStorage.getItem('theme');
-            if (currentTheme === 'system') {
-                isDark.value = event.matches;
-                applyTheme();
-            }
-        };
-
-        // Добавляем слушатель
-        prefersDarkScheme.addEventListener('change', handleSystemPreferenceChange);
-
-        // Возвращаем функцию для удаления слушателя
-        return () => {
-            prefersDarkScheme.removeEventListener('change', handleSystemPreferenceChange);
-        };
-    };
-
-    // Слушаем изменения в isDark и применяем тему
-    watch(isDark, () => {
-        applyTheme();
-    });
-
-    // При монтировании компонента инициализируем тему
+    // Also initialize on mount for SSR safety
     onMounted(() => {
-        if (process.client) {
-            initTheme();
+        if (!ready.value) {
+            initializeTheme();
         }
     });
 
     return {
         isDark,
         toggleDarkMode,
-        applyTheme,
-        initTheme
+        ready
     };
-} 
+}

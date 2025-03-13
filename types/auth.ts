@@ -1,27 +1,18 @@
-export interface User {
-    id: string;
+export interface RegisterRequest {
     email: string;
-    name: string;
-    role: 'free' | 'premium' | 'admin';
-    createdAt: string;
-    remainingRequests: number;
-    isPremium: boolean;
+    password: string;
 }
 
 export interface LoginRequest {
     email: string;
     password: string;
-    remember: boolean;
 }
 
-export interface RegisterRequest {
+export interface UserResponse {
+    id: number;
     email: string;
-    password: string;
-    confirmPassword: string;
-}
-
-export interface AuthResponse {
-    user: User;
+    isEmailVerified: boolean;
+    isPremium: boolean;
     token: string;
-    expiresAt: string;
+    registrationDate: string;
 }
