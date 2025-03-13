@@ -54,7 +54,6 @@ export default defineNuxtConfig({
     compatibilityDate: '2025-03-04',
 
     runtimeConfig: {
-        apiSecret: process.env.API_SECRET,
         googleClientId: process.env.GOOGLE_CLIENT_ID,
         googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
         authSecret: process.env.AUTH_SECRET || 'your-development-secret-key',
