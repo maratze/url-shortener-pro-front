@@ -1,4 +1,4 @@
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 
 // Use a global variable to track if initialization has occurred
 let isInitialized = false;

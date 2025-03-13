@@ -6,7 +6,6 @@
 		</main>
 		<AppFooter/>
 		<ToastContainer/>
-		<FloatingThemeToggle />
 	</div>
 </template>
 

@@ -1,18 +1,18 @@
 <template>
 	<button
-		v-if="ready"
-		@click="toggleDarkMode"
+		v-if="props.ready"
+		@click="props.toggleDarkMode"
 		class="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:transform hover:scale-110 theme-toggle-btn"
 		:class="{
-			'bg-slate-800 text-yellow-300': !isDark,
-			'bg-blue-100 text-slate-800': isDark
+			'bg-slate-800 text-yellow-300': !props.isDark,
+			'bg-blue-100 text-slate-800': props.isDark
 		}"
 		aria-label="Toggle Dark Mode"
 		data-tooltip="Toggle dark mode"
 		data-tooltip-position="left"
 	>
 		<!-- Show sun icon when in dark mode (to switch to light) -->
-		<span v-if="isDark" class="sun-icon">
+		<span v-if="props.isDark" class="sun-icon">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"
@@ -49,9 +49,20 @@
 </template>
 
 <script setup lang="ts">
-import { useTheme } from '~/composables/useTheme';
-
-const { isDark, toggleDarkMode, ready } = useTheme();
+const props = defineProps({
+	ready: {
+		type: Boolean,
+		default: false
+	},
+	isDark: {
+		type: Boolean,
+		default: false
+	},
+	toggleDarkMode: {
+		type: Function as PropType<(payload: MouseEvent) => void>,
+		default: () => {}
+	}
+})
 </script>
 
 <style scoped>

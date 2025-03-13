@@ -1,32 +1,31 @@
 <template>
-	<div class="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950 transition-colors duration-300">
-		<div :class="{ 'opacity-0': isLoading }">
-			<NuxtLayout>
-				<div
-					class="from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950 transition-colors duration-300">
-					<main class="pt-[74px]">
-						<NuxtPage />
-					</main>
-				</div>
-			</NuxtLayout>
-		</div>
+	<div 
+		v-if="ready"
+		class="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950 transition-colors duration-300"
+	>
+		<FloatingThemeToggle
+			:isDark="isDark"
+			:toggleDarkMode="toggleDarkMode"
+			:ready="ready"
+		/>
+		
+		<NuxtLayout>
+			<div
+				class="from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950 transition-colors duration-300">
+				<main class="pt-[74px]">
+					<NuxtPage />
+				</main>
+			</div>
+		</NuxtLayout>
 	</div>
 </template>
 
 <script setup>
 import { onMounted } from 'vue';
+import { useTheme } from '~/composables/useTheme.js';
+import FloatingThemeToggle from '~/components/FloatingThemeToggle.vue';
 
-useHead({
-	style: [{
-		children: `
-		html.not-ready body {
-			opacity: 0;
-      	}
-      	body {
-        	transition: opacity 0.2s ease;
-      	}`
-	}]
-});
+const { isDark, toggleDarkMode, ready } = useTheme();
 
 onMounted(() => {
 	document.title = 'TinyLink - Shorten Your URLs';
