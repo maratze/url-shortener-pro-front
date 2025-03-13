@@ -412,7 +412,7 @@
 							QR Code
 						</button>
 						<button
-							style="display: none;"
+							v-if="false"
 							@click="exportData"
 							class="px-3 py-1.5 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none flex items-center text-sm"
 							title="Export analytics data as CSV or JSON">

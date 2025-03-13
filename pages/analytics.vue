@@ -257,7 +257,7 @@
 					</div>
 
 					<!-- Фильтры -->
-					<div class="relative" style="display: none;">
+					<div class="relative" v-if="false">
 						<button @click="toggleFilters"
 							class="filters-button p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
 							:class="{ 'filter-active': hasActiveFilters }" title="Filters">
@@ -379,7 +379,7 @@
 					</div>
 
 					<!-- Настройки таблицы -->
-					<div style="display: none;">
+					<div v-if="false">
 						<TableSettings ref="settingsMenuRef" :columns="tableColumns" :is-compact="isCompactTable"
 							:show-borders="showTableBorders" :show-stripes="showTableStripes"
 							@toggle-column="toggleColumn"
@@ -389,7 +389,7 @@
 					</div>
 
 					<!-- Импорт/Экспорт (для авторизованных) -->
-					<div v-if="isAuthenticated" class="relative" style="display: none;">
+					<div v-if="false && isAuthenticated" class="relative">
 						<button @click="toggleImportExport"
 							class="import-export-button p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center"
 							title="Import/Export">
