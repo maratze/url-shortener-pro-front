@@ -168,10 +168,11 @@
 import { useAuthStore } from '~/stores/auth';
 import { useToastStore } from '~/stores/toast';
 import type { LoginRequest, OAuthRequest } from "~/types/auth";
-import { useAuth } from "#imports";
+import { useAuthService } from '~/composables/useAuthService';
 
 const authStore = useAuthStore();
 const toastStore = useToastStore();
+const { login } = useAuthService();
 
 const loading = ref(false);
 const showPassword = ref(false);
@@ -231,6 +232,7 @@ const handleSubmit = async () => {
 	if (!validateForm()) return;
 
 	loading.value = true;
+	clearErrors();
 
 	try {
 		await authStore.login({
@@ -243,8 +245,13 @@ const handleSubmit = async () => {
 			errors.general = authStore.error;
 			toastStore.error(authStore.error);
 		} else if (authStore.isAuthenticated) {
+			// Используем setTimeout, чтобы уведомление появилось после перехода на новую страницу
 			toastStore.success('Successfully logged in! Welcome back.');
-			navigateTo('/analytics');
+
+			// Небольшая задержка перед редиректом для отображения уведомления
+			setTimeout(() => {
+				navigateTo('/analytics');
+			}, 300);
 		}
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : 'Failed to log in. Please try again.';
@@ -260,18 +267,16 @@ const handleGoogleLogin = async () => {
 	loading.value = true;
 
 	try {
-		// Используем Auth.js / NextAuth для OAuth
-		// Получаем функцию signIn из useAuth
-		const { signIn } = useAuth();
+		// Временное решение - сообщение о недоступности функции
+		toastStore.info('Google authentication is currently not available in this version.');
 
-		// Используем встроенный signIn метод
-		await signIn('google', {
-			callbackUrl: '/analytics'
-		});
+		// В будущем можно реализовать через собственный API:
+		// const response = await authStore.loginWithOAuth({
+		//     provider: 'google',
+		//     redirectUrl: window.location.origin + '/auth/callback/google'
+		// } as OAuthRequest);
 
-		toastStore.success('Successfully logged in with Google');
-
-		// Редирект произойдет автоматически после успешной аутентификации
+		loading.value = false;
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : 'Не удалось войти через Google. Пожалуйста, попробуйте снова.';
 		errors.general = errorMessage;

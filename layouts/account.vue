@@ -1,13 +1,11 @@
 <template>
     <div
-		class="flex flex-col min-h-screen"
-	>
-		<FloatingThemeToggle
-			:isDark="isDark"
-			:toggleDarkMode="toggleDarkMode"
-			:ready="ready"
-		/>
-		
+        class="flex flex-col min-h-screen">
+        <FloatingThemeToggle
+            :isDark="isDark"
+            :toggleDarkMode="toggleDarkMode"
+            :ready="ready" />
+
         <!-- Header -->
         <AppHeader />
 
@@ -18,7 +16,8 @@
                     <!-- Sidebar with navigation -->
                     <div class="lg:col-span-1">
                         <div class="sticky">
-                            <div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-4">
+                            <div
+                                class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-4">
                                 <h2 class="text-lg font-medium text-slate-900 dark:text-white mb-4">Settings</h2>
                                 <nav class="space-y-1">
                                     <NuxtLink to="/account" class="flex items-center px-3 py-2 text-sm rounded-lg"
@@ -79,8 +78,6 @@
 
         <!-- Footer -->
         <AppFooter />
-		
-		<ToastContainer/>
     </div>
 </template>
 
@@ -88,7 +85,6 @@
 // Основной функционал по управлению авторизацией перенесем в AppHeader
 import AppHeader from '~/components/layout/AppHeader.vue';
 import AppFooter from '~/components/layout/AppFooter.vue';
-import ToastContainer from '~/components/common/ToastContainer.vue';
 import FloatingThemeToggle from '~/components/FloatingThemeToggle.vue';
 import { useTheme } from '~/composables/useTheme.js';
 import { onMounted } from 'vue';
@@ -97,6 +93,6 @@ const { isDark, toggleDarkMode, ready } = useTheme();
 const isMounted = ref(false)
 
 onMounted(() => {
-	isMounted.value = true
+    isMounted.value = true
 })
 </script>

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { userApi } from '~/services/api/userApi'
 import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest } from '~/types/auth'
+import { getStringFromStorage, setStringInStorage, removeLocalStorage } from '~/utils/client'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -41,7 +42,7 @@ export const useAuthStore = defineStore('auth', {
                 this.isAuthenticated = true
 
                 // Сохранение токена
-                localStorage.setItem('token', response.token)
+                setStringInStorage('token', response.token)
 
                 return response
             } catch (error: any) {
@@ -54,7 +55,8 @@ export const useAuthStore = defineStore('auth', {
 
         setToken(token: string) {
             this.token = token
-            localStorage.setItem('token', token)
+            // Сохранение токена
+            setStringInStorage('token', token)
             this.isAuthenticated = true
         },
 
@@ -70,7 +72,7 @@ export const useAuthStore = defineStore('auth', {
                 this.isAuthenticated = true
 
                 // Сохранение токена
-                localStorage.setItem('token', response.token)
+                setStringInStorage('token', response.token)
 
                 return response
             } catch (error: any) {
@@ -82,7 +84,10 @@ export const useAuthStore = defineStore('auth', {
         },
 
         async fetchCurrentUser() {
-            if (!localStorage.getItem('token')) return null
+            // Проверяем наличие токена
+            if (!getStringFromStorage('token') && !this.token) {
+                return null
+            }
 
             this.loading = true
 
@@ -103,7 +108,9 @@ export const useAuthStore = defineStore('auth', {
             this.user = null
             this.token = ''
             this.isAuthenticated = false
-            localStorage.removeItem('token')
+
+            // Удаление токена
+            removeLocalStorage('token')
         }
     }
 })

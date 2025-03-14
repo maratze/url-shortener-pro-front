@@ -2,52 +2,77 @@
 	<NuxtLayout>
 		<NuxtPage />
 	</NuxtLayout>
+
+	<!-- Глобальный контейнер для уведомлений -->
+	<ClientOnly>
+		<ToastContainer />
+	</ClientOnly>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
+import { onClientOnly } from '~/utils/client';
 import { useTheme } from '~/composables/useTheme.js';
-import { useAuthService } from '~/composables/useAuth';
+import { useAuthService } from '~/composables/useAuthService';
+import ToastContainer from '~/components/common/ToastContainer.vue';
 
 const isInitialized = ref(false);
 
-onMounted(async () => {
+// Функция для установки метаданных для SEO
+const setupSEOMetadata = () => {
+	// Базовые мета-данные для SEO
 	document.title = 'TinyLink - Shorten Your URLs';
 
-	const metaDescription = document.querySelector('meta[name="description"]');
-	if (metaDescription) {
-		metaDescription.setAttribute('content', 'TinyLink - fast, simple and secure URL shortener service.');
-	} else {
-		const meta = document.createElement('meta');
-		meta.name = 'description';
-		meta.content = 'TinyLink - fast, simple and secure URL shortener service.';
-		document.head.appendChild(meta);
-	}
+	// Установка мета-тегов для SEO
+	const setMetaTag = (name, content, isProperty = false) => {
+		const metaSelector = isProperty
+			? `meta[property="${name}"]`
+			: `meta[name="${name}"]`;
 
-	const ogTitle = document.querySelector('meta[property="og:title"]');
-	if (ogTitle) {
-		ogTitle.setAttribute('content', 'TinyLink - Shorten Your URLs');
-	} else {
-		const meta = document.createElement('meta');
-		meta.setAttribute('property', 'og:title');
-		meta.content = 'TinyLink - Shorten Your URLs';
-		document.head.appendChild(meta);
-	}
+		const meta = document.querySelector(metaSelector);
+		if (meta) {
+			const attrName = isProperty ? 'property' : 'name';
+			meta.setAttribute('content', content);
+		} else {
+			const newMeta = document.createElement('meta');
+			if (isProperty) {
+				newMeta.setAttribute('property', name);
+			} else {
+				newMeta.setAttribute('name', name);
+			}
+			newMeta.setAttribute('content', content);
+			document.head.appendChild(newMeta);
+		}
+	};
 
-	const ogDescription = document.querySelector('meta[property="og:description"]');
-	if (ogDescription) {
-		ogDescription.setAttribute('content', 'Create short, memorable links with TinyLink URL shortener.');
-	} else {
-		const meta = document.createElement('meta');
-		meta.setAttribute('property', 'og:description');
-		meta.content = 'Create short, memorable links with TinyLink URL shortener.';
-		document.head.appendChild(meta);
-	}
+	// Устанавливаем обычные мета-теги
+	setMetaTag('description', 'TinyLink - fast, simple and secure URL shortener service.');
+
+	// Устанавливаем Open Graph мета-теги
+	setMetaTag('og:title', 'TinyLink - Shorten Your URLs', true);
+	setMetaTag('og:description', 'Create short, memorable links with TinyLink URL shortener.', true);
+	setMetaTag('og:type', 'website', true);
+	setMetaTag('og:url', 'https://tinylink.io', true);
+};
+
+// Функции, которые выполняются после монтирования компонента
+onMounted(() => {
+	// Безопасно выполняем код, специфичный для клиента
+	onClientOnly(() => {
+		// Установка мета-тегов для SEO
+		setupSEOMetadata();
+	});
 
 	// Инициализация аутентификации
 	const { checkAuthStatus } = useAuthService();
-	await checkAuthStatus();
-	isInitialized.value = true;
+	checkAuthStatus()
+		.then(() => {
+			isInitialized.value = true;
+		})
+		.catch(error => {
+			console.error('Ошибка при инициализации аутентификации:', error);
+			isInitialized.value = true; // Все равно устанавливаем как инициализированный
+		});
 });
 </script>
 
@@ -56,6 +81,12 @@ onMounted(async () => {
 
 :root {
 	font-family: 'Inter', sans-serif;
+	--glass-bg: rgba(255, 255, 255, 0.9);
+	--glass-bg-dark: rgba(15, 23, 42, 0.9);
+	--glass-border: rgba(255, 255, 255, 0.3);
+	--glass-border-dark: rgba(30, 41, 59, 0.5);
+	--glass-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	--glass-shadow-dark: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 html {

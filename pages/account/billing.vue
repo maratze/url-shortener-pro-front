@@ -137,7 +137,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useToastStore } from '~/stores/toast';
-import { useAuthService } from '~/composables/useAuth';
+import { useAuthService } from '~/composables/useAuthService';
 
 definePageMeta({
     layout: 'account',

@@ -175,8 +175,8 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth';
 import { useToastStore } from '~/stores/toast';
+import { useAuthService } from '~/composables/useAuthService';
 import type { RegisterRequest } from "~/types/auth";
-import { useAuth } from "#imports";
 
 const authStore = useAuthStore();
 const toastStore = useToastStore();
@@ -312,6 +312,7 @@ const handleSubmit = async () => {
 	if (!validateForm()) return;
 
 	loading.value = true;
+	clearErrors();
 
 	try {
 		await authStore.register({
@@ -324,8 +325,12 @@ const handleSubmit = async () => {
 			toastStore.error(authStore.error);
 		} else {
 			toastStore.success('Account created successfully! Please check your email to verify your account.');
-			// Redirect to login page with success message and email
-			navigateTo(`/login?registered=true&email=${encodeURIComponent(form.email)}`);
+
+			// Небольшая задержка перед редиректом для отображения уведомления
+			setTimeout(() => {
+				// Redirect to login page with success message and email
+				navigateTo(`/login?registered=true&email=${encodeURIComponent(form.email)}`);
+			}, 300);
 		}
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : 'Failed to register. Please try again.';
@@ -336,24 +341,23 @@ const handleSubmit = async () => {
 	}
 };
 
-// Функция для аутентификации через Google
+// Функция для регистрации через Google
 const handleGoogleSignup = async () => {
 	loading.value = true;
 
 	try {
-		// Получаем функцию signIn из useAuth
-		const { signIn } = useAuth();
+		// Временное решение - сообщение о недоступности функции
+		toastStore.info('Google signup is currently not available in this version.');
 
-		// Используем встроенный signIn метод
-		await signIn('google', {
-			callbackUrl: '/analytics'
-		});
-		
-		toastStore.success('Successfully registered with Google');
+		// В будущем можно реализовать через собственный API:
+		// const response = await authStore.loginWithOAuth({
+		//     provider: 'google',
+		//     redirectUrl: window.location.origin + '/auth/callback/google'
+		// });
 
-		// Редирект произойдет автоматически после успешной аутентификации
+		loading.value = false;
 	} catch (error) {
-		const errorMessage = error instanceof Error ? error.message : 'Не удалось зарегистрироваться через Google. Пожалуйста, попробуйте снова.';
+		const errorMessage = error instanceof Error ? error.message : 'Failed to sign up with Google. Please try again.';
 		errors.general = errorMessage;
 		toastStore.error(errorMessage);
 		loading.value = false;

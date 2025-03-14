@@ -326,7 +326,7 @@ import { ref, reactive, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import type { LinkData, SummaryData } from '~/types/link';
 import { useDeviceFingerprint } from '~/composables/useDeviceFingerprint';
 import { useToastStore } from '~/stores/toast';
-import { useAuthService } from '~/composables/useAuth';
+import { useAuthService } from '~/composables/useAuthService';
 import Preloader from '~/components/common/Preloader.vue';
 
 // Импортируем компоненты

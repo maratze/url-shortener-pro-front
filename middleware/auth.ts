@@ -1,19 +1,7 @@
 import { useAuthStore } from "~/stores/auth";
-import { useAuth } from "#imports";
+import { getStringFromStorage } from "~/utils/client";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-    // Добавляем небольшую задержку для инициализации состояния
-    await new Promise(resolve => setTimeout(resolve, 50));
-
-    const authStore = useAuthStore();
-    const { status } = useAuth();
-
-    // Проверяем наличие токена в localStorage (теперь всегда на клиенте)
-    const hasToken = !!localStorage.getItem('token');
-
-    // Проверяем статус аутентификации
-    const isAuthenticated = authStore.isAuthenticated || status.value === 'authenticated' || hasToken;
-
     // Список защищенных маршрутов
     const protectedRoutes = ['/account', '/analytics'];
     const isProtectedRoute = protectedRoutes.some(route => to.path.startsWith(route));
@@ -21,6 +9,14 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     // Список маршрутов для неавторизованных пользователей
     const authRoutes = ['/login', '/register'];
     const isAuthRoute = authRoutes.includes(to.path);
+
+    const authStore = useAuthStore();
+
+    // Проверяем наличие токена в localStorage безопасным способом
+    const hasToken = !!getStringFromStorage('token');
+
+    // Проверяем статус аутентификации
+    const isAuthenticated = authStore.isAuthenticated || hasToken;
 
     // Если пользователь авторизован и пытается зайти на страницы логина/регистрации
     if (isAuthenticated && isAuthRoute) {

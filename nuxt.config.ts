@@ -15,16 +15,8 @@ export default defineNuxtConfig({
     modules: [
         '@nuxtjs/tailwindcss',
         '@pinia/nuxt',
-        '@nuxtjs/color-mode',
-        '@sidebase/nuxt-auth'
+        '@nuxtjs/color-mode'
     ],
-
-    auth: {
-        provider: {
-            type: 'authjs',
-        },
-        globalAppMiddleware: false
-    },
 
     colorMode: {
         classSuffix: '',

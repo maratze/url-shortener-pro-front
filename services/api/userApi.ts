@@ -5,14 +5,8 @@ import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest } from '
 const getApiBaseUrl = () => {
     let apiBaseUrl = '';
     try {
-        if (typeof window !== 'undefined') {
-            // Клиентский код
-            const config = useRuntimeConfig();
-            apiBaseUrl = config.public.apiBase || 'https://localhost:7095';
-        } else {
-            // Серверный код
-            apiBaseUrl = process.env.API_BASE_URL || 'https://localhost:7095';
-        }
+        const config = useRuntimeConfig();
+        apiBaseUrl = config.public.apiBase || 'https://localhost:7095';
     } catch (error) {
         console.error('Error getting API base URL:', error);
         apiBaseUrl = 'https://localhost:7095'; // Fallback
@@ -56,7 +50,7 @@ export const userApi = {
     getCurrentUser: async (): Promise<UserResponse> => {
         try {
             // Safe localStorage access that works with SSR
-            const token = process.client ? localStorage.getItem('token') : null;
+            const token = localStorage.getItem('token');
             const apiBaseUrl = getApiBaseUrl();
             console.log(`Making API request to ${apiBaseUrl}/api/users/me`);
 
