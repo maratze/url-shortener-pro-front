@@ -1,12 +1,6 @@
 <template>
-    <div class="container mx-auto p-6 max-w-7xl">
-        <PageHeader title="Security Settings">
-            <template #subtitle>
-                Manage your account security settings and preferences
-            </template>
-        </PageHeader>
-
-        <div class="max-w-2xl mx-auto space-y-6">
+    <div class="w-full">
+        <div class="space-y-6">
             <!-- Password Change Section -->
             <section
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
@@ -92,7 +86,7 @@
                                 <p class="text-sm font-medium text-slate-900 dark:text-white">{{ session.device }}</p>
                                 <p class="text-xs text-slate-500 dark:text-slate-400">{{ session.location }} · Last
                                     active {{
-                                    session.lastActive }}</p>
+                                        session.lastActive }}</p>
                             </div>
                         </div>
                         <button v-if="!session.current" @click="terminateSession(session.id)"
@@ -110,7 +104,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useToastStore } from '~/stores/toast';
-import PageHeader from '~/components/common/PageHeader.vue';
+
+definePageMeta({
+    layout: 'account',
+    middleware: ['auth']
+});
 
 const toastStore = useToastStore();
 

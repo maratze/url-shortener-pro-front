@@ -1,13 +1,15 @@
 <template>
-	<NuxtLayout />
+	<NuxtLayout>
+		<NuxtPage />
+	</NuxtLayout>
 </template>
 
 <script setup>
 import { onMounted } from 'vue';
 import { useTheme } from '~/composables/useTheme.js';
-import FloatingThemeToggle from '~/components/FloatingThemeToggle.vue';
+import { useAuthService } from '~/composables/useAuth';
 
-onMounted(() => {
+onMounted(async () => {
 	document.title = 'TinyLink - Shorten Your URLs';
 
 	const metaDescription = document.querySelector('meta[name="description"]');
@@ -39,7 +41,11 @@ onMounted(() => {
 		meta.content = 'Create short, memorable links with TinyLink URL shortener.';
 		document.head.appendChild(meta);
 	}
-})
+
+	// Инициализация аутентификации
+	const { checkAuthStatus } = useAuthService();
+	await checkAuthStatus();
+});
 </script>
 
 <style>

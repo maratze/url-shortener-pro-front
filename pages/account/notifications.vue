@@ -1,12 +1,6 @@
 <template>
-    <div class="container mx-auto p-6 max-w-7xl">
-        <PageHeader title="Notification Settings">
-            <template #subtitle>
-                Manage how and when you receive notifications
-            </template>
-        </PageHeader>
-
-        <div class="max-w-2xl mx-auto space-y-6">
+    <div class="w-full">
+        <div class="space-y-6">
             <!-- Email Notifications -->
             <section
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
@@ -112,7 +106,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useToastStore } from '~/stores/toast';
-import PageHeader from '~/components/common/PageHeader.vue';
+
+definePageMeta({
+    layout: 'account',
+    middleware: ['auth']
+});
 
 const toastStore = useToastStore();
 

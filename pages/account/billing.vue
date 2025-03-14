@@ -1,12 +1,6 @@
 <template>
-    <div class="container mx-auto p-6 max-w-7xl">
-        <PageHeader title="Billing & Subscription">
-            <template #subtitle>
-                Manage your subscription and billing information
-            </template>
-        </PageHeader>
-
-        <div class="max-w-2xl mx-auto space-y-6">
+    <div class="w-full">
+        <div class="space-y-6">
             <!-- Current Plan -->
             <section
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
@@ -144,7 +138,11 @@
 import { ref, computed } from 'vue';
 import { useToastStore } from '~/stores/toast';
 import { useAuthService } from '~/composables/useAuth';
-import PageHeader from '~/components/common/PageHeader.vue';
+
+definePageMeta({
+    layout: 'account',
+    middleware: ['auth']
+});
 
 const toastStore = useToastStore();
 const { isPremium } = useAuthService();
