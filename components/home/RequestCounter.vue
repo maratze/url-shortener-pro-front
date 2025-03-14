@@ -3,18 +3,18 @@
 		<!-- Счетчик с прогресс-баром -->
 		<div class="counter-container">
 			<div class="flex items-center justify-between w-full">
-				<div class="flex items-start">
+				<div class="flex items-start" v-if="isClient">
 					<!-- Разный текст для бесплатных и PRO пользователей -->
 					<span v-if="isPremiumUser" class="counter-text flex items-center">
-						<svg xmlns="http://www.w3.org/2000/svg"
-							class="h-4 w-4 mr-1 text-purple-600 dark:text-purple-400" viewBox="0 0 20 20"
-							fill="currentColor">
-							<path fill-rule="evenodd"
-								d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-								clip-rule="evenodd" />
-						</svg>
-						Неограниченное количество сокращений (PRO)
-					</span>
+      <svg xmlns="http://www.w3.org/2000/svg"
+		   class="h-4 w-4 mr-1 text-purple-600 dark:text-purple-400" viewBox="0 0 20 20"
+		   fill="currentColor">
+       <path fill-rule="evenodd"
+			 d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+			 clip-rule="evenodd" />
+      </svg>
+      Неограниченное количество сокращений (PRO)
+     </span>
 					<span v-else class="counter-text">{{ remainingRequests }} бесплатных сокращений осталось</span>
 
 					<!-- Иконка с улучшенной подсказкой (только для бесплатных пользователей) -->
@@ -25,10 +25,10 @@
 							class="info-icon-button"
 							aria-label="More information">
 							<svg xmlns="http://www.w3.org/2000/svg" class="info-icon" viewBox="0 0 20 20"
-								fill="currentColor">
+								 fill="currentColor">
 								<path fill-rule="evenodd"
-									d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-									clip-rule="evenodd" />
+									  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+									  clip-rule="evenodd" />
 							</svg>
 						</button>
 
@@ -56,16 +56,16 @@
 				<NuxtLink to="/pricing" class="upgrade-link" v-if="!isPremiumUser && usageRatio >= 0.7">
 					Улучшить
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20"
-						fill="currentColor">
+						 fill="currentColor">
 						<path fill-rule="evenodd"
-							d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
-							clip-rule="evenodd" />
+							  d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
+							  clip-rule="evenodd" />
 					</svg>
 				</NuxtLink>
 			</div>
 
 			<!-- Прогресс-бар (только для бесплатных пользователей) -->
-			<div v-if="!isPremiumUser" class="progress-bar-container">
+			<div v-if="!isPremiumUser && isClient" class="progress-bar-container">
 				<div
 					class="progress-bar"
 					:class="progressBarClass"
@@ -90,16 +90,15 @@ const isPremiumUser = computed(() => {
 });
 
 // Общее количество бесплатных запросов в месяц (из конфигурации или констант)
-const totalFreeRequests = computed(() => urlStore.totalFreeRequests || 30);
-
-// Получаем оставшееся количество бесплатных запросов
-const remainingRequests = computed(() => urlStore.remainingFreeRequests);
+const totalFreeRequests = ref(30);
+const remainingRequests = ref(0);
 
 const showTooltip = ref(false);
 const tooltip = ref(null);
 const tooltipCloseTimer = ref(null);
+const isClient = ref(false);
 
-// Расчет процента использования
+// Расчет ��роцента использования
 const usageRatio = computed(() => {
 	return (totalFreeRequests.value - remainingRequests.value) / totalFreeRequests.value;
 });
@@ -152,6 +151,10 @@ onMounted(() => {
 		document.removeEventListener('click', handleClickOutside);
 		clearCloseTimer();
 	});
+
+	isClient.value = true;
+	totalFreeRequests.value = urlStore.totalFreeRequests || 30;
+	remainingRequests.value = urlStore.remainingFreeRequests;
 });
 </script>
 
@@ -176,7 +179,7 @@ onMounted(() => {
 	@apply h-3.5 w-3.5;
 }
 
-/* Обновленный контейнер подсказки с увеличенной шириной */
+/* Обновленный контейнер под��казки с увеличенной шириной */
 .tooltip-container {
 	@apply absolute z-50 bottom-full left-1/2 w-60 p-3 bg-white dark:bg-slate-800 rounded-lg shadow-xl mb-2;
 	transform: translateX(-50%);

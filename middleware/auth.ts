@@ -8,11 +8,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const authStore = useAuthStore();
     const { status } = useAuth();
 
-    // Проверяем наличие токена в localStorage только на клиенте
-    let hasToken = false;
-    if (process.client) {
-        hasToken = !!localStorage.getItem('token');
-    }
+    // Проверяем наличие токена в localStorage (теперь всегда на клиенте)
+    const hasToken = !!localStorage.getItem('token');
 
     // Проверяем статус аутентификации
     const isAuthenticated = authStore.isAuthenticated || status.value === 'authenticated' || hasToken;

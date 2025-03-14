@@ -141,7 +141,7 @@ import { useAuthService } from '~/composables/useAuth';
 
 definePageMeta({
     layout: 'account',
-    middleware: ['auth']
+    middleware: ['auth'],
 });
 
 const toastStore = useToastStore();

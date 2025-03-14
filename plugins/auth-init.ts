@@ -1,11 +1,6 @@
 import { useAuthStore } from '~/stores/auth';
 
 export default defineNuxtPlugin(async () => {
-    // Проверяем, что мы на клиенте, прежде чем использовать localStorage
-    if (!process.client) {
-        return;
-    }
-
     const authStore = useAuthStore();
 
     // Проверяем, есть ли токен в localStorage

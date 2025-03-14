@@ -1,10 +1,18 @@
 <template>
-    <div class="flex flex-col min-h-screen">
+    <div
+		class="flex flex-col min-h-screen"
+	>
+		<FloatingThemeToggle
+			:isDark="isDark"
+			:toggleDarkMode="toggleDarkMode"
+			:ready="ready"
+		/>
+		
         <!-- Header -->
         <AppHeader />
 
         <!-- Main Content -->
-        <main class="flex-grow bg-slate-50 dark:bg-slate-900 py-6 min-h-screen pt-[74px]">
+        <main class="flex-grow bg-slate-50 dark:bg-slate-900 min-h-screen pt-[98px] pb-6">
             <div class="container mx-auto px-6 max-w-7xl">
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <!-- Sidebar with navigation -->
@@ -71,6 +79,8 @@
 
         <!-- Footer -->
         <AppFooter />
+		
+		<ToastContainer/>
     </div>
 </template>
 
@@ -78,4 +88,15 @@
 // Основной функционал по управлению авторизацией перенесем в AppHeader
 import AppHeader from '~/components/layout/AppHeader.vue';
 import AppFooter from '~/components/layout/AppFooter.vue';
+import ToastContainer from '~/components/common/ToastContainer.vue';
+import FloatingThemeToggle from '~/components/FloatingThemeToggle.vue';
+import { useTheme } from '~/composables/useTheme.js';
+import { onMounted } from 'vue';
+
+const { isDark, toggleDarkMode, ready } = useTheme();
+const isMounted = ref(false)
+
+onMounted(() => {
+	isMounted.value = true
+})
 </script>

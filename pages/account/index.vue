@@ -37,8 +37,7 @@
 
                 <div class="mb-6">
                     <div class="flex items-center mb-4">
-                        <div
-                            class="w-16 h-16 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold">
                             {{ userInitials }}
                         </div>
                         <div class="ml-4">
@@ -120,7 +119,7 @@ import { useAuthService } from '~/composables/useAuth';
 
 definePageMeta({
     layout: 'account',
-    middleware: ['auth']
+    middleware: ['auth'],
 });
 
 const toastStore = useToastStore();

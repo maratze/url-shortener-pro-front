@@ -5,9 +5,11 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useTheme } from '~/composables/useTheme.js';
 import { useAuthService } from '~/composables/useAuth';
+
+const isInitialized = ref(false);
 
 onMounted(async () => {
 	document.title = 'TinyLink - Shorten Your URLs';
@@ -45,6 +47,7 @@ onMounted(async () => {
 	// Инициализация аутентификации
 	const { checkAuthStatus } = useAuthService();
 	await checkAuthStatus();
+	isInitialized.value = true;
 });
 </script>
 

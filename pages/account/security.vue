@@ -107,7 +107,7 @@ import { useToastStore } from '~/stores/toast';
 
 definePageMeta({
     layout: 'account',
-    middleware: ['auth']
+    middleware: ['auth'],
 });
 
 const toastStore = useToastStore();
