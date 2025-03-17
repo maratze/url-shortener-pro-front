@@ -9,7 +9,7 @@
 			<div class="flex items-center justify-between">
 				<!-- Левая часть: Логотип -->
 				<div class="flex items-center space-x-4">
-					<NuxtLink to="/" class="flex items-center space-x-2">
+					<NuxtLink :to="layoutType === 'dashboard' ? '/dashboard' : '/'" class="flex items-center space-x-2">
 						<div
 							class="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold">
 							TL
@@ -20,10 +20,15 @@
 				</div>
 
 				<!-- Центральная часть: Навигация -->
-				<nav class="hidden md:flex items-center justify-center space-x-6">
-					<NuxtLink v-if="authStore.isAuthenticated" to="/analytics" class="nav-link" active-class="router-link-active">Analytics</NuxtLink>
-					<NuxtLink v-if="!authStore.isAuthenticated" to="/pricing" class="nav-link" active-class="router-link-active">Pricing</NuxtLink>
-					<NuxtLink v-if="!authStore.isAuthenticated" to="/about" class="nav-link" active-class="router-link-active">About</NuxtLink>
+				<nav v-if="layoutType !== 'auth'" class="hidden md:flex items-center justify-center space-x-6">
+					<NuxtLink v-if="authStore.isAuthenticated" to="/dashboard" class="nav-link"
+						active-class="router-link-active">Dashboard</NuxtLink>
+					<NuxtLink v-if="authStore.isAuthenticated" to="/analytics" class="nav-link"
+						active-class="router-link-active">Analytics</NuxtLink>
+					<NuxtLink v-if="!authStore.isAuthenticated && layoutType !== 'dashboard'" to="/pricing"
+						class="nav-link" active-class="router-link-active">Pricing</NuxtLink>
+					<NuxtLink v-if="!authStore.isAuthenticated && layoutType !== 'dashboard'" to="/about"
+						class="nav-link" active-class="router-link-active">About</NuxtLink>
 				</nav>
 
 				<!-- Правая часть: Кнопки авторизации или Меню пользователя -->
@@ -42,21 +47,25 @@
 
 		<!-- Mobile menu -->
 		<Transition name="slide-down">
-			<div v-if="mobileMenuOpen" class="md:hidden mobile-menu">
+			<div v-if="mobileMenuOpen && layoutType !== 'auth'" class="md:hidden mobile-menu">
 				<nav class="px-4 py-6 space-y-4">
 					<div class="border-t dark:border-slate-700"></div>
 					<!-- Мобильное меню -->
+					<NuxtLink v-if="authStore.isAuthenticated" to="/dashboard" class="mobile-nav-link"
+						active-class="text-purple-600 dark:text-purple-400 font-semibold"
+						@click="mobileMenuOpen = false">
+						Dashboard</NuxtLink>
 					<NuxtLink v-if="authStore.isAuthenticated" to="/analytics" class="mobile-nav-link"
 						active-class="text-purple-600 dark:text-purple-400 font-semibold"
 						@click="mobileMenuOpen = false">
 						Analytics</NuxtLink>
-					<NuxtLink v-if="!authStore.isAuthenticated" to="/pricing" class="mobile-nav-link"
-						active-class="text-purple-600 dark:text-purple-400 font-semibold"
+					<NuxtLink v-if="!authStore.isAuthenticated && layoutType !== 'dashboard'" to="/pricing"
+						class="mobile-nav-link" active-class="text-purple-600 dark:text-purple-400 font-semibold"
 						@click="mobileMenuOpen = false">
 						Pricing
 					</NuxtLink>
-					<NuxtLink v-if="!authStore.isAuthenticated" to="/about" class="mobile-nav-link"
-						active-class="text-purple-600 dark:text-purple-400 font-semibold"
+					<NuxtLink v-if="!authStore.isAuthenticated && layoutType !== 'dashboard'" to="/about"
+						class="mobile-nav-link" active-class="text-purple-600 dark:text-purple-400 font-semibold"
 						@click="mobileMenuOpen = false">About
 					</NuxtLink>
 
@@ -91,8 +100,18 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import UserMenu from './UserMenu.vue';
+import { useRoute } from 'vue-router';
+
+const props = defineProps({
+	layoutType: {
+		type: String,
+		default: 'default', // Возможные значения: 'default', 'auth', 'dashboard'
+		validator: (value) => ['default', 'auth', 'dashboard'].includes(value)
+	}
+});
 
 const authStore = useAuthStore();
+const route = useRoute();
 const mobileMenuOpen = ref(false);
 const isScrolled = ref(false);
 

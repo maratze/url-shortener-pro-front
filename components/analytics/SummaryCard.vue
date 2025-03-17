@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="glass-card glass-card-prevent-transform p-5 shadow-sm relative overflow-hidden flex flex-col transition-all duration-200"
+		class="glass-card glass-card-prevent-transform p-5 relative overflow-hidden flex flex-col !shadow-none"
 		:class="{
 			'bg-indigo-50/30 dark:bg-indigo-900/10': color === 'indigo',
 			'bg-green-50/30 dark:bg-green-900/10': color === 'green',

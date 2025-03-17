@@ -1,6 +1,6 @@
 <template>
 	<div class="overflow-x-auto">
-		<div class="mb-4 flex items-center justify-between">
+		<div class="mb-4 flex items-center justify-between bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
 			<div class="flex items-center space-x-2">
 				<div class="relative">
 					<button
@@ -10,13 +10,13 @@
 						title="Show bulk actions">
 						<span>Bulk Actions ({{ selectedLinks.length }})</span>
 						<svg class="ml-1.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-							stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+							 stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
 						</svg>
 					</button>
 
 					<div v-if="showBulkActions && selectedLinks.length > 0"
-						class="absolute left-0 mt-1 w-48 rounded-md shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-10">
+						 class="absolute left-0 mt-1 w-48 rounded-md shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-10">
 						<div class="py-1">
 							<button
 								@click="handleBulkCopy"
@@ -78,9 +78,10 @@
 			</div>
 		</div>
 
-		<table
-			class="glass-card-border min-w-full divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-800 rounded-lg overflow-hidden">
-			<thead class="bg-slate-50 dark:bg-slate-800/60">
+		<div class="glass-card-border rounded-lg">
+			<table
+				class="min-w-full divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-800 rounded-lg overflow-hidden">
+				<thead class="bg-slate-50 dark:bg-slate-800/60">
 				<tr>
 					<th scope="col"
 						class="px-3 py-3.5 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider w-10">
@@ -111,8 +112,8 @@
 						Actions
 					</th>
 				</tr>
-			</thead>
-			<tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
+				</thead>
+				<tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
 				<tr v-for="link in links" :key="link.id" class="hover:bg-slate-50 dark:hover:bg-slate-700/30">
 					<td class="px-3 py-4 whitespace-nowrap">
 						<input
@@ -124,7 +125,9 @@
 					<td class="px-3 py-4">
 						<div class="flex flex-col">
 							<div class="flex items-center">
-								<span class="font-medium text-slate-900 dark:text-white">{{ link.title || 'Untitled Link' }}</span>
+								<span class="font-medium text-slate-900 dark:text-white">{{
+										link.title || 'Untitled Link'
+									}}</span>
 								<span v-if="link.tags && link.tags.length > 0" class="ml-2 flex space-x-1">
 									<span
 										v-for="tag in link.tags.slice(0, 2)"
@@ -161,17 +164,17 @@
 									title="Copy short URL">
 									<span v-if="copiedLinkId === link.id" class="text-green-500">
 										<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-											fill="currentColor">
+											 fill="currentColor">
 											<path fill-rule="evenodd"
-												d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-												clip-rule="evenodd" />
+												  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+												  clip-rule="evenodd"/>
 										</svg>
 									</span>
 									<span v-else>
 										<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-											viewBox="0 0 24 24" stroke="currentColor">
+											 viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-												d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+												  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
 										</svg>
 									</span>
 								</button>
@@ -197,7 +200,7 @@
 										viewBox="0 0 24 24"
 										stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-											d="M5 10l7-7m0 0l7 7m-7-7v18" />
+											  d="M5 10l7-7m0 0l7 7m-7-7v18"/>
 									</svg>
 									<svg
 										v-else-if="link.clickTrend < 0"
@@ -207,7 +210,7 @@
 										viewBox="0 0 24 24"
 										stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-											d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+											  d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
 									</svg>
 									{{ Math.abs(link.clickTrend) }}%
 								</span>
@@ -241,9 +244,9 @@
 								class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300"
 								title="View statistics">
 								<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-									stroke="currentColor">
+									 stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-										d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+										  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
 								</svg>
 							</button>
 							<button
@@ -251,14 +254,14 @@
 								:class="link.isActive ? 'text-amber-600 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300' : 'text-green-600 dark:text-green-400 hover:text-green-900 dark:hover:text-green-300'"
 								:title="link.isActive ? 'Deactivate' : 'Activate'">
 								<svg v-if="link.isActive" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-									viewBox="0 0 24 24" stroke="currentColor">
+									 viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-										d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+										  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
 								</svg>
 								<svg v-else class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-									viewBox="0 0 24 24" stroke="currentColor">
+									 viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-										d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+										  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
 								</svg>
 							</button>
 							<button
@@ -266,9 +269,9 @@
 								class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
 								title="Edit">
 								<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-									stroke="currentColor">
+									 stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-										d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+										  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
 								</svg>
 							</button>
 							<button
@@ -276,16 +279,17 @@
 								class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
 								title="Delete">
 								<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-									stroke="currentColor">
+									 stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-										d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+										  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
 								</svg>
 							</button>
 						</div>
 					</td>
 				</tr>
-			</tbody>
-		</table>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </template>
 

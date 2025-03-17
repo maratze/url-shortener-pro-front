@@ -1,12 +1,12 @@
 <template>
 	<div class="min-h-screen relative overflow-hidden">
-		<HeroSection/>
-		<RecentUrls/>
-		<WhyChooseSection/>
-		<StatisticsSection/>
-		<HowItWorksSection/>
-		<FaqSection/>
-		<CtaSection/>
+		<HeroSection />
+		<RecentUrls />
+		<WhyChooseSection />
+		<StatisticsSection />
+		<HowItWorksSection />
+		<FaqSection />
+		<CtaSection />
 	</div>
 </template>
 
@@ -51,4 +51,8 @@ useHead({
 		{ name: 'twitter:description', content: 'Shorten your URLs quickly and securely with TinyLink.' },
 	],
 })
+
+definePageMeta({
+	middleware: ['auth']
+});
 </script>

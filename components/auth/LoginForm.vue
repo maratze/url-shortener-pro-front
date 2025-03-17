@@ -75,7 +75,7 @@
 				</div>
 
 				<!-- Опции входа -->
-				<div class="flex items-center justify-between mt-4">
+				<div class="flex items-center justify-between mt-6s">
 					<div class="flex items-center">
 						<input
 							id="remember-me"
@@ -250,7 +250,7 @@ const handleSubmit = async () => {
 
 			// Небольшая задержка перед редиректом для отображения уведомления
 			setTimeout(() => {
-				navigateTo('/analytics');
+				navigateTo('/dashboard');
 			}, 300);
 		}
 	} catch (error) {

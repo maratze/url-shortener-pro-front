@@ -8,7 +8,7 @@
 			:ready="ready" />
 
 		<div class="flex flex-col min-h-screen">
-			<AppHeader />
+			<AppHeader layout-type="default" />
 			<main class="flex-grow">
 				<div
 					class="from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950 transition-colors duration-300">

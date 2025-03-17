@@ -8,7 +8,7 @@
 				</p>
 			</div>
 
-			<div class="premium-glass-card p-8">
+			<div class="premium-glass-card p-8 bg-white dark:bg-slate-800">
 				<form class="space-y-6">
 					<div class="form-field">
 						<label class="form-label" for="email">Email Address</label>
@@ -17,14 +17,12 @@
 							type="email"
 							class="form-input"
 							placeholder="your@email.com"
-							required
-						/>
+							required />
 					</div>
 
 					<button
 						type="submit"
-						class="submit-button w-full"
-					>
+						class="submit-button w-full">
 						Send Reset Link
 					</button>
 
@@ -46,13 +44,17 @@ useHead({
 		{ name: 'description', content: 'Reset your TinyLink password.' }
 	]
 })
+
+definePageMeta({
+	middleware: ['auth'],
+	layout: 'auth'
+})
 </script>
 
 <style scoped>
 .premium-glass-card {
 	border-radius: 16px;
-	background: var(--card-border-dark);
-	border: 1px solid rgb(0, 0, 0, .05);
+	border: 1px solid rgb(0, 0, 0, .1);
 }
 
 .dark .premium-glass-card {

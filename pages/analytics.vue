@@ -128,7 +128,7 @@
 
 		<!-- Фильтры и действия -->
 		<div
-			class="mb-4 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-4">
+			class="mb-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
 			<!-- Верхняя панель с поиском и управлением видом -->
 			<div class="flex flex-wrap gap-2 items-center justify-between">
 
@@ -296,7 +296,7 @@
 
 		<!-- Пагинация -->
 		<div
-			class="mt-6 mb-4 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-4">
+			class="mt-6 mb-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
 			<div class="flex flex-wrap gap-2 items-center justify-between">
 				<div class="text-sm text-slate-600 dark:text-slate-400">
 					Showing {{ paginationStart }}-{{ paginationEnd }} of {{ totalLinks }} links
@@ -1277,6 +1277,11 @@ const isUserMenuOpen = ref(false);
 const toggleUserMenu = () => {
 	isUserMenuOpen.value = !isUserMenuOpen.value;
 };
+
+definePageMeta({
+	middleware: ['auth'],
+	layout: 'dashboard'
+})
 </script>
 
 <style scoped>
