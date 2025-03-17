@@ -3,29 +3,29 @@ import { useAuthStore } from '~/stores/auth'
 import type { UpdateProfileRequest } from '~/types/auth'
 
 /**
- * Композабл для управления аутентификацией
+ * Composable for authentication management
  */
 export const useAuthService = () => {
     const authStore = useAuthStore()
 
-    // Состояние инициализации аутентификации
+    // Authentication initialization state
     const isInitializing = ref(false)
     const isInitialized = ref(false)
 
-    // Вычисляемые свойства для удобного доступа к состоянию аутентификации
+    // Computed properties for easy access to authentication state
     const isAuthenticated = computed(() => authStore.isAuthenticated)
     const user = computed(() => authStore.user)
     const isPremium = computed(() => authStore.user?.isPremium === true)
 
     /**
-     * Проверка статуса аутентификации при загрузке приложения
-     * Загружает пользователя, если есть токен
+     * Check authentication status when the application loads
+     * Loads user data if a token exists
      */
     const checkAuthStatus = async () => {
         isInitializing.value = true
         try {
-            // Пытаемся загрузить данные пользователя, если есть токен
-            // fetchCurrentUser внутри проверяет наличие токена
+            // Try to load user data if a token exists
+            // fetchCurrentUser checks for token presence internally
             await authStore.fetchCurrentUser()
         } catch (error) {
             console.error('Error checking authentication status:', error)
@@ -38,7 +38,7 @@ export const useAuthService = () => {
     }
 
     /**
-     * Вход пользователя с email и паролем
+     * User login with email and password
      */
     const login = async (email: string, password: string) => {
         isInitializing.value = true
@@ -48,7 +48,7 @@ export const useAuthService = () => {
         } catch (error: any) {
             return {
                 success: false,
-                error: error?.message || 'Не удалось войти в систему'
+                error: error?.message || 'Failed to log in'
             }
         } finally {
             isInitializing.value = false
@@ -56,7 +56,7 @@ export const useAuthService = () => {
     }
 
     /**
-     * Регистрация нового пользователя
+     * Register a new user
      */
     const register = async (userData: { email: string, password: string, firstName: string, lastName: string }) => {
         isInitializing.value = true
@@ -66,7 +66,7 @@ export const useAuthService = () => {
         } catch (error: any) {
             return {
                 success: false,
-                error: error?.message || 'Не удалось зарегистрироваться'
+                error: error?.message || 'Failed to register'
             }
         } finally {
             isInitializing.value = false
@@ -74,7 +74,7 @@ export const useAuthService = () => {
     }
 
     /**
-     * Обновление профиля пользователя
+     * Update user profile
      */
     const updateProfile = async (profileData: UpdateProfileRequest) => {
         try {
@@ -83,13 +83,13 @@ export const useAuthService = () => {
         } catch (error: any) {
             return {
                 success: false,
-                error: error?.message || 'Не удалось обновить профиль'
+                error: error?.message || 'Failed to update profile'
             }
         }
     }
 
     /**
-     * Выход из системы
+     * Logout from the system
      */
     const logout = async () => {
         await authStore.logout()
@@ -110,20 +110,20 @@ export const useAuthService = () => {
 }
 
 /**
- * Хук для использования в компонентах, которые требуют аутентификации
- * Проверяет статус аутентификации и управляет состоянием загрузки
+ * Hook for use in components that require authentication
+ * Checks authentication status and manages loading state
  */
 export const useRequireAuth = () => {
     const { isAuthenticated, isInitializing, isInitialized } = useAuthService()
     const isLoading = ref(true)
     const error = ref<string | null>(null)
 
-    // Используем onMounted для проверки аутентификации
+    // Use onMounted to check authentication
     onMounted(async () => {
         try {
-            // Проверка выполняется только после инициализации
+            // Check is performed only after initialization
             if (!isAuthenticated.value && isInitialized.value) {
-                error.value = 'Требуется аутентификация'
+                error.value = 'Authentication required'
             }
         } finally {
             isLoading.value = false

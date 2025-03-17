@@ -1,65 +1,65 @@
-import { getApiBaseUrl } from '~/utils/config';
+import { getApiBaseUrl } from '../../utils/config';
 
 export const sessionApi = {
-    // Получение всех активных сессий пользователя
+    // Get all active user sessions
     getSessions: async () => {
         try {
             const token = localStorage.getItem('token');
             const apiBaseUrl = getApiBaseUrl();
 
-            if (!token) throw new Error('Требуется авторизация');
+            if (!token) throw new Error('Authorization required');
 
-            const response = await fetch(`${apiBaseUrl}/api/UserSession`, {
+            const response = await fetch(`${apiBaseUrl}/api/sessions`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
 
             if (!response.ok) {
-                throw new Error(`Ошибка получения сессий: ${response.status}`);
+                throw new Error(`Error getting sessions: ${response.status}`);
             }
 
             return await response.json();
         } catch (error) {
-            console.error('Ошибка при получении сессий:', error);
+            console.error('Error retrieving sessions:', error);
             throw error;
         }
     },
 
-    // Получение текущей сессии
+    // Get current session
     getCurrentSession: async () => {
         try {
             const token = localStorage.getItem('token');
             const apiBaseUrl = getApiBaseUrl();
 
-            if (!token) throw new Error('Требуется авторизация');
+            if (!token) throw new Error('Authorization required');
 
-            const response = await fetch(`${apiBaseUrl}/api/UserSession/current`, {
+            const response = await fetch(`${apiBaseUrl}/api/sessions/current`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
 
             if (!response.ok) {
-                throw new Error(`Ошибка получения текущей сессии: ${response.status}`);
+                throw new Error(`Error getting current session: ${response.status}`);
             }
 
             return await response.json();
         } catch (error) {
-            console.error('Ошибка при получении текущей сессии:', error);
+            console.error('Error retrieving current session:', error);
             throw error;
         }
     },
 
-    // Завершение сессии
+    // Terminate session
     terminateSession: async (sessionId: number) => {
         try {
             const token = localStorage.getItem('token');
             const apiBaseUrl = getApiBaseUrl();
 
-            if (!token) throw new Error('Требуется авторизация');
+            if (!token) throw new Error('Authorization required');
 
-            const response = await fetch(`${apiBaseUrl}/api/UserSession/${sessionId}`, {
+            const response = await fetch(`${apiBaseUrl}/api/sessions/${sessionId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -67,25 +67,25 @@ export const sessionApi = {
             });
 
             if (!response.ok) {
-                throw new Error(`Ошибка при завершении сессии: ${response.status}`);
+                throw new Error(`Error terminating session: ${response.status}`);
             }
 
             return true;
         } catch (error) {
-            console.error('Ошибка при завершении сессии:', error);
+            console.error('Error terminating session:', error);
             throw error;
         }
     },
 
-    // Завершение всех сессий, кроме текущей
+    // Terminate all sessions except current
     terminateAllSessionsExceptCurrent: async () => {
         try {
             const token = localStorage.getItem('token');
             const apiBaseUrl = getApiBaseUrl();
 
-            if (!token) throw new Error('Требуется авторизация');
+            if (!token) throw new Error('Authorization required');
 
-            const response = await fetch(`${apiBaseUrl}/api/UserSession/all-except-current`, {
+            const response = await fetch(`${apiBaseUrl}/api/sessions/all-except-current`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -93,12 +93,12 @@ export const sessionApi = {
             });
 
             if (!response.ok) {
-                throw new Error(`Ошибка при завершении сессий: ${response.status}`);
+                throw new Error(`Error terminating sessions: ${response.status}`);
             }
 
             return true;
         } catch (error) {
-            console.error('Ошибка при завершении сессий:', error);
+            console.error('Error terminating sessions:', error);
             throw error;
         }
     }

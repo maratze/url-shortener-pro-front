@@ -68,7 +68,6 @@ import CountUp from '~/components/CountUp.vue';
 .statistics-section {
 	background-color: var(--glass-bg);
 	position: relative;
-	box-shadow: var(--glass-shadow);
 }
 
 .dark .statistics-section {

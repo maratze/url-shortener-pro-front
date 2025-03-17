@@ -111,10 +111,6 @@
 </template>
 
 <style scoped>
-.footer {
-	box-shadow: var(--glass-shadow);
-}
-
 .social-link {
 	@apply inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-colors;
 }

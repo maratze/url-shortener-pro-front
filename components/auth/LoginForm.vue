@@ -201,7 +201,7 @@ onMounted(() => {
 	if (route.query.registered === 'true') {
 		toastStore.success('Registration successful! Please log in with your new account.');
 
-		// Заполняем поле email, если оно передано в URL
+		// Fill email field if it's passed in the URL
 		if (route.query.email) {
 			form.email = route.query.email as string;
 		}
@@ -245,7 +245,7 @@ const handleSubmit = async () => {
 			errors.general = authStore.error;
 			toastStore.error(authStore.error);
 		} else if (authStore.isAuthenticated) {
-			// Используем setTimeout, чтобы уведомление появилось после перехода на новую страницу
+			// Use setTimeout to show notification after page transition
 			toastStore.success('Successfully logged in! Welcome back.');
 
 			// Небольшая задержка перед редиректом для отображения уведомления

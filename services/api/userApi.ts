@@ -1,18 +1,6 @@
 import { $fetch } from 'ohmyfetch'
 import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest } from '~/types/auth'
-
-// Добавляем функцию для получения базового URL API
-const getApiBaseUrl = () => {
-    let apiBaseUrl = '';
-    try {
-        const config = useRuntimeConfig();
-        apiBaseUrl = config.public.apiBase || 'https://localhost:7095';
-    } catch (error) {
-        console.error('Error getting API base URL:', error);
-        apiBaseUrl = 'https://localhost:7095'; // Fallback
-    }
-    return apiBaseUrl;
-};
+import { getApiBaseUrl } from '../../utils/config';
 
 export const userApi = {
     register: async (registerData: RegisterRequest): Promise<UserResponse> => {
@@ -34,9 +22,9 @@ export const userApi = {
     login: async (loginData: LoginRequest): Promise<UserResponse> => {
         try {
             const apiBaseUrl = getApiBaseUrl();
-            console.log(`Making API request to ${apiBaseUrl}/api/users/login`);
+            console.log(`Making API request to ${apiBaseUrl}/api/auth/login`);
 
-            return await $fetch(`${apiBaseUrl}/api/users/login`, {
+            return await $fetch(`${apiBaseUrl}/api/auth/login`, {
                 method: 'POST',
                 body: loginData
             })
@@ -50,11 +38,11 @@ export const userApi = {
     getCurrentUser: async (): Promise<UserResponse> => {
         try {
             // Safe localStorage access that works with SSR
-            const token = localStorage.getItem('token');
+            const token = process.client ? localStorage.getItem('token') : null;
             const apiBaseUrl = getApiBaseUrl();
-            console.log(`Making API request to ${apiBaseUrl}/api/users/me`);
+            console.log(`Making API request to ${apiBaseUrl}/api/users/profile`);
 
-            return await $fetch(`${apiBaseUrl}/api/users/me`, {
+            return await $fetch(`${apiBaseUrl}/api/users/profile`, {
                 headers: token ? {
                     'Authorization': `Bearer ${token}`
                 } : {}
@@ -68,7 +56,7 @@ export const userApi = {
     updateProfile: async (profileData: UpdateProfileRequest): Promise<UserResponse> => {
         try {
             // Safe localStorage access that works with SSR
-            const token = localStorage.getItem('token');
+            const token = process.client ? localStorage.getItem('token') : null;
             const apiBaseUrl = getApiBaseUrl();
             console.log(`Making API request to ${apiBaseUrl}/api/users/profile`);
 
@@ -89,10 +77,13 @@ export const userApi = {
     checkEmailAvailability: async (email: string): Promise<boolean> => {
         try {
             const apiBaseUrl = getApiBaseUrl();
-            console.log(`Making API request to ${apiBaseUrl}/api/users/check-email?email=${encodeURIComponent(email)}`);
+            console.log(`Making API request to ${apiBaseUrl}/api/users/check-email`);
 
-            const { isAvailable } = await $fetch(`${apiBaseUrl}/api/users/check-email?email=${encodeURIComponent(email)}`)
-            return isAvailable
+            const response = await $fetch(`${apiBaseUrl}/api/users/check-email`, {
+                method: 'POST',
+                body: email
+            });
+            return response.isAvailable;
         } catch (error) {
             console.error('Error checking email availability:', error);
             throw new Error('Failed to check email availability')
@@ -102,9 +93,9 @@ export const userApi = {
     loginWithOAuth: async (oauthData: OAuthRequest): Promise<UserResponse> => {
         try {
             const apiBaseUrl = getApiBaseUrl();
-            console.log(`Making OAuth API request to ${apiBaseUrl}/api/users/oauth/${oauthData.provider}`);
+            console.log(`Making OAuth API request to ${apiBaseUrl}/api/users/oauth`);
 
-            return await $fetch(`${apiBaseUrl}/api/users/oauth/${oauthData.provider}`, {
+            return await $fetch(`${apiBaseUrl}/api/users/oauth`, {
                 method: 'POST',
                 body: oauthData
             })

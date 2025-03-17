@@ -48,7 +48,6 @@
 <style scoped>
 .how-it-works-section {
 	position: relative;
-	box-shadow: var(--glass-shadow);
 }
 
 .step-card {

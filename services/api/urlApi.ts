@@ -1,12 +1,14 @@
 // URL Shortening Service API
 // Сервис для работы с API сокращения ссылок
 
+import { getOrCreateUniqueId } from '../../utils/uniqueId';
+import { getApiBaseUrl } from '../../utils/config';
+
 export const urlApi = {
-    // Сокращение URL
+    // Shorten URL
     shortenUrl: async (originalUrl: string, customAlias?: string) => {
-        // Получаем конфигурацию внутри функции для корректной работы с SSR
-        const config = useRuntimeConfig();
-        const apiBaseUrl = config.public.apiBase || 'https://localhost:7095';
+        // Get configuration inside the function for proper SSR support
+        const apiBaseUrl = getApiBaseUrl();
 
         try {
             const payload = {
@@ -16,9 +18,9 @@ export const urlApi = {
 
             const uniqueId = getOrCreateUniqueId();
 
-            console.log(`Making API request to ${apiBaseUrl}/api/urls with client ID: ${uniqueId}`);
+            console.log(`Making API request to ${apiBaseUrl}/api/url with client ID: ${uniqueId}`);
 
-            const response = await fetch(`${apiBaseUrl}/api/urls`, {
+            const response = await fetch(`${apiBaseUrl}/api/url`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,9 +34,9 @@ export const urlApi = {
                 console.error(`API Error (${response.status}): ${errorText}`);
                 try {
                     const errorData = JSON.parse(errorText);
-                    throw new Error(errorData.message || `Не удалось сократить URL: ${response.status}`);
+                    throw new Error(errorData.message || `Failed to shorten URL: ${response.status}`);
                 } catch (e) {
-                    throw new Error(`Не удалось сократить URL: ${response.status}. ${errorText.substring(0, 100)}`);
+                    throw new Error(`Failed to shorten URL: ${response.status}. ${errorText.substring(0, 100)}`);
                 }
             }
 
@@ -45,28 +47,27 @@ export const urlApi = {
         }
     },
 
-    // Получение оставшегося количества запросов
+    // Get remaining request count
     getRemainingRequests: async (): Promise<number> => {
-        // Получаем конфигурацию внутри функции для корректной работы с SSR
-        const config = useRuntimeConfig();
-        const apiBaseUrl = config.public.apiBase || 'https://localhost:7095';
+        // Get configuration inside the function for proper SSR support
+        const apiBaseUrl = getApiBaseUrl();
 
         try {
             const uniqueId = getOrCreateUniqueId();
             const token = process.client ? localStorage.getItem('token') : null;
 
-            console.log(`Making API request to ${apiBaseUrl}/api/urls/remaining-requests with client ID: ${uniqueId}`);
+            console.log(`Making API request to ${apiBaseUrl}/api/url/remaining-requests with client ID: ${uniqueId}`);
 
             const headers: Record<string, string> = {
                 'X-Client-Id': uniqueId
             };
 
-            // Добавляем токен авторизации если пользователь вошел в систему
+            // Add authorization token if user is logged in
             if (token) {
                 headers['Authorization'] = `Bearer ${token}`;
             }
 
-            const response = await fetch(`${apiBaseUrl}/api/urls/remaining-requests`, {
+            const response = await fetch(`${apiBaseUrl}/api/url/remaining-requests`, {
                 headers
             });
 
@@ -82,32 +83,4 @@ export const urlApi = {
             return 0;
         }
     }
-};
-
-// Utility function to get or create a unique ID for the user
-const getOrCreateUniqueId = (): string => {
-    let uniqueId;
-
-    // Use typeof window check to avoid SSR issues
-    if (typeof window !== 'undefined') {
-        uniqueId = localStorage.getItem('url-shortener-client-id');
-
-        if (!uniqueId) {
-            uniqueId = generateUUID();
-            localStorage.setItem('url-shortener-client-id', uniqueId);
-        }
-    } else {
-        uniqueId = generateUUID(); // Fallback for server-side
-    }
-
-    return uniqueId;
-};
-
-// Simple UUID generator
-const generateUUID = (): string => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        const r = Math.random() * 16 | 0;
-        const v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
 }; 

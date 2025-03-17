@@ -146,7 +146,7 @@
                             </button>
                         </div>
 
-                        <!-- Кнопка для завершения всех сессий, кроме текущей -->
+                        <!-- Button to terminate all sessions except current -->
                         <div v-if="activeSessions.length > 1"
                             class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
                             <button @click="terminateAllSessions"
@@ -208,41 +208,41 @@ const activeSessions = ref<Array<{
     current: boolean;
 }>>([]);
 
-// Загрузка сессий
+// Load sessions
 const loadSessions = async () => {
     try {
         isLoading.value = true;
 
-        // Загружаем сессии пользователя
+        // Load user sessions
         const sessions = await sessionApi.getSessions();
 
-        // Получаем текущую сессию для определения текущего устройства
+        // Get current session to identify current device
         const currentSession = await sessionApi.getCurrentSession();
 
-        // Форматируем полученные данные
+        // Format session data
         activeSessions.value = sessions.map((session: any) => {
-            // Форматирование времени последней активности
+            // Format last activity time
             const lastActiveDate = new Date(session.lastActivityAt);
             const now = new Date();
             const diffMinutes = Math.round((now.getTime() - lastActiveDate.getTime()) / (1000 * 60));
 
             let lastActive = '';
             if (diffMinutes < 1) {
-                lastActive = 'Сейчас';
+                lastActive = 'Now';
             } else if (diffMinutes < 60) {
-                lastActive = `${diffMinutes} мин. назад`;
+                lastActive = `${diffMinutes} min ago`;
             } else if (diffMinutes < 1440) {
                 const hours = Math.floor(diffMinutes / 60);
-                lastActive = `${hours} ч. назад`;
+                lastActive = `${hours} hr ago`;
             } else {
                 const days = Math.floor(diffMinutes / 1440);
-                lastActive = `${days} д. назад`;
+                lastActive = `${days} day(s) ago`;
             }
 
             return {
                 id: session.id,
-                device: session.deviceInfo || 'Неизвестное устройство',
-                location: session.location || 'Неизвестное местоположение',
+                device: session.deviceInfo || 'Unknown device',
+                location: session.location || 'Unknown location',
                 lastActive: lastActive,
                 current: session.id === currentSession.id
             };
@@ -256,7 +256,7 @@ const loadSessions = async () => {
     }
 };
 
-// Функции
+// Functions
 const changePassword = async () => {
     if (newPassword.value !== confirmPassword.value) {
         toastStore.error('New passwords do not match');
@@ -265,11 +265,11 @@ const changePassword = async () => {
 
     try {
         isChangingPassword.value = true;
-        // Здесь будет API запрос для смены пароля
+        // Here will be API request to change password
         await new Promise(resolve => setTimeout(resolve, 500));
         toastStore.success('Password updated successfully');
 
-        // Очистка формы
+        // Clear form
         currentPassword.value = '';
         newPassword.value = '';
         confirmPassword.value = '';
@@ -283,7 +283,7 @@ const changePassword = async () => {
 const toggle2FA = async () => {
     try {
         isToggling2FA.value = true;
-        // Здесь будет API запрос для включения/выключения 2FA
+        // Here will be API request to enable/disable 2FA
         await new Promise(resolve => setTimeout(resolve, 500));
         is2FAEnabled.value = !is2FAEnabled.value;
         toastStore.success(`Two-factor authentication ${is2FAEnabled.value ? 'enabled' : 'disabled'}`);
@@ -299,10 +299,10 @@ const terminateSession = async (sessionId: number) => {
         isTerminating.value = true;
         terminatingSessionId.value = sessionId;
 
-        // Отправляем запрос на завершение сессии
+        // Send request to terminate session
         await sessionApi.terminateSession(sessionId);
 
-        // Обновляем список сессий (удаляем завершенную)
+        // Update session list (remove terminated session)
         activeSessions.value = activeSessions.value.filter(session => session.id !== sessionId);
 
         toastStore.success('Session terminated successfully');
@@ -319,10 +319,10 @@ const terminateAllSessions = async () => {
     try {
         isTerminating.value = true;
 
-        // Отправляем запрос на завершение всех сессий, кроме текущей
+        // Send request to terminate all sessions except current
         await sessionApi.terminateAllSessionsExceptCurrent();
 
-        // Обновляем список сессий (оставляем только текущую)
+        // Update session list (keep only current session)
         activeSessions.value = activeSessions.value.filter(session => session.current);
 
         toastStore.success('All other sessions terminated successfully');
@@ -334,7 +334,7 @@ const terminateAllSessions = async () => {
     }
 };
 
-// Загрузка данных при монтировании компонента
+// Load data when component is mounted
 onMounted(() => {
     loadSessions();
 });

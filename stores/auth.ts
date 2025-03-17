@@ -20,7 +20,7 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await userApi.register(userData)
 
-                // Просто возвращаем ответ от API без авторизации
+                // Just return the API response without authorization
                 return response
             } catch (error: any) {
                 this.error = error.message
@@ -41,7 +41,7 @@ export const useAuthStore = defineStore('auth', {
                 this.token = response.token
                 this.isAuthenticated = true
 
-                // Сохранение токена
+                // Save token
                 setStringInStorage('token', response.token)
 
                 return response
@@ -55,7 +55,7 @@ export const useAuthStore = defineStore('auth', {
 
         setToken(token: string) {
             this.token = token
-            // Сохранение токена
+            // Save token
             setStringInStorage('token', token)
             this.isAuthenticated = true
         },
@@ -71,7 +71,7 @@ export const useAuthStore = defineStore('auth', {
                 this.token = response.token
                 this.isAuthenticated = true
 
-                // Сохранение токена
+                // Save token
                 setStringInStorage('token', response.token)
 
                 return response
@@ -84,7 +84,7 @@ export const useAuthStore = defineStore('auth', {
         },
 
         async fetchCurrentUser() {
-            // Проверяем наличие токена
+            // Check for token presence
             if (!getStringFromStorage('token') && !this.token) {
                 return null
             }
@@ -109,7 +109,7 @@ export const useAuthStore = defineStore('auth', {
             this.token = ''
             this.isAuthenticated = false
 
-            // Удаление токена
+            // Remove token
             removeLocalStorage('token')
         },
 

@@ -158,14 +158,12 @@
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
     position: relative;
 }
 
 .dark .glass-panel {
     background: var(--glass-bg-dark);
     border-color: var(--glass-border-dark);
-    box-shadow: var(--glass-shadow-dark);
 }
 
 .glass-card-highlight {

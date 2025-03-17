@@ -28,7 +28,6 @@ import FaqAccordion from '~/components/FaqAccordion.vue';
 .faq-section {
 	background-color: var(--glass-bg);
 	position: relative;
-	box-shadow: var(--glass-shadow);
 }
 
 .dark .faq-section {
