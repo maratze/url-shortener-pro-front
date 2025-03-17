@@ -25,6 +25,8 @@
 						active-class="router-link-active">Dashboard</NuxtLink>
 					<NuxtLink v-if="authStore.isAuthenticated" to="/analytics" class="nav-link"
 						active-class="router-link-active">Analytics</NuxtLink>
+					<NuxtLink v-if="authStore.isAuthenticated" to="/qr-codes" class="nav-link"
+						active-class="router-link-active">QR Codes</NuxtLink>
 					<NuxtLink v-if="!authStore.isAuthenticated && layoutType !== 'dashboard'" to="/pricing"
 						class="nav-link" active-class="router-link-active">Pricing</NuxtLink>
 					<NuxtLink v-if="!authStore.isAuthenticated && layoutType !== 'dashboard'" to="/about"
@@ -59,6 +61,10 @@
 						active-class="text-purple-600 dark:text-purple-400 font-semibold"
 						@click="mobileMenuOpen = false">
 						Analytics</NuxtLink>
+					<NuxtLink v-if="authStore.isAuthenticated" to="/qr-codes" class="mobile-nav-link"
+						active-class="text-purple-600 dark:text-purple-400 font-semibold"
+						@click="mobileMenuOpen = false">
+						QR Codes</NuxtLink>
 					<NuxtLink v-if="!authStore.isAuthenticated && layoutType !== 'dashboard'" to="/pricing"
 						class="mobile-nav-link" active-class="text-purple-600 dark:text-purple-400 font-semibold"
 						@click="mobileMenuOpen = false">

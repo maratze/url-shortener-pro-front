@@ -1,5 +1,5 @@
 <template>
-	<div class="container mx-auto p-6 max-w-7xl">
+	<div class="container mx-auto max-w-7xl">
 		<PageHeader title="Analytics">
 			<template #button>
 				<button
@@ -127,8 +127,7 @@
 		</div>
 
 		<!-- Фильтры и действия -->
-		<div
-			class="mb-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+		<div class="mb-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
 			<!-- Верхняя панель с поиском и управлением видом -->
 			<div class="flex flex-wrap gap-2 items-center justify-between">
 
@@ -295,8 +294,7 @@
 		</div>
 
 		<!-- Пагинация -->
-		<div
-			class="mt-6 mb-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+		<div class="mt-6 mb-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
 			<div class="flex flex-wrap gap-2 items-center justify-between">
 				<div class="text-sm text-slate-600 dark:text-slate-400">
 					Showing {{ paginationStart }}-{{ paginationEnd }} of {{ totalLinks }} links
