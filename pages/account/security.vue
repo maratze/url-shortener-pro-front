@@ -92,42 +92,80 @@
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
                 <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Active Sessions</h2>
                 <div class="space-y-4">
-                    <div v-for="session in activeSessions" :key="session.id"
-                        class="flex items-center justify-between py-3 border-b border-slate-200 dark:border-slate-700 last:border-0">
-                        <div class="flex items-center space-x-3">
-                            <div class="flex-shrink-0">
-                                <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-slate-900 dark:text-white">{{ session.device }}</p>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">{{ session.location }} · Last
-                                    active {{ session.lastActive }}</p>
-                            </div>
-                        </div>
-                        <span v-if="session.current"
-                            class="px-2.5 py-1 text-xs font-medium text-green-700 bg-green-100 dark:bg-green-900/30 dark:text-green-400 rounded-full">
-                            Current
-                        </span>
-                        <button v-else @click="terminateSession(session.id)"
-                            class="px-2.5 py-1 text-xs font-medium text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-400 rounded-full hover:bg-red-200 dark:hover:bg-red-900/50 h-6 min-w-[80px] inline-flex items-center justify-center"
-                            :disabled="isTerminating && terminatingSessionId === session.id">
-                            <svg v-if="isTerminating && terminatingSessionId === session.id"
-                                class="animate-spin -ml-1 mr-1 h-3 w-3 text-red-700 dark:text-red-400"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                            <span>{{ isTerminating && terminatingSessionId === session.id ? 'Terminating...' :
-                                'Terminate' }}</span>
-                        </button>
+                    <div v-if="isLoading" class="py-4 text-center text-slate-500 dark:text-slate-400">
+                        <svg class="animate-spin h-5 w-5 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        Loading sessions...
                     </div>
+                    <div v-else-if="activeSessions.length === 0"
+                        class="py-4 text-center text-slate-500 dark:text-slate-400">
+                        No active sessions found
+                    </div>
+                    <template v-else>
+                        <div v-for="session in activeSessions" :key="session.id"
+                            class="flex items-center justify-between py-3 border-b border-slate-200 dark:border-slate-700 last:border-0">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-slate-900 dark:text-white">{{ session.device }}
+                                    </p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">{{ session.location }} · Last
+                                        active {{ session.lastActive }}</p>
+                                </div>
+                            </div>
+                            <span v-if="session.current"
+                                class="px-2.5 py-1 text-xs font-medium text-green-700 bg-green-100 dark:bg-green-900/30 dark:text-green-400 rounded-full">
+                                Current
+                            </span>
+                            <button v-else @click="terminateSession(session.id)"
+                                class="px-2.5 py-1 text-xs font-medium text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-400 rounded-full hover:bg-red-200 dark:hover:bg-red-900/50 h-6 min-w-[80px] inline-flex items-center justify-center"
+                                :disabled="isTerminating && terminatingSessionId === session.id">
+                                <svg v-if="isTerminating && terminatingSessionId === session.id"
+                                    class="animate-spin -ml-1 mr-1 h-3 w-3 text-red-700 dark:text-red-400"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                        stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                                <span>{{ isTerminating && terminatingSessionId === session.id ? 'Terminating...' :
+                                    'Terminate' }}</span>
+                            </button>
+                        </div>
+
+                        <!-- Кнопка для завершения всех сессий, кроме текущей -->
+                        <div v-if="activeSessions.length > 1"
+                            class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                            <button @click="terminateAllSessions"
+                                class="w-full py-2 px-4 text-sm font-medium text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 flex items-center justify-center"
+                                :disabled="isTerminating">
+                                <svg v-if="isTerminating && !terminatingSessionId"
+                                    class="animate-spin -ml-1 mr-2 h-4 w-4 text-red-700 dark:text-red-400"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                        stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                                <span>{{ isTerminating && !terminatingSessionId ? 'Terminating all sessions...' :
+                                    'Terminate all other sessions' }}</span>
+                            </button>
+                        </div>
+                    </template>
                 </div>
             </section>
         </div>
@@ -135,8 +173,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useToastStore } from '~/stores/toast';
+import { sessionApi } from '~/services/api/sessionApi';
 
 definePageMeta({
     layout: 'account',
@@ -158,26 +197,66 @@ const isToggling2FA = ref(false);
 // Session management
 const isTerminating = ref(false);
 const terminatingSessionId = ref<number | null>(null);
+const isLoading = ref(false);
 
-// Active sessions mock data
-const activeSessions = ref([
-    {
-        id: 1,
-        device: 'MacBook Pro - Chrome',
-        location: 'New York, US',
-        lastActive: 'Now',
-        current: true
-    },
-    {
-        id: 2,
-        device: 'iPhone 12 - Safari',
-        location: 'New York, US',
-        lastActive: '2 hours ago',
-        current: false
+// Active sessions data
+const activeSessions = ref<Array<{
+    id: number;
+    device: string;
+    location: string;
+    lastActive: string;
+    current: boolean;
+}>>([]);
+
+// Загрузка сессий
+const loadSessions = async () => {
+    try {
+        isLoading.value = true;
+
+        // Загружаем сессии пользователя
+        const sessions = await sessionApi.getSessions();
+
+        // Получаем текущую сессию для определения текущего устройства
+        const currentSession = await sessionApi.getCurrentSession();
+
+        // Форматируем полученные данные
+        activeSessions.value = sessions.map((session: any) => {
+            // Форматирование времени последней активности
+            const lastActiveDate = new Date(session.lastActivityAt);
+            const now = new Date();
+            const diffMinutes = Math.round((now.getTime() - lastActiveDate.getTime()) / (1000 * 60));
+
+            let lastActive = '';
+            if (diffMinutes < 1) {
+                lastActive = 'Сейчас';
+            } else if (diffMinutes < 60) {
+                lastActive = `${diffMinutes} мин. назад`;
+            } else if (diffMinutes < 1440) {
+                const hours = Math.floor(diffMinutes / 60);
+                lastActive = `${hours} ч. назад`;
+            } else {
+                const days = Math.floor(diffMinutes / 1440);
+                lastActive = `${days} д. назад`;
+            }
+
+            return {
+                id: session.id,
+                device: session.deviceInfo || 'Неизвестное устройство',
+                location: session.location || 'Неизвестное местоположение',
+                lastActive: lastActive,
+                current: session.id === currentSession.id
+            };
+        });
+
+    } catch (error) {
+        console.error('Error loading sessions:', error);
+        toastStore.error('Failed to load sessions');
+    } finally {
+        isLoading.value = false;
     }
-]);
+};
 
-// Functions
+// Функции
 const changePassword = async () => {
     if (newPassword.value !== confirmPassword.value) {
         toastStore.error('New passwords do not match');
@@ -219,15 +298,44 @@ const terminateSession = async (sessionId: number) => {
     try {
         isTerminating.value = true;
         terminatingSessionId.value = sessionId;
-        // Здесь будет API запрос для завершения сессии
-        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // Отправляем запрос на завершение сессии
+        await sessionApi.terminateSession(sessionId);
+
+        // Обновляем список сессий (удаляем завершенную)
         activeSessions.value = activeSessions.value.filter(session => session.id !== sessionId);
+
         toastStore.success('Session terminated successfully');
     } catch (error) {
+        console.error('Error terminating session:', error);
         toastStore.error('Failed to terminate session');
     } finally {
         isTerminating.value = false;
         terminatingSessionId.value = null;
     }
 };
+
+const terminateAllSessions = async () => {
+    try {
+        isTerminating.value = true;
+
+        // Отправляем запрос на завершение всех сессий, кроме текущей
+        await sessionApi.terminateAllSessionsExceptCurrent();
+
+        // Обновляем список сессий (оставляем только текущую)
+        activeSessions.value = activeSessions.value.filter(session => session.current);
+
+        toastStore.success('All other sessions terminated successfully');
+    } catch (error) {
+        console.error('Error terminating all sessions:', error);
+        toastStore.error('Failed to terminate sessions');
+    } finally {
+        isTerminating.value = false;
+    }
+};
+
+// Загрузка данных при монтировании компонента
+onMounted(() => {
+    loadSessions();
+});
 </script>

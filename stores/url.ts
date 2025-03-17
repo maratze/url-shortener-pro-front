@@ -21,8 +21,8 @@ export const useUrlStore = defineStore('url', {
     state: () => ({
         urls: [] as UrlData[],
         loading: false,
-        remainingFreeRequests: 30,
-        totalFreeRequests: 30
+        remainingFreeRequests: 10,
+        totalFreeRequests: 10
     }),
 
     getters: {
@@ -34,7 +34,7 @@ export const useUrlStore = defineStore('url', {
                 return Infinity;
             }
             // Иначе возвращаем стандартный лимит для бесплатных пользователей
-            return 30;
+            return 10;
         }
     },
 
@@ -194,12 +194,25 @@ export const useUrlStore = defineStore('url', {
                 // Fallback - используем локальную логику
                 if (process.client) {
                     const lastResetDate = localStorage.getItem('last-reset-date');
-                    const today = new Date().toDateString();
+                    // Проверяем если прошел месяц с последнего сброса
+                    const currentDate = new Date();
+                    let shouldReset = false;
 
-                    if (!lastResetDate || lastResetDate !== today) {
-                        this.remainingFreeRequests = 30;
-                        localStorage.setItem('last-reset-date', today);
-                        localStorage.setItem('remaining-requests', '30');
+                    if (lastResetDate) {
+                        const lastReset = new Date(lastResetDate);
+                        // Разница в месяцах
+                        const monthDiff =
+                            (currentDate.getFullYear() - lastReset.getFullYear()) * 12 +
+                            (currentDate.getMonth() - lastReset.getMonth());
+                        shouldReset = monthDiff >= 1;
+                    } else {
+                        shouldReset = true;
+                    }
+
+                    if (shouldReset) {
+                        this.remainingFreeRequests = 10;
+                        localStorage.setItem('last-reset-date', currentDate.toISOString());
+                        localStorage.setItem('remaining-requests', '10');
                     }
                 }
 

@@ -1,6 +1,6 @@
 <template>
     <div class="w-full">
-        <div class="space-y-6">
+        <div class="space-y-4">
             <!-- Current Plan -->
             <section
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
@@ -26,7 +26,7 @@
                             </p>
                         </div>
                         <NuxtLink v-if="!isPremium" to="/pricing"
-                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 min-w-[140px] h-10">
                             Upgrade to PRO
                         </NuxtLink>
                     </div>
@@ -38,8 +38,17 @@
                         <span>{{ nextBillingDate }}</span>
                     </div>
                     <button @click="cancelSubscription"
-                        class="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
-                        Cancel subscription
+                        class="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 inline-flex items-center justify-center min-w-[150px] h-8"
+                        :disabled="isCancelling">
+                        <svg v-if="isCancelling" class="animate-spin -ml-1 mr-2 h-4 w-4 text-red-600 dark:text-red-400"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        <span>{{ isCancelling ? 'Cancelling...' : 'Cancel subscription' }}</span>
                     </button>
                 </div>
             </section>
@@ -70,14 +79,33 @@
                         </div>
                     </div>
                     <button @click="updatePaymentMethod"
-                        class="text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300">
-                        Update
+                        class="text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 inline-flex items-center justify-center min-w-[80px] h-8"
+                        :disabled="isUpdatingPayment">
+                        <svg v-if="isUpdatingPayment"
+                            class="animate-spin -ml-1 mr-2 h-4 w-4 text-indigo-600 dark:text-indigo-400"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        <span>{{ isUpdatingPayment ? 'Updating...' : 'Update' }}</span>
                     </button>
                 </div>
 
                 <button v-else @click="addPaymentMethod"
-                    class="mt-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Add Payment Method
+                    class="mt-2 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 min-w-[160px] h-10"
+                    :disabled="isAddingPayment">
+                    <svg v-if="isAddingPayment" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    <span>{{ isAddingPayment ? 'Adding...' : 'Add Payment Method' }}</span>
                 </button>
             </section>
 
@@ -121,8 +149,19 @@
                                 </td>
                                 <td class="px-4 py-3 whitespace-nowrap text-right text-sm">
                                     <button @click="downloadInvoice(invoice.id)"
-                                        class="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300">
-                                        Download
+                                        class="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 inline-flex items-center justify-center min-w-[100px] h-8"
+                                        :disabled="isDownloading && downloadingInvoiceId === invoice.id">
+                                        <svg v-if="isDownloading && downloadingInvoiceId === invoice.id"
+                                            class="animate-spin -ml-1 mr-2 h-4 w-4 text-indigo-600 dark:text-indigo-400"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor"
+                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                            </path>
+                                        </svg>
+                                        <span>{{ isDownloading && downloadingInvoiceId === invoice.id ? 'Downloading...'
+                                            : 'Download' }}</span>
                                     </button>
                                 </td>
                             </tr>
@@ -146,6 +185,13 @@ definePageMeta({
 
 const toastStore = useToastStore();
 const { isPremium } = useAuthService();
+
+// Состояния загрузки
+const isCancelling = ref(false);
+const isUpdatingPayment = ref(false);
+const isAddingPayment = ref(false);
+const isDownloading = ref(false);
+const downloadingInvoiceId = ref<number | null>(null);
 
 // Mock data
 const nextBillingDate = computed(() => {
@@ -211,42 +257,56 @@ const getCardIcon = (brand: string) => {
 const cancelSubscription = async () => {
     if (confirm('Are you sure you want to cancel your subscription? You will lose access to premium features at the end of your billing period.')) {
         try {
+            isCancelling.value = true;
             // Здесь будет API запрос для отмены подписки
             await new Promise(resolve => setTimeout(resolve, 500));
             toastStore.success('Subscription cancelled successfully');
         } catch (error) {
             toastStore.error('Failed to cancel subscription');
+        } finally {
+            isCancelling.value = false;
         }
     }
 };
 
 const updatePaymentMethod = async () => {
     try {
+        isUpdatingPayment.value = true;
         // Здесь будет API запрос для обновления способа оплаты
         await new Promise(resolve => setTimeout(resolve, 500));
         toastStore.success('Payment method updated successfully');
     } catch (error) {
         toastStore.error('Failed to update payment method');
+    } finally {
+        isUpdatingPayment.value = false;
     }
 };
 
 const addPaymentMethod = async () => {
     try {
+        isAddingPayment.value = true;
         // Здесь будет API запрос для добавления способа оплаты
         await new Promise(resolve => setTimeout(resolve, 500));
         toastStore.success('Payment method added successfully');
     } catch (error) {
         toastStore.error('Failed to add payment method');
+    } finally {
+        isAddingPayment.value = false;
     }
 };
 
 const downloadInvoice = async (invoiceId: number) => {
     try {
+        isDownloading.value = true;
+        downloadingInvoiceId.value = invoiceId;
         // Здесь будет API запрос для скачивания счета
         await new Promise(resolve => setTimeout(resolve, 500));
         toastStore.success('Invoice downloaded successfully');
     } catch (error) {
         toastStore.error('Failed to download invoice');
+    } finally {
+        isDownloading.value = false;
+        downloadingInvoiceId.value = null;
     }
 };
 </script>
