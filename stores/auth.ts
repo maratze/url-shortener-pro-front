@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { userApi } from '~/services/api/userApi'
-import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest } from '~/types/auth'
+import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest } from '~/types/auth'
 import { getStringFromStorage, setStringInStorage, removeLocalStorage } from '~/utils/client'
 
 export const useAuthStore = defineStore('auth', {
@@ -111,6 +111,23 @@ export const useAuthStore = defineStore('auth', {
 
             // Удаление токена
             removeLocalStorage('token')
+        },
+
+        async updateProfile(profileData: UpdateProfileRequest) {
+            this.loading = true
+            this.error = ''
+
+            try {
+                const response = await userApi.updateProfile(profileData)
+
+                this.user = response
+                return response
+            } catch (error: any) {
+                this.error = error.message
+                throw error
+            } finally {
+                this.loading = false
+            }
         }
     }
 })

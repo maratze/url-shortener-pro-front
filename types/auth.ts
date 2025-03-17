@@ -19,8 +19,15 @@ export interface OAuthRequest {
 export interface UserResponse {
     id: number;
     email: string;
+    firstName?: string;
+    lastName?: string;
     isEmailVerified: boolean;
     isPremium: boolean;
     token: string;
     registrationDate: string;
+}
+
+export interface UpdateProfileRequest {
+    firstName?: string;
+    lastName?: string;
 }

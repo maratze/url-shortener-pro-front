@@ -1,6 +1,6 @@
 <template>
     <div class="w-full">
-        <div class="space-y-6">
+        <div class="space-y-4">
             <!-- Email Notifications -->
             <section
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
@@ -54,7 +54,7 @@
             <!-- Push Notifications -->
             <section
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-                <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Push Notifications</h2>
                         <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -88,14 +88,14 @@
                             Start Time
                         </label>
                         <input type="time" v-model="quietHours.start"
-                            class="block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white sm:text-sm">
+                            class="block w-full h-11 px-4 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white text-base">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                             End Time
                         </label>
                         <input type="time" v-model="quietHours.end"
-                            class="block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white sm:text-sm">
+                            class="block w-full h-11 px-4 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white text-base">
                     </div>
                 </div>
             </section>

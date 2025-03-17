@@ -1,5 +1,5 @@
 import { $fetch } from 'ohmyfetch'
-import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest } from '~/types/auth'
+import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest } from '~/types/auth'
 
 // Добавляем функцию для получения базового URL API
 const getApiBaseUrl = () => {
@@ -62,6 +62,27 @@ export const userApi = {
         } catch (error) {
             console.error('Error getting current user:', error);
             throw new Error('Failed to get user data')
+        }
+    },
+
+    updateProfile: async (profileData: UpdateProfileRequest): Promise<UserResponse> => {
+        try {
+            // Safe localStorage access that works with SSR
+            const token = localStorage.getItem('token');
+            const apiBaseUrl = getApiBaseUrl();
+            console.log(`Making API request to ${apiBaseUrl}/api/users/profile`);
+
+            return await $fetch(`${apiBaseUrl}/api/users/profile`, {
+                method: 'PUT',
+                body: profileData,
+                headers: token ? {
+                    'Authorization': `Bearer ${token}`
+                } : {}
+            })
+        } catch (error: any) {
+            console.error('Error updating profile:', error);
+            const message = error.response?._data?.message || 'Failed to update profile'
+            throw new Error(message)
         }
     },
 

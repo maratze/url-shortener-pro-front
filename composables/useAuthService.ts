@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
 import { useAuthStore } from '~/stores/auth'
+import type { UpdateProfileRequest } from '~/types/auth'
 
 /**
  * Композабл для управления аутентификацией
@@ -73,6 +74,21 @@ export const useAuthService = () => {
     }
 
     /**
+     * Обновление профиля пользователя
+     */
+    const updateProfile = async (profileData: UpdateProfileRequest) => {
+        try {
+            await authStore.updateProfile(profileData)
+            return { success: true }
+        } catch (error: any) {
+            return {
+                success: false,
+                error: error?.message || 'Не удалось обновить профиль'
+            }
+        }
+    }
+
+    /**
      * Выход из системы
      */
     const logout = async () => {
@@ -88,6 +104,7 @@ export const useAuthService = () => {
         checkAuthStatus,
         login,
         register,
+        updateProfile,
         logout
     }
 }
