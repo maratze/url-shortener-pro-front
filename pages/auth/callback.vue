@@ -29,8 +29,11 @@ const toastStore = useToastStore();
 
 const loading = ref(true);
 const error = ref('');
+const authCompleted = ref(false); // Флаг для предотвращения повторной обработки
 
 onMounted(async () => {
+    if (authCompleted.value) return; // Предотвращаем повторное выполнение
+
     try {
         // Получаем параметры из URL
         const token = route.query.token as string;
@@ -41,15 +44,37 @@ onMounted(async () => {
             throw new Error('Токен аутентификации не найден');
         }
 
-        // Сохраняем токен и получаем данные пользователя
+        if (!email) {
+            throw new Error('Email пользователя не найден');
+        }
+
+        console.log('Полученные данные:', { token: token ? 'Присутствует' : 'Отсутствует', email });
+
+        // Сохраняем токен
         authStore.setToken(token);
+
+        // Устанавливаем флаг завершения аутентификации
+        authCompleted.value = true;
+
+        // Создаем базовые данные пользователя с полученным email 
+        // для предотвращения ошибки при обращении к email
+        authStore.setUserData({
+            id: 0,  // Будет обновлено после fetchCurrentUser
+            email: email,
+            token: token,
+            isPremium: false,
+            isEmailVerified: false,
+            registrationDate: new Date().toISOString()
+        });
+
+        // Теперь запрашиваем полные данные с сервера
         await authStore.fetchCurrentUser();
 
         if (!authStore.isAuthenticated) {
             throw new Error('Не удалось завершить аутентификацию');
         }
 
-        // Показываем сообщение об успешном входе
+        // Показываем сообщение об успешном входе только один раз
         toastStore.success('Вход выполнен успешно!');
 
         // Перенаправляем пользователя на целевую страницу

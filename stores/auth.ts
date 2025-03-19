@@ -85,6 +85,23 @@ export const useAuthStore = defineStore('auth', {
             this.isAuthenticated = true
         },
 
+        // Новый метод для установки данных пользователя без дополнительного запроса
+        setUserData(userData: UserResponse) {
+            if (!userData || !userData.email) {
+                console.error('Attempted to set invalid user data')
+                return
+            }
+
+            this.user = userData
+
+            if (userData.token && !this.token) {
+                this.setToken(userData.token)
+            }
+
+            this.isAuthenticated = true
+            console.log('User data set directly:', userData.email)
+        },
+
         async loginWithOAuth(oauthData: OAuthRequest) {
             this.loading = true
             this.error = ''

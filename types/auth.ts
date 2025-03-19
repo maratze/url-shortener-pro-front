@@ -15,6 +15,9 @@ export interface OAuthRequest {
     token: string;
     email?: string;
     name?: string;
+    firstName?: string;
+    lastName?: string;
+    picture?: string;
 }
 
 export interface UserResponse {
