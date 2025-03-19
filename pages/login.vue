@@ -1,5 +1,5 @@
 <template>
-	<div class="login-page py-20 px-6 relative min-h-screen flex items-start justify-center overflow-hidden">
+	<div class="login-page py-20 px-6 relative flex items-start justify-center overflow-hidden">
 		<div class="container mx-auto max-w-lg z-10">
 			<LoginForm />
 		</div>

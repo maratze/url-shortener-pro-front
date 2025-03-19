@@ -13,6 +13,23 @@
 			</div>
 
 			<form @submit.prevent="handleSubmit" class="space-y-6">
+				<!-- FirstName поле -->
+				<div class="form-field">
+					<label class="form-label" for="firstName">First Name</label>
+					<div class="relative">
+						<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none"
+								viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+							</svg>
+						</div>
+						<input id="firstName" v-model="form.firstName" type="text" class="form-input pl-10"
+							placeholder="Your name" />
+					</div>
+					<p v-if="errors.firstName" class="form-error">{{ errors.firstName }}</p>
+				</div>
+
 				<!-- Email поле -->
 				<div class="form-field">
 					<label class="form-label" for="email">Email</label>
@@ -185,12 +202,14 @@ const loading = ref(false);
 const showPassword = ref(false);
 
 const form = reactive({
+	firstName: '',
 	email: '',
 	password: '',
 	agreeToTerms: false
 });
 
 const errors = reactive({
+	firstName: '',
 	email: '',
 	password: '',
 	general: ''
@@ -275,6 +294,7 @@ const strengthColorClass = (level: number) => {
 };
 
 const clearErrors = () => {
+	errors.firstName = '';
 	errors.email = '';
 	errors.password = '';
 	errors.general = '';
@@ -283,6 +303,11 @@ const clearErrors = () => {
 const validateForm = () => {
 	clearErrors();
 	let isValid = true;
+
+	if (!form.firstName) {
+		errors.firstName = 'First Name is required';
+		isValid = false;
+	}
 
 	if (!form.email) {
 		errors.email = 'Email is required';
@@ -316,6 +341,7 @@ const handleSubmit = async () => {
 
 	try {
 		await authStore.register({
+			firstName: form.firstName,
 			email: form.email,
 			password: form.password
 		} as RegisterRequest);

@@ -37,8 +37,10 @@
 				<div class="flex items-center space-x-3">
 					<!-- Показываем кнопки регистрации и входа для неавторизованных пользователей -->
 					<template v-if="!authStore.isAuthenticated">
-						<NuxtLink to="/register" class="register-btn hidden sm:flex">Register</NuxtLink>
-						<NuxtLink to="/login" class="login-btn">Login</NuxtLink>
+						<template v-if="layoutType !== 'auth'">
+							<NuxtLink to="/register" class="register-btn hidden sm:flex">Register</NuxtLink>
+							<NuxtLink to="/login" class="login-btn">Login</NuxtLink>
+						</template>
 					</template>
 
 					<!-- Показываем меню пользователя для авторизованных пользователей -->
@@ -77,7 +79,8 @@
 
 					<!-- Показываем кнопки регистрации/входа или профиль пользователя -->
 					<template v-if="!authStore.isAuthenticated">
-						<NuxtLink to="/register"
+						<NuxtLink
+							to="/register"
 							class="mobile-nav-link text-purple-600 dark:text-purple-400 font-semibold"
 							@click="mobileMenuOpen = false">Register</NuxtLink>
 						<NuxtLink to="/login" class="mobile-nav-link" @click="mobileMenuOpen = false">Login</NuxtLink>

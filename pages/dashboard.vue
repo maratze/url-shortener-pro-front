@@ -722,8 +722,8 @@ const userFullName = computed(() => {
     }
 
     // Используем имя, если есть
-    if (authStore.user.name) {
-        return authStore.user.name;
+    if (authStore.user.firstName) {
+        return authStore.user.firstName;
     }
 
     // В крайнем случае используем email
