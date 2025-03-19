@@ -77,16 +77,31 @@
                         <label for="email"
                             class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email
                             Address</label>
-                        <input type="email" id="email" :value="email" disabled
-                            class="cursor-not-allowed opacity-75 block w-full h-11 px-4 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white text-base">
-                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Email address cannot be changed.
-                            Please
-                            contact support for assistance.</p>
+                        <div class="relative">
+                            <input type="email" id="email" :value="email" disabled
+                                class="cursor-not-allowed bg-slate-100 dark:bg-slate-700/50 block w-full h-11 px-4 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none dark:text-slate-400 text-slate-500 text-base">
+                            <div
+                                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400 flex items-center">
+                            <svg class="h-3 w-3 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Email address cannot be changed. Please contact support for assistance.
+                        </p>
                     </div>
 
                     <div class="pt-2">
                         <button type="submit"
-                            class="inline-flex justify-center items-center py-2.5 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 min-w-[120px] h-10"
+                            class="inline-flex justify-center items-center py-2.5 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 min-w-[120px] h-10 w-[140px]"
                             :disabled="isLoading">
                             <svg v-if="isLoading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -144,7 +159,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useToastStore } from '~/stores/toast';
 import { useAuthService } from '~/composables/useAuthService';
 
@@ -205,21 +220,42 @@ const fetchUserData = async () => {
 
 const saveProfileInfo = async () => {
     try {
+        // Удаляем лишние пробелы в начале и конце полей
+        firstName.value = firstName.value.trim();
+        lastName.value = lastName.value.trim();
+
+        // Базовая валидация
+        if (firstName.value.length > 50) {
+            toastStore.error('First name is too long (maximum 50 characters)');
+            return;
+        }
+
+        if (lastName.value.length > 50) {
+            toastStore.error('Last name is too long (maximum 50 characters)');
+            return;
+        }
+
         isLoading.value = true;
 
-        const result = await updateProfile({
+        // Вызываем API для обновления профиля
+        const response = await updateProfile({
             firstName: firstName.value,
             lastName: lastName.value
         });
 
-        if (result.success) {
+        if (response.success) {
+            // Показываем сообщение об успехе
             toastStore.success('Profile information saved successfully');
+
+            // Обновляем локальные данные (на случай, если API изменило данные)
+            fetchUserData();
         } else {
-            toastStore.error(result.error || 'Failed to save profile information');
+            // Показываем сообщение об ошибке
+            toastStore.error(response.error || 'Failed to save profile information');
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error saving profile:', error);
-        toastStore.error('Failed to save profile information');
+        toastStore.error(error.message || 'Failed to save profile information');
     } finally {
         isLoading.value = false;
     }
@@ -251,4 +287,27 @@ const deleteAccount = async () => {
 onMounted(() => {
     fetchUserData();
 });
+
+// Получаем данные пользователя при изменении объекта user (например, после входа)
+watch(() => user.value, (newUser) => {
+    if (newUser) {
+        fetchUserData();
+    }
+}, { immediate: true });
 </script>
+
+<style scoped>
+/* Стили для input с состоянием disabled */
+input:disabled {
+    opacity: 0.8;
+}
+
+/* Стили для кнопки, чтобы она не меняла размер */
+button[type="submit"] {
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+button[type="submit"] svg {
+    flex-shrink: 0;
+}
+</style>
