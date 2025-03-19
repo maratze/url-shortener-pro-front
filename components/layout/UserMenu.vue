@@ -59,9 +59,21 @@ const menuButton = ref(null);
 
 // Вычисляем инициалы для аватара
 const userInitials = computed(() => {
-    if (!user.value?.email) return '?';
+    let result = '';
 
-    return user.value.email.charAt(0).toUpperCase();
+    if (user.value?.firstName) {
+        result += user.value.firstName.charAt(0);
+    }
+
+    if (user.value?.lastName) {
+        result += user.value.lastName.charAt(0);
+    }
+
+    if (result === '' && user.value.email) {
+        result += user.value.email.charAt(0)
+    }
+
+    return result ? result : '?';
 });
 
 // Переключение видимости меню
