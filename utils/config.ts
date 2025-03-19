@@ -2,35 +2,34 @@
  * Конфигурационный файл для API и других настроек приложения
  */
 
+import { useRuntimeConfig } from '#app';
+
 /**
  * Возвращает базовый URL API в зависимости от окружения
- * В production берет URL из переменной окружения или использует дефолтное значение
- * В development использует локальный адрес
+ * Использует runtimeConfig из Nuxt для доступа к настройкам
  */
 export function getApiBaseUrl(): string {
-    // Проверяем окружение
-    const isDev = process.env.NODE_ENV === 'development';
-
-    // В режиме разработки используем локальный сервер
-    if (isDev) {
-        return 'http://localhost:3000';
+    // Используем useRuntimeConfig для получения настроек из nuxt.config.ts
+    if (process.client) {
+        const config = useRuntimeConfig();
+        return config.public.apiBase;
     }
 
-    // В production берем URL из переменных окружения или используем дефолтный
-    const apiUrl = process.env.NUXT_PUBLIC_API_URL || 'https://api-url-shortener.com';
-
-    return apiUrl;
+    // Fallback для SSR или если не можем получить конфигурацию
+    return process.env.API_BASE_URL!;
 }
 
 /**
  * Получаем URL фронтенда для редиректов и callback'ов
+ * Использует runtimeConfig из Nuxt для доступа к настройкам
  */
 export function getFrontendUrl(): string {
-    const isDev = process.env.NODE_ENV === 'development';
-
-    if (isDev) {
-        return 'http://localhost:3000';
+    // Используем useRuntimeConfig для получения настроек из nuxt.config.ts
+    if (process.client) {
+        const config = useRuntimeConfig();
+        return config.public.baseUrl;
     }
 
-    return process.env.NUXT_PUBLIC_FRONTEND_URL || 'https://url-shortener.com';
+    // Fallback для SSR или если не можем получить конфигурацию
+    return process.env.BASE_URL!;
 } 

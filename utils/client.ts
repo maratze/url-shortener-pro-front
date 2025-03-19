@@ -37,8 +37,21 @@ export const setLocalStorage = <T>(key: string, value: T): boolean => {
  * @param key Ключ в localStorage
  */
 export const removeLocalStorage = (key: string): boolean => {
+    if (typeof window === 'undefined') {
+        return false; // Для SSR
+    }
+
     try {
+        const hadValue = localStorage.getItem(key) !== null;
         localStorage.removeItem(key);
+
+        if (key === 'token') {
+            console.log(`Removed ${key} from localStorage`, {
+                previouslyExisted: hadValue,
+                nowExists: localStorage.getItem(key) !== null
+            });
+        }
+
         return true;
     } catch (error) {
         console.error(`Error removing ${key} from localStorage:`, error);

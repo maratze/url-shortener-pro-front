@@ -59,10 +59,11 @@ export default defineNuxtConfig({
     nitro: {
         devProxy: {
             '/api': {
-                target: process.env.API_BASE_URL || 'https://localhost:7095',
+                target: 'https://localhost:7095',
                 changeOrigin: true,
                 secure: false,
-                ws: true
+                ws: true,
+                prependPath: false
             }
         }
     }

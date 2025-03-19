@@ -7,9 +7,6 @@ import { getApiBaseUrl } from '../../utils/config';
 export const urlApi = {
     // Shorten URL
     shortenUrl: async (originalUrl: string, customAlias?: string) => {
-        // Get configuration inside the function for proper SSR support
-        const apiBaseUrl = getApiBaseUrl();
-
         try {
             const payload = {
                 originalUrl,
@@ -18,9 +15,9 @@ export const urlApi = {
 
             const uniqueId = getOrCreateUniqueId();
 
-            console.log(`Making API request to ${apiBaseUrl}/api/url with client ID: ${uniqueId}`);
+            console.log(`Making API request to ${getApiBaseUrl()}/api/url with client ID: ${uniqueId}`);
 
-            const response = await fetch(`${apiBaseUrl}/api/url`, {
+            const response = await fetch(`${getApiBaseUrl()}/api/url`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -49,14 +46,11 @@ export const urlApi = {
 
     // Get remaining request count
     getRemainingRequests: async (): Promise<number> => {
-        // Get configuration inside the function for proper SSR support
-        const apiBaseUrl = getApiBaseUrl();
-
         try {
             const uniqueId = getOrCreateUniqueId();
             const token = process.client ? localStorage.getItem('token') : null;
 
-            console.log(`Making API request to ${apiBaseUrl}/api/url/remaining-requests with client ID: ${uniqueId}`);
+            console.log(`Making API request to ${getApiBaseUrl()}/api/url/remaining-requests with client ID: ${uniqueId}`);
 
             const headers: Record<string, string> = {
                 'X-Client-Id': uniqueId
@@ -67,7 +61,7 @@ export const urlApi = {
                 headers['Authorization'] = `Bearer ${token}`;
             }
 
-            const response = await fetch(`${apiBaseUrl}/api/url/remaining-requests`, {
+            const response = await fetch(`${getApiBaseUrl()}/api/url/remaining-requests`, {
                 headers
             });
 

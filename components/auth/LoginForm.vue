@@ -169,6 +169,7 @@ import { useAuthStore } from '~/stores/auth';
 import { useToastStore } from '~/stores/toast';
 import type { LoginRequest, OAuthRequest } from "~/types/auth";
 import { useAuthService } from '~/composables/useAuthService';
+import { getStringFromStorage, setStringInStorage } from '~/utils/client';
 
 const authStore = useAuthStore();
 const toastStore = useToastStore();
@@ -235,23 +236,42 @@ const handleSubmit = async () => {
 	clearErrors();
 
 	try {
-		await authStore.login({
+		// Вызываем login из authStore
+		const response = await authStore.login({
 			email: form.email,
 			password: form.password,
 			remember: form.rememberMe
 		} as LoginRequest);
 
+		// Проверяем успешность авторизации
 		if (authStore.error) {
 			errors.general = authStore.error;
 			toastStore.error(authStore.error);
-		} else if (authStore.isAuthenticated) {
-			// Use setTimeout to show notification after page transition
+		} else if (authStore.isAuthenticated && response?.token) {
+			// Показываем уведомление об успешном входе
 			toastStore.success('Successfully logged in! Welcome back.');
+			console.log('Login successful, authenticated:', authStore.isAuthenticated);
+
+			// Проверяем, что токен действительно сохранен
+			const token = getStringFromStorage('token');
+			if (!token) {
+				console.warn('Token not found in localStorage after login!');
+				// Пробуем сохранить еще раз
+				setStringInStorage('token', response.token);
+			}
 
 			// Небольшая задержка перед редиректом для отображения уведомления
+			// и завершения сохранения токена
 			setTimeout(() => {
-				navigateTo('/dashboard');
+				// Получаем страницу для перенаправления, если она была указана
+				const redirectPath = route.query.redirect?.toString() || '/dashboard';
+				navigateTo(redirectPath);
 			}, 300);
+		} else {
+			// Необычная ситуация - нет ошибки, но и нет успешной авторизации
+			errors.general = 'An unexpected error occurred. Please try again.';
+			toastStore.error(errors.general);
+			console.error('Login response without token:', response);
 		}
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : 'Failed to log in. Please try again.';

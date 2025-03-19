@@ -324,12 +324,12 @@ const handleSubmit = async () => {
 			errors.general = authStore.error;
 			toastStore.error(authStore.error);
 		} else {
-			toastStore.success('Account created successfully! Please check your email to verify your account.');
+			toastStore.success('Account created successfully! You are now logged in.');
 
 			// Небольшая задержка перед редиректом для отображения уведомления
 			setTimeout(() => {
-				// Redirect to login page with success message and email
-				navigateTo(`/login?registered=true&email=${encodeURIComponent(form.email)}`);
+				// Перенаправляем в личный кабинет
+				navigateTo('/dashboard');
 			}, 300);
 		}
 	} catch (error) {

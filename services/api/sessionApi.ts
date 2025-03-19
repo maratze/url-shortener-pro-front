@@ -5,11 +5,10 @@ export const sessionApi = {
     getSessions: async () => {
         try {
             const token = localStorage.getItem('token');
-            const apiBaseUrl = getApiBaseUrl();
 
             if (!token) throw new Error('Authorization required');
 
-            const response = await fetch(`${apiBaseUrl}/api/sessions`, {
+            const response = await fetch(`${getApiBaseUrl()}/api/user-sessions`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -30,11 +29,10 @@ export const sessionApi = {
     getCurrentSession: async () => {
         try {
             const token = localStorage.getItem('token');
-            const apiBaseUrl = getApiBaseUrl();
 
             if (!token) throw new Error('Authorization required');
 
-            const response = await fetch(`${apiBaseUrl}/api/sessions/current`, {
+            const response = await fetch(`${getApiBaseUrl()}/api/user-sessions/current`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -55,11 +53,10 @@ export const sessionApi = {
     terminateSession: async (sessionId: number) => {
         try {
             const token = localStorage.getItem('token');
-            const apiBaseUrl = getApiBaseUrl();
 
             if (!token) throw new Error('Authorization required');
 
-            const response = await fetch(`${apiBaseUrl}/api/sessions/${sessionId}`, {
+            const response = await fetch(`${getApiBaseUrl()}/api/user-sessions/${sessionId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -81,11 +78,10 @@ export const sessionApi = {
     terminateAllSessionsExceptCurrent: async () => {
         try {
             const token = localStorage.getItem('token');
-            const apiBaseUrl = getApiBaseUrl();
 
             if (!token) throw new Error('Authorization required');
 
-            const response = await fetch(`${apiBaseUrl}/api/sessions/all-except-current`, {
+            const response = await fetch(`${getApiBaseUrl()}/api/user-sessions/all-except-current`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

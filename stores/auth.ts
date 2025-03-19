@@ -20,7 +20,19 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await userApi.register(userData)
 
-                // Just return the API response without authorization
+                debugger
+
+                // Сохраняем данные пользователя и токен так же, как при логине
+                if (response && response.token) {
+                    this.user = response
+                    this.token = response.token
+                    this.isAuthenticated = true
+
+                    // Сохраняем токен в localStorage
+                    console.log('Saving token to localStorage after registration:', { tokenLength: response.token.length })
+                    setStringInStorage('token', response.token)
+                }
+
                 return response
             } catch (error: any) {
                 this.error = error.message
@@ -37,11 +49,18 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await userApi.login(loginData)
 
+                // Проверяем, что ответ содержит токен
+                if (!response || !response.token) {
+                    throw new Error('Authentication failed: No token received')
+                }
+
+                // Сохраняем данные пользователя и токен
                 this.user = response
                 this.token = response.token
                 this.isAuthenticated = true
 
-                // Save token
+                // Явно сохраняем токен в localStorage
+                console.log('Saving token to localStorage:', { tokenLength: response.token.length })
                 setStringInStorage('token', response.token)
 
                 return response
@@ -54,8 +73,14 @@ export const useAuthStore = defineStore('auth', {
         },
 
         setToken(token: string) {
+            if (!token) {
+                console.error('Attempted to set empty token')
+                return
+            }
+
             this.token = token
             // Save token
+            console.log('Setting token via setToken method:', { tokenLength: token.length })
             setStringInStorage('token', token)
             this.isAuthenticated = true
         },
@@ -84,8 +109,24 @@ export const useAuthStore = defineStore('auth', {
         },
 
         async fetchCurrentUser() {
-            // Check for token presence
-            if (!getStringFromStorage('token') && !this.token) {
+            // Проверяем наличие токена
+            const storedToken = getStringFromStorage('token')
+
+            console.log('Fetching current user with token:', {
+                storeToken: this.token ? 'present' : 'missing',
+                storedToken: storedToken ? 'present' : 'missing'
+            })
+
+            // Если токен есть в localStorage, но нет в store - восстанавливаем его
+            if (storedToken && !this.token) {
+                this.token = storedToken
+                this.isAuthenticated = true
+                console.log('Restored token from localStorage')
+            }
+
+            // Если токена нет нигде, выходим
+            if (!storedToken && !this.token) {
+                console.log('No token available, skipping getCurrentUser')
                 return null
             }
 
@@ -96,8 +137,15 @@ export const useAuthStore = defineStore('auth', {
                 this.user = user
                 this.isAuthenticated = true
                 return user
-            } catch (error) {
-                this.logout()
+            } catch (error: any) {
+                console.error('Error fetching current user:', error.message)
+
+                // Если ошибка 401, значит токен недействителен, очищаем его
+                if (error.response && error.response.status === 401) {
+                    console.log('Token invalid, logging out')
+                    this.logout()
+                }
+
                 return null
             } finally {
                 this.loading = false
@@ -110,6 +158,7 @@ export const useAuthStore = defineStore('auth', {
             this.isAuthenticated = false
 
             // Remove token
+            console.log('Removing token from localStorage')
             removeLocalStorage('token')
         },
 
