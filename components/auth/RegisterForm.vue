@@ -194,6 +194,7 @@ import { useAuthStore } from '~/stores/auth';
 import { useToastStore } from '~/stores/toast';
 import { useAuthService } from '~/composables/useAuthService';
 import type { RegisterRequest } from "~/types/auth";
+import { userApi } from '~/services/api/userApi';
 
 const authStore = useAuthStore();
 const toastStore = useToastStore();
@@ -372,16 +373,12 @@ const handleGoogleSignup = async () => {
 	loading.value = true;
 
 	try {
-		// Временное решение - сообщение о недоступности функции
-		toastStore.info('Google signup is currently not available in this version.');
+		// Запускаем процесс аутентификации Google
+		userApi.initiateGoogleLogin();
 
-		// В будущем можно реализовать через собственный API:
-		// const response = await authStore.loginWithOAuth({
-		//     provider: 'google',
-		//     redirectUrl: window.location.origin + '/auth/callback/google'
-		// });
-
-		loading.value = false;
+		// Показываем пользователю индикатор загрузки
+		// Реальная обработка происходит на странице /auth/callback
+		toastStore.info('Перенаправление на страницу входа в Google...');
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : 'Failed to sign up with Google. Please try again.';
 		errors.general = errorMessage;

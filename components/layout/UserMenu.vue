@@ -6,7 +6,7 @@
             class="flex items-center space-x-2 relative focus:outline-none"
             ref="menuButton">
             <div
-                class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold overflow-hidden">
+                class="w-[42px] h-[42px] rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold overflow-hidden">
                 {{ userInitials }}
             </div>
             <div class="flex items-center">

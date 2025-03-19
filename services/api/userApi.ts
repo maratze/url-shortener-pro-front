@@ -134,5 +134,16 @@ export const userApi = {
             const message = error.response?._data?.message || 'Error during OAuth authentication'
             throw new Error(message)
         }
+    },
+
+    // Новый метод для открытия окна аутентификации Google
+    initiateGoogleLogin: (redirectUri: string = window.location.origin + '/auth/callback') => {
+        if (process.client) {
+            const state = encodeURIComponent(window.location.pathname);
+            const authUrl = `${getApiBaseUrl()}/api/auth/google-login?returnUrl=${state}`;
+
+            // Открываем страницу Google Auth в том же окне
+            window.location.href = authUrl;
+        }
     }
 }

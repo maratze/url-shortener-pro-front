@@ -170,6 +170,7 @@ import { useToastStore } from '~/stores/toast';
 import type { LoginRequest, OAuthRequest } from "~/types/auth";
 import { useAuthService } from '~/composables/useAuthService';
 import { getStringFromStorage, setStringInStorage } from '~/utils/client';
+import { userApi } from '~/services/api/userApi';
 
 const authStore = useAuthStore();
 const toastStore = useToastStore();
@@ -282,23 +283,19 @@ const handleSubmit = async () => {
 	}
 };
 
-// Функция для аутентификации через Google
+// Функция для входа через Google
 const handleGoogleLogin = async () => {
 	loading.value = true;
 
 	try {
-		// Временное решение - сообщение о недоступности функции
-		toastStore.info('Google authentication is currently not available in this version.');
+		// Запускаем процесс аутентификации Google
+		userApi.initiateGoogleLogin();
 
-		// В будущем можно реализовать через собственный API:
-		// const response = await authStore.loginWithOAuth({
-		//     provider: 'google',
-		//     redirectUrl: window.location.origin + '/auth/callback/google'
-		// } as OAuthRequest);
-
-		loading.value = false;
+		// Показываем пользователю индикатор загрузки
+		// Реальная обработка происходит на странице /auth/callback
+		toastStore.info('Перенаправление на страницу входа в Google...');
 	} catch (error) {
-		const errorMessage = error instanceof Error ? error.message : 'Не удалось войти через Google. Пожалуйста, попробуйте снова.';
+		const errorMessage = error instanceof Error ? error.message : 'Failed to log in with Google. Please try again.';
 		errors.general = errorMessage;
 		toastStore.error(errorMessage);
 		loading.value = false;
