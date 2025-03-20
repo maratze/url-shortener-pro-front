@@ -17,7 +17,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
                         <!-- Sidebar with navigation -->
                         <div class="lg:col-span-1">
-                            <div class="sticky top-[74px]">
+                            <div class="sticky top-[90px]">
                                 <div
                                     class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-4">
                                     <h2 class="text-lg font-medium text-slate-900 dark:text-white mb-4">Settings</h2>
@@ -71,7 +71,7 @@
                         </div>
 
                         <!-- Main content -->
-                        <div class="lg:col-span-3">
+                        <div class="lg:col-span-3 mt-4">
                             <slot />
                         </div>
                     </div>
