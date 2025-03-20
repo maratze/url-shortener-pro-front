@@ -1,5 +1,5 @@
 import { $fetch } from 'ohmyfetch'
-import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest } from '~/types/auth'
+import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest, ChangePasswordRequest } from '~/types/auth'
 
 export const userApi = {
     register: async (registerData: RegisterRequest): Promise<UserResponse> => {
@@ -125,10 +125,21 @@ export const userApi = {
         try {
             console.log(`Making OAuth API request to ${getApiBaseUrl()}/api/users/oauth`);
 
-            return await $fetch(`${getApiBaseUrl()}/api/users/oauth`, {
+            const response = await $fetch(`${getApiBaseUrl()}/api/users/oauth`, {
                 method: 'POST',
                 body: oauthData
-            })
+            });
+
+            // Добавляем отладочную информацию о пользователе и его провайдере
+            console.log('OAuth login success, user details:', {
+                id: response.id,
+                email: response.email,
+                authProvider: response.authProvider || 'Not set',
+                hasToken: !!response.token,
+                tokenLength: response.token ? response.token.length : 0
+            });
+
+            return response;
         } catch (error: any) {
             console.error('OAuth login error:', error);
             const message = error.response?._data?.message || 'Error during OAuth authentication'
@@ -181,6 +192,55 @@ export const userApi = {
                     errorMessage = error.response._data?.message || 'Failed to delete account';
                 } else if (statusCode === 500) {
                     errorMessage = 'Server error occurred while deleting account';
+                }
+            }
+
+            return {
+                success: false,
+                message: errorMessage
+            };
+        }
+    },
+
+    changePassword: async (passwordData: ChangePasswordRequest): Promise<{ success: boolean, message: string }> => {
+        try {
+            // Safe localStorage access that works with SSR
+            const token = process.client ? localStorage.getItem('token') : null;
+            if (!token) {
+                throw new Error('Authentication required');
+            }
+
+            console.log(`Making API request to ${getApiBaseUrl()}/api/users/change-password`);
+
+            // Добавляем логирование данных о пользователе Google
+            if (passwordData.isGoogleUser) {
+                console.log('Change password request for Google user');
+            }
+
+            const response = await $fetch(`${getApiBaseUrl()}/api/users/change-password`, {
+                method: 'POST',
+                body: passwordData,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            return {
+                success: true,
+                message: response.message || 'Password changed successfully'
+            };
+        } catch (error: any) {
+            console.error('Error changing password:', error);
+
+            let errorMessage = 'Failed to change password';
+            if (error.response) {
+                const statusCode = error.response.status;
+                if (statusCode === 401) {
+                    errorMessage = 'Authentication required';
+                } else if (statusCode === 400) {
+                    errorMessage = error.response._data?.message || 'Invalid current password';
+                } else if (statusCode === 500) {
+                    errorMessage = 'Server error occurred while changing password';
                 }
             }
 

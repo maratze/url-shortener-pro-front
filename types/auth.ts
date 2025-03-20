@@ -27,6 +27,7 @@ export interface UserResponse {
     lastName?: string;
     isEmailVerified: boolean;
     isPremium: boolean;
+    authProvider?: string;
     token: string;
     registrationDate: string;
 }
@@ -34,4 +35,10 @@ export interface UserResponse {
 export interface UpdateProfileRequest {
     firstName?: string;
     lastName?: string;
+}
+
+export interface ChangePasswordRequest {
+    currentPassword?: string;
+    newPassword: string;
+    isGoogleUser?: boolean;
 }

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { userApi } from '~/services/api/userApi'
-import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest } from '~/types/auth'
+import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest, ChangePasswordRequest } from '~/types/auth'
 import { getStringFromStorage, setStringInStorage, removeLocalStorage } from '~/utils/client'
 
 export const useAuthStore = defineStore('auth', {
@@ -215,6 +215,24 @@ export const useAuthStore = defineStore('auth', {
                 const errorMessage = error instanceof Error ? error.message : 'Failed to delete account'
                 this.error = errorMessage
                 return { success: false, message: errorMessage }
+            } finally {
+                this.loading = false
+            }
+        },
+
+        async changePassword(passwordData: ChangePasswordRequest) {
+            this.loading = true
+            this.error = ''
+
+            try {
+                const response = await userApi.changePassword(passwordData)
+                return response
+            } catch (error: any) {
+                this.error = error.message
+                return {
+                    success: false,
+                    message: error.message || 'Failed to change password'
+                }
             } finally {
                 this.loading = false
             }

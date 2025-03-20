@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { useAuthStore } from '~/stores/auth'
-import type { UpdateProfileRequest } from '~/types/auth'
+import type { UpdateProfileRequest, ChangePasswordRequest } from '~/types/auth'
 
 /**
  * Composable for authentication management
@@ -27,6 +27,15 @@ export const useAuthService = () => {
             // Try to load user data if a token exists
             // fetchCurrentUser checks for token presence internally
             await authStore.fetchCurrentUser()
+
+            // Добавляем логирование для отладки данных пользователя
+            if (authStore.user) {
+                console.log('User authenticated, details:', {
+                    id: authStore.user.id,
+                    email: authStore.user.email,
+                    authProvider: authStore.user.authProvider || 'Not set'
+                })
+            }
         } catch (error) {
             console.error('Error checking authentication status:', error)
         } finally {
@@ -114,6 +123,21 @@ export const useAuthService = () => {
         }
     }
 
+    /**
+     * Change user password
+     */
+    const changePassword = async (passwordData: ChangePasswordRequest) => {
+        try {
+            const result = await authStore.changePassword(passwordData)
+            return result
+        } catch (error: any) {
+            return {
+                success: false,
+                error: error?.message || 'Failed to change password'
+            }
+        }
+    }
+
     return {
         isAuthenticated,
         isInitializing,
@@ -125,7 +149,8 @@ export const useAuthService = () => {
         register,
         updateProfile,
         logout,
-        deleteAccount
+        deleteAccount,
+        changePassword
     }
 }
 
