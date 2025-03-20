@@ -95,6 +95,25 @@ export const useAuthService = () => {
         await authStore.logout()
     }
 
+    /**
+     * Delete user account
+     */
+    const deleteAccount = async () => {
+        try {
+            const result = await authStore.deleteAccount()
+            if (result.success) {
+                return { success: true, message: result.message }
+            } else {
+                return { success: false, error: result.message }
+            }
+        } catch (error: any) {
+            return {
+                success: false,
+                error: error?.message || 'Failed to delete account'
+            }
+        }
+    }
+
     return {
         isAuthenticated,
         isInitializing,
@@ -105,7 +124,8 @@ export const useAuthService = () => {
         login,
         register,
         updateProfile,
-        logout
+        logout,
+        deleteAccount
     }
 }
 

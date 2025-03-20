@@ -194,6 +194,30 @@ export const useAuthStore = defineStore('auth', {
             } finally {
                 this.loading = false
             }
+        },
+
+        async deleteAccount() {
+            this.loading = true
+            this.error = ''
+
+            try {
+                const response = await userApi.deleteAccount()
+
+                if (response.success) {
+                    // После успешного удаления выходим из системы
+                    this.logout()
+                    return { success: true, message: response.message }
+                } else {
+                    this.error = response.message
+                    return { success: false, message: response.message }
+                }
+            } catch (error: any) {
+                const errorMessage = error instanceof Error ? error.message : 'Failed to delete account'
+                this.error = errorMessage
+                return { success: false, message: errorMessage }
+            } finally {
+                this.loading = false
+            }
         }
     }
 })

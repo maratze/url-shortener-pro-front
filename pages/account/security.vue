@@ -4,7 +4,9 @@
             <!-- Password Change Section -->
             <section
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-                <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Change Password</h2>
+                <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4 min-h-[36px] flex items-center">
+                    Change
+                    Password</h2>
                 <form @submit.prevent="changePassword" class="space-y-4">
                     <div>
                         <label for="currentPassword"
@@ -90,7 +92,8 @@
             <!-- Active Sessions -->
             <section
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-                <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Active Sessions</h2>
+                <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4 min-h-[36px] flex items-center">
+                    Active Sessions</h2>
                 <div class="space-y-4">
                     <div v-if="isLoading" class="py-4 text-center text-slate-500 dark:text-slate-400">
                         <svg class="animate-spin h-5 w-5 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none"

@@ -145,5 +145,49 @@ export const userApi = {
             // Открываем страницу Google Auth в том же окне
             window.location.href = authUrl;
         }
+    },
+
+    // Метод для удаления аккаунта пользователя
+    deleteAccount: async (): Promise<{ success: boolean, message: string }> => {
+        try {
+            // Safe localStorage access that works with SSR
+            const token = process.client ? localStorage.getItem('token') : null;
+            if (!token) {
+                throw new Error('Authentication required');
+            }
+
+            console.log(`Making API request to ${getApiBaseUrl()}/api/users/account`);
+
+            const response = await $fetch(`${getApiBaseUrl()}/api/users/account`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            return {
+                success: true,
+                message: response.message || 'Account deleted successfully'
+            };
+        } catch (error: any) {
+            console.error('Error deleting account:', error);
+
+            let errorMessage = 'Failed to delete account';
+            if (error.response) {
+                const statusCode = error.response.status;
+                if (statusCode === 401) {
+                    errorMessage = 'Authentication required';
+                } else if (statusCode === 400) {
+                    errorMessage = error.response._data?.message || 'Failed to delete account';
+                } else if (statusCode === 500) {
+                    errorMessage = 'Server error occurred while deleting account';
+                }
+            }
+
+            return {
+                success: false,
+                message: errorMessage
+            };
+        }
     }
 }

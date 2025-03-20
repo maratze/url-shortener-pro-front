@@ -25,7 +25,7 @@
                 class="absolute right-0 mt-2 min-w-[240px] rounded-lg shadow-lg bg-white dark:bg-slate-800 ring-1 ring-black ring-opacity-5 z-50 py-2">
                 <!-- Информация о пользователе -->
                 <div class="px-4 py-2 border-b border-slate-200 dark:border-slate-700">
-                    <div class="font-medium text-slate-800 dark:text-white truncate">{{ user?.email }}</div>
+                    <div class="font-medium text-slate-800 dark:text-white truncate">{{ getFullName(user) }}</div>
                     <div v-if="user?.isPremium" class="text-xs text-purple-600 dark:text-purple-400 font-medium">PRO
                         account</div>
                     <div v-else class="text-xs text-slate-500 dark:text-slate-400">Free account</div>
@@ -75,6 +75,24 @@ const userInitials = computed(() => {
 
     return result ? result : '?';
 });
+
+const getFullName = (user) => {
+    let result = '';
+
+    if (user.firstName) {
+        result += user.firstName;
+    }
+
+    if (user.lastName) {
+        result += ' ' + user.lastName;
+    }
+
+    if (result === '') {
+        result = user.email;
+    }
+
+    return result;
+};
 
 // Переключение видимости меню
 const toggleMenu = () => {

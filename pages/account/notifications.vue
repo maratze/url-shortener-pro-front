@@ -4,7 +4,8 @@
             <!-- Email Notifications -->
             <section
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-                <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Email Notifications</h2>
+                <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4 min-h-[36px] flex items-center">
+                    Email Notifications</h2>
                 <div class="space-y-4">
                     <div class="flex items-center justify-between">
                         <div>
@@ -89,7 +90,8 @@
             <!-- Notification Schedule -->
             <section
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-                <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Quiet Hours</h2>
+                <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4 min-h-[36px] flex items-center">
+                    Quiet Hours</h2>
                 <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">
                     Set a time period during which you won't receive notifications
                 </p>

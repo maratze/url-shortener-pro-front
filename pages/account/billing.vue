@@ -56,8 +56,8 @@
             <!-- Payment Method -->
             <section v-if="isPremium"
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-                <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Payment Method</h2>
-
+                <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4 min-h-[36px] flex items-center">
+                    Payment Method</h2>
                 <div v-if="paymentMethod"
                     class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/30 rounded-lg">
                     <div class="flex items-center space-x-3">
@@ -112,7 +112,8 @@
             <!-- Billing History -->
             <section v-if="isPremium"
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-                <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Billing History</h2>
+                <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4 min-h-[36px] flex items-center">
+                    Billing History</h2>
 
                 <div class="overflow-hidden">
                     <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
