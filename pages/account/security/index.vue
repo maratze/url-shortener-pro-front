@@ -1,14 +1,14 @@
 <template>
     <div class="w-full">
         <div class="space-y-4">
-            <!-- Смена пароля -->
+            <!-- Password Change -->
             <section
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Смена пароля</h2>
+                    <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Password Change</h2>
                 </div>
 
-                <!-- Информация для пользователей Google -->
+                <!-- Information for Google users -->
                 <div v-if="isGoogleUser"
                     class="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded-lg text-sm flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
@@ -17,18 +17,17 @@
                             d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
                             clip-rule="evenodd" />
                     </svg>
-                    <span>Вы вошли через Google. Установите пароль, чтобы иметь возможность входить с помощью email и
-                        пароля.</span>
+                    <span>You signed in with Google. Set a password to be able to log in with email and password.</span>
                 </div>
 
                 <form @submit.prevent="changePassword" class="space-y-4">
-                    <!-- Две колонки для более компактного отображения полей -->
+                    <!-- Two columns for more compact display of fields -->
                     <div class="grid grid-cols-1 gap-4">
-                        <!-- Текущий пароль (только для не-Google пользователей) -->
+                        <!-- Current password (only for non-Google users) -->
                         <div v-if="!isGoogleUser" class="form-field">
                             <label for="currentPassword"
                                 class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                                Текущий пароль
+                                Current Password
                             </label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -42,7 +41,7 @@
                                 <input id="currentPassword" v-model="form.currentPassword"
                                     :type="showCurrentPassword ? 'text' : 'password'"
                                     class="block w-full h-11 px-4 pl-10 pr-10 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white text-base"
-                                    placeholder="Введите текущий пароль" :required="!isGoogleUser" />
+                                    placeholder="Enter current password" :required="!isGoogleUser" />
                                 <button type="button" @click="showCurrentPassword = !showCurrentPassword"
                                     class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 focus:outline-none">
                                     <svg v-if="showCurrentPassword" xmlns="http://www.w3.org/2000/svg"
@@ -65,11 +64,11 @@
                             </p>
                         </div>
 
-                        <!-- Новый пароль -->
+                        <!-- New password -->
                         <div class="form-field">
                             <label for="newPassword"
                                 class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                                Новый пароль
+                                New Password
                             </label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -83,7 +82,7 @@
                                 <input id="newPassword" v-model="form.newPassword"
                                     :type="showNewPassword ? 'text' : 'password'"
                                     class="block w-full h-11 px-4 pl-10 pr-10 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white text-base"
-                                    placeholder="Введите новый пароль" required />
+                                    placeholder="Enter new password" required />
                                 <button type="button" @click="showNewPassword = !showNewPassword"
                                     class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 focus:outline-none">
                                     <svg v-if="showNewPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
@@ -106,11 +105,11 @@
                             </p>
                         </div>
 
-                        <!-- Подтверждение нового пароля -->
+                        <!-- Confirm new password -->
                         <div class="form-field">
                             <label for="confirmPassword"
                                 class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                                Подтверждение пароля
+                                Confirm Password
                             </label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -124,7 +123,7 @@
                                 <input id="confirmPassword" v-model="form.confirmPassword"
                                     :type="showConfirmPassword ? 'text' : 'password'"
                                     class="block w-full h-11 px-4 pl-10 pr-10 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white text-base"
-                                    placeholder="Подтвердите пароль" required />
+                                    placeholder="Confirm password" required />
                                 <button type="button" @click="showConfirmPassword = !showConfirmPassword"
                                     class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 focus:outline-none">
                                     <svg v-if="showConfirmPassword" xmlns="http://www.w3.org/2000/svg"
@@ -148,7 +147,7 @@
                         </div>
                     </div>
 
-                    <!-- Индикатор силы пароля -->
+                    <!-- Password strength indicator -->
                     <div v-if="form.newPassword" class="mt-0">
                         <div class="flex items-center justify-between mb-1">
                             <span class="text-xs font-medium" :class="passwordStrengthClass">
@@ -173,7 +172,7 @@
                         </div>
                     </div>
 
-                    <!-- Ошибка -->
+                    <!-- Error message -->
                     <div v-if="errors.general"
                         class="py-3 px-4 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg text-sm flex items-start">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
@@ -185,7 +184,7 @@
                         <span>{{ errors.general }}</span>
                     </div>
 
-                    <!-- Кнопка изменения пароля -->
+                    <!-- Change password button -->
                     <div class="pt-2">
                         <button type="submit"
                             class="inline-flex justify-center items-center py-2.5 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 min-w-[120px] h-10"
@@ -198,9 +197,9 @@
                                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                                 </path>
                             </svg>
-                            <template v-if="isLoading">Сохранение...</template>
-                            <template v-else-if="isGoogleUser">Установить пароль</template>
-                            <template v-else>Изменить пароль</template>
+                            <template v-if="isLoading">Saving...</template>
+                            <template v-else-if="isGoogleUser">Set Password</template>
+                            <template v-else>Change Password</template>
                         </button>
                     </div>
                 </form>
@@ -223,22 +222,22 @@ definePageMeta({
 const toastStore = useToastStore();
 const { changePassword: changePasswordService, user } = useAuthService();
 
-// Состояние формы
+// Form state
 const form = reactive({
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
 });
 
-// Состояния видимости паролей
+// Password visibility states
 const showCurrentPassword = ref(false);
 const showNewPassword = ref(false);
 const showConfirmPassword = ref(false);
 
-// Состояние загрузки
+// Loading state
 const isLoading = ref(false);
 
-// Ошибки валидации
+// Validation errors
 const errors = reactive({
     currentPassword: '',
     newPassword: '',
@@ -246,7 +245,7 @@ const errors = reactive({
     general: ''
 });
 
-// Очистка ошибок
+// Clear errors
 const clearErrors = () => {
     errors.currentPassword = '';
     errors.newPassword = '';
@@ -254,25 +253,25 @@ const clearErrors = () => {
     errors.general = '';
 };
 
-// Подсказки для пароля
+// Password tips
 const passwordTipsText = computed(() => {
-    if (!form.newPassword) return 'Введите пароль';
-    if (passwordStrength.value < 2) return 'Добавьте заглавные буквы, цифры или специальные символы';
+    if (!form.newPassword) return 'Enter password';
+    if (passwordStrength.value < 2) return 'Add uppercase letters, numbers, or special characters';
     return '';
 });
 
-// Расчет силы пароля
+// Calculate password strength
 const passwordStrength = computed(() => {
     const password = form.newPassword;
     if (!password) return 0;
 
     let score = 0;
 
-    // Длина пароля
+    // Password length
     if (password.length >= 6) score += 1;
     if (password.length >= 10) score += 0.5;
 
-    // Комбинация разных символов
+    // Combination of different characters
     if (/[A-Z]/.test(password)) score += 0.5;
     if (/[a-z]/.test(password)) score += 0.5;
     if (/[0-9]/.test(password)) score += 0.5;
@@ -281,25 +280,25 @@ const passwordStrength = computed(() => {
     return Math.min(4, Math.floor(score));
 });
 
-// Текст индикатора силы пароля
+// Password strength indicator text
 const passwordStrengthText = computed(() => {
     switch (passwordStrength.value) {
         case 0:
-            return 'Слишком слабый';
+            return 'Too weak';
         case 1:
-            return 'Слабый';
+            return 'Weak';
         case 2:
-            return 'Хороший';
+            return 'Good';
         case 3:
-            return 'Сильный';
+            return 'Strong';
         case 4:
-            return 'Очень сильный';
+            return 'Very strong';
         default:
             return '';
     }
 });
 
-// Класс цвета для индикатора силы пароля
+// Color class for the password strength indicator
 const passwordStrengthClass = computed(() => {
     switch (passwordStrength.value) {
         case 0:
@@ -317,7 +316,7 @@ const passwordStrengthClass = computed(() => {
     }
 });
 
-// Класс цвета для индикатора прогресса
+// Color class for the progress indicator
 const strengthColorClass = (level: number) => {
     if (passwordStrength.value <= level) return 'bg-slate-200 dark:bg-slate-700';
 
@@ -335,45 +334,45 @@ const strengthColorClass = (level: number) => {
     }
 };
 
-// Определяем, зарегистрирован ли пользователь через Google
+// Determine if the user is registered via Google
 const isGoogleUser = computed(() => {
-    // Добавляем логирование для отладки
+    // Add logging for debugging
     console.log('User auth provider:', user.value?.authProvider);
-    // Проверяем наличие authProvider и его значение (приводим к нижнему регистру для сравнения)
+    // Check for authProvider and its value (convert to lowercase for comparison)
     return user.value?.authProvider?.toLowerCase() === 'google';
 });
 
-// Валидация формы
+// Form validation
 const validateForm = () => {
     clearErrors();
     let isValid = true;
 
-    // Если пользователь зарегистрирован через Google, не требуем текущий пароль
+    // If the user is registered via Google, we don't require the current password
     if (!isGoogleUser.value && !form.currentPassword) {
-        errors.currentPassword = 'Введите текущий пароль';
+        errors.currentPassword = 'Enter current password';
         isValid = false;
     }
 
     if (!form.newPassword) {
-        errors.newPassword = 'Введите новый пароль';
+        errors.newPassword = 'Enter new password';
         isValid = false;
     } else if (form.newPassword.length < 6) {
-        errors.newPassword = 'Пароль должен содержать минимум 6 символов';
+        errors.newPassword = 'Password must contain at least 6 characters';
         isValid = false;
     }
 
     if (!form.confirmPassword) {
-        errors.confirmPassword = 'Подтвердите новый пароль';
+        errors.confirmPassword = 'Confirm new password';
         isValid = false;
     } else if (form.newPassword !== form.confirmPassword) {
-        errors.confirmPassword = 'Пароли не совпадают';
+        errors.confirmPassword = 'Passwords do not match';
         isValid = false;
     }
 
     return isValid;
 };
 
-// Обработка отправки формы
+// Form submission handler
 const changePassword = async () => {
     if (!validateForm()) return;
 
@@ -381,7 +380,7 @@ const changePassword = async () => {
     clearErrors();
 
     try {
-        // Если пользователь Google, то отправляем запрос с флагом isGoogleUser
+        // If the user is from Google, send the request with the isGoogleUser flag
         const passwordData = isGoogleUser.value
             ? { newPassword: form.newPassword, isGoogleUser: true }
             : { currentPassword: form.currentPassword, newPassword: form.newPassword };
@@ -389,22 +388,22 @@ const changePassword = async () => {
         const result = await changePasswordService(passwordData as any);
 
         if (result.success) {
-            // Преобразуем результат к нужному типу для доступа к свойству message
+            // Convert the result to the correct type for access to the message property
             const successResult = result as { success: true; message: string };
-            toastStore.success(successResult.message || 'Пароль успешно изменен');
+            toastStore.success(successResult.message || 'Password changed successfully');
 
-            // Очищаем форму
+            // Clear the form
             form.currentPassword = '';
             form.newPassword = '';
             form.confirmPassword = '';
         } else {
-            // Преобразуем результат к нужному типу для доступа к свойству error
+            // Convert the result to the correct type for access to the error property
             const errorResult = result as { success: false; error: string };
-            errors.general = errorResult.error || 'Не удалось изменить пароль';
+            errors.general = errorResult.error || 'Failed to change password';
             toastStore.error(errors.general);
         }
     } catch (error: any) {
-        const errorMessage = error.message || 'Произошла ошибка при изменении пароля';
+        const errorMessage = error.message || 'An error occurred while changing the password';
         errors.general = errorMessage;
         toastStore.error(errorMessage);
     } finally {

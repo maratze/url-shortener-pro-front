@@ -2,7 +2,7 @@
 	<div class="premium-glass-card relative overflow-hidden">
 		<div
 			class="relative p-8 md:p-10 z-10 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-xl">
-			<!-- Заголовок формы -->
+			<!-- Form title -->
 			<div class="mb-8">
 				<h2 class="text-2xl font-bold mb-2 text-slate-800 dark:text-white">
 					Log in
@@ -13,7 +13,7 @@
 			</div>
 
 			<form @submit.prevent="handleSubmit" class="space-y-6">
-				<!-- Email поле -->
+				<!-- Email field -->
 				<div class="form-field">
 					<label class="form-label" for="email">Email</label>
 					<div class="relative">
@@ -35,7 +35,7 @@
 					<p v-if="errors.email" class="form-error">{{ errors.email }}</p>
 				</div>
 
-				<!-- Пароль -->
+				<!-- Password -->
 				<div class="form-field">
 					<label class="form-label" for="password">Password</label>
 					<div class="relative">
@@ -74,7 +74,7 @@
 					<p v-if="errors.password" class="form-error">{{ errors.password }}</p>
 				</div>
 
-				<!-- Опции входа -->
+				<!-- Login options -->
 				<div class="flex items-center justify-between mt-6s">
 					<div class="flex items-center">
 						<input
@@ -94,7 +94,7 @@
 					</div>
 				</div>
 
-				<!-- Ошибка -->
+				<!-- Error -->
 				<div v-if="errors.general"
 					class="py-3 px-4 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg text-sm flex items-start">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
@@ -106,7 +106,7 @@
 					<span>{{ errors.general }}</span>
 				</div>
 
-				<!-- Кнопка входа -->
+				<!-- Login button -->
 				<button
 					type="submit"
 					class="submit-button"
@@ -126,7 +126,7 @@
 					</span>
 				</button>
 
-				<!-- Разделитель -->
+				<!-- Divider -->
 				<div class="relative flex items-center justify-center my-6">
 					<div class="h-px flex-grow bg-slate-200 dark:bg-slate-700"></div>
 					<span
@@ -135,7 +135,7 @@
 					<div class="h-px flex-grow bg-slate-200 dark:bg-slate-700"></div>
 				</div>
 
-				<!-- Социальные кнопки -->
+				<!-- Social buttons -->
 				<div class="social-buttons">
 					<button type="button" @click="handleGoogleLogin" class="social-btn google-btn">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 48 48">
@@ -197,7 +197,7 @@ const clearErrors = () => {
 	errors.general = '';
 };
 
-// Проверяем, был ли пользователь перенаправлен после успешной регистрации
+// Check if the user was redirected after successful registration
 const route = useRoute();
 onMounted(() => {
 	if (route.query.registered === 'true') {
@@ -237,39 +237,38 @@ const handleSubmit = async () => {
 	clearErrors();
 
 	try {
-		// Вызываем login из authStore
+		// Call login from authStore
 		const response = await authStore.login({
 			email: form.email,
 			password: form.password,
 			remember: form.rememberMe
 		} as LoginRequest);
 
-		// Проверяем успешность авторизации
+		// Check authorization success
 		if (authStore.error) {
 			errors.general = authStore.error;
 			toastStore.error(authStore.error);
 		} else if (authStore.isAuthenticated && response?.token) {
-			// Показываем уведомление об успешном входе
+			// Show success notification
 			toastStore.success('Successfully logged in! Welcome back.');
 			console.log('Login successful, authenticated:', authStore.isAuthenticated);
 
-			// Проверяем, что токен действительно сохранен
+			// Check if token is actually saved
 			const token = getStringFromStorage('token');
 			if (!token) {
 				console.warn('Token not found in localStorage after login!');
-				// Пробуем сохранить еще раз
+				// Try saving again
 				setStringInStorage('token', response.token);
 			}
 
-			// Небольшая задержка перед редиректом для отображения уведомления
-			// и завершения сохранения токена
+			// Small delay before redirect to show notification and complete token saving
 			setTimeout(() => {
-				// Получаем страницу для перенаправления, если она была указана
+				// Get redirect page if specified
 				const redirectPath = route.query.redirect?.toString() || '/dashboard';
 				navigateTo(redirectPath);
 			}, 300);
 		} else {
-			// Необычная ситуация - нет ошибки, но и нет успешной авторизации
+			// Unexpected situation - no error but no successful authorization
 			errors.general = 'An unexpected error occurred. Please try again.';
 			toastStore.error(errors.general);
 			console.error('Login response without token:', response);
@@ -283,17 +282,17 @@ const handleSubmit = async () => {
 	}
 };
 
-// Функция для входа через Google
+// Function for login with Google
 const handleGoogleLogin = async () => {
 	loading.value = true;
 
 	try {
-		// Запускаем процесс аутентификации Google
+		// Start Google authentication process
 		userApi.initiateGoogleLogin();
 
-		// Показываем пользователю индикатор загрузки
-		// Реальная обработка происходит на странице /auth/callback
-		toastStore.info('Перенаправление на страницу входа в Google...');
+		// Show user loading indicator
+		// Real processing happens on /auth/callback page
+		toastStore.info('Redirecting to Google login page...');
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : 'Failed to log in with Google. Please try again.';
 		errors.general = errorMessage;
@@ -364,7 +363,7 @@ const handleGoogleLogin = async () => {
 	@apply border-gray-400 dark:border-gray-600;
 }
 
-/* Анимация сияния */
+/* Shine effect */
 .shine-effect {
 	@apply absolute w-1/2 h-full top-0 left-[-100%] transform skew-x-[-25deg] bg-gradient-to-r from-transparent via-white/10 to-transparent;
 	animation: shine 6s infinite;
@@ -386,12 +385,12 @@ const handleGoogleLogin = async () => {
 	}
 }
 
-/* Добавьте дополнительные эффекты при наведении */
+/* Add additional effects on hover */
 .form-input:hover {
 	@apply border-slate-400 dark:border-slate-500;
 }
 
-/* Создаем приятный фокус для всех интерактивных элементов */
+/* Create a pleasant focus for all interactive elements */
 button:focus,
 .form-input:focus,
 input[type="checkbox"]:focus {

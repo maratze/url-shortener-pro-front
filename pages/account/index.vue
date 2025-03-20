@@ -1,212 +1,160 @@
 <template>
-    <div class="w-full">
-        <div class="space-y-4">
-            <!-- Profile Section -->
-            <section
-                class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Profile Information</h2>
-                    <NuxtLink v-if="!isPremium" to="/pricing"
-                        class="px-4 py-2 rounded-lg flex items-center justify-center bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-sm">
-                        <svg class="h-4 w-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                        </svg>
-                        Upgrade to PRO
-                    </NuxtLink>
-                </div>
+    <div class="w-full space-y-6">
+        <!-- Profile Settings -->
+        <section
+            class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Profile Settings</h2>
+            </div>
 
-                <div v-if="!isPremium"
-                    class="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                    <div class="text-sm text-amber-700 dark:text-amber-400 flex items-center">
-                        <svg class="h-4 w-4 mr-1.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>
-                            You're using a free account with limited functionality.
-                            <NuxtLink to="/pricing" class="text-indigo-600 dark:text-indigo-400 hover:underline">Upgrade
-                                to
-                                PRO</NuxtLink>
-                            for access to full analytics and unlimited links.
+            <form @submit.prevent="saveProfile" class="space-y-5">
+                <!-- User email (non-editable) -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                        Email
+                    </label>
+                    <div
+                        class="flex items-center h-11 px-4 bg-slate-100 dark:bg-slate-700/60 border border-slate-200 dark:border-slate-600 rounded-md text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                        <span>{{ user?.email }}</span>
+                        <span
+                            v-if="user?.authProvider === 'google'"
+                            class="ml-auto rounded-full text-xs font-medium px-2.5 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                            Google Account
                         </span>
                     </div>
                 </div>
 
-                <div class="mb-4">
-                    <div class="flex items-center mb-4">
-                        <div
-                            class="w-16 h-16 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold">
-                            {{ userInitials }}
-                        </div>
-                        <div class="ml-4">
-                            <div class="text-lg font-medium text-slate-900 dark:text-white">
-                                {{ userFullName || 'Your Name' }}
-                            </div>
-                            <div class="text-sm text-slate-500 dark:text-slate-400">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                                    :class="accountTypeClasses">
-                                    {{ isPremium ? 'PRO Account' : 'Free Account' }}
-                                </span>
-                            </div>
-                        </div>
+                <!-- First name and Last name -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="firstName"
+                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                            First Name
+                        </label>
+                        <input
+                            type="text"
+                            id="firstName"
+                            v-model="form.firstName"
+                            placeholder="Enter your first name"
+                            class="block w-full h-11 px-4 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white text-base">
+                        <p v-if="errors.firstName" class="mt-1 text-sm text-red-600 dark:text-red-400">{{
+                            errors.firstName }}</p>
+                    </div>
+                    <div>
+                        <label for="lastName" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                            Last Name
+                        </label>
+                        <input
+                            type="text"
+                            id="lastName"
+                            v-model="form.lastName"
+                            placeholder="Enter your last name"
+                            class="block w-full h-11 px-4 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white text-base">
+                        <p v-if="errors.lastName" class="mt-1 text-sm text-red-600 dark:text-red-400">{{ errors.lastName
+                            }}</p>
                     </div>
                 </div>
 
-                <form @submit.prevent="saveProfileInfo" class="space-y-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="firstName"
-                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">First
-                                Name</label>
-                            <input type="text" id="firstName" v-model="firstName"
-                                class="block w-full h-11 px-4 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white text-base">
-                        </div>
-                        <div>
-                            <label for="lastName"
-                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Last
-                                Name</label>
-                            <input type="text" id="lastName" v-model="lastName"
-                                class="block w-full h-11 px-4 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white text-base">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label for="email"
-                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email
-                            Address</label>
-                        <div class="relative">
-                            <input type="email" id="email" :value="email" disabled
-                                class="cursor-not-allowed bg-slate-100 dark:bg-slate-700/50 block w-full h-11 px-4 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none dark:text-slate-400 text-slate-500 text-base">
-                            <div
-                                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400 flex items-center">
-                            <svg class="h-3 w-3 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Email address cannot be changed. Please contact support for assistance.
-                        </p>
-                    </div>
-
-                    <div class="pt-2">
-                        <button type="submit"
-                            class="inline-flex justify-center items-center py-2.5 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 min-w-[120px] h-10 w-[140px]"
-                            :disabled="isLoading">
-                            <svg v-if="isLoading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                            <span>{{ isLoading ? 'Saving...' : 'Save Changes' }}</span>
-                        </button>
-                    </div>
-                </form>
-            </section>
-
-            <!-- Advanced Settings (бывший Danger Zone) -->
-            <section
-                class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-                <details class="group">
-                    <summary class="cursor-pointer flex items-center text-slate-700 dark:text-slate-300">
-                        <h2 class="text-lg font-medium">Advanced Settings</h2>
-                        <div class="ml-auto">
-                            <svg class="h-5 w-5 transform group-open:rotate-180 transition-transform duration-200"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </div>
-                    </summary>
-
-                    <div
-                        class="mt-4 p-3 border border-red-200 rounded-lg bg-red-50 dark:bg-red-900/10 dark:border-red-900/30">
-                        <h3 class="text-base font-medium text-red-700 dark:text-red-400">Delete Account</h3>
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-300">Once you delete your account, all of your
-                            data will be permanently removed. This action cannot be undone.</p>
-                        <button @click="confirmDeleteAccount"
-                            class="mt-3 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 min-w-[120px] h-9"
-                            :disabled="isDeleting">
-                            <svg v-if="isDeleting" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                            <span>{{ isDeleting ? 'Deleting...' : 'Delete Account' }}</span>
-                        </button>
-                    </div>
-                </details>
-            </section>
-        </div>
-    </div>
-
-    <!-- Модальное окно подтверждения удаления аккаунта -->
-    <Teleport to="body">
-        <div v-if="showConfirmationModal" class="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/60">
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow-lg max-w-md w-full p-6 relative">
-                <button @click="showConfirmationModal = false"
-                    class="absolute top-4 right-4 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <!-- Error messages -->
+                <div v-if="errors.general"
+                    class="py-3 px-4 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg text-sm flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
+                        viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
                             clip-rule="evenodd" />
                     </svg>
-                </button>
-                <div class="text-center">
+                    <span>{{ errors.general }}</span>
+                </div>
+
+                <!-- Save button -->
+                <div class="pt-2">
+                    <button
+                        type="submit"
+                        class="inline-flex justify-center items-center py-2.5 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 min-w-[120px] h-10"
+                        :disabled="isLoading">
+                        <svg v-if="isLoading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        <template v-if="isLoading">Saving...</template>
+                        <template v-else>Save Changes</template>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Advanced Settings -->
+        <section
+            class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Advanced Settings</h2>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Delete Account -->
+                <div class="pb-6 border-b border-slate-200 dark:border-slate-700">
+                    <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-2">Delete Account</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">
+                        Once you delete your account, there is no going back. All your data will be permanently deleted.
+                    </p>
+                    <button @click="confirmDeleteAccount" type="button"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        Delete Account
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Confirmation Modal -->
+        <div v-if="showConfirmationModal"
+            class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-slate-800 rounded-lg max-w-md w-full p-6 shadow-xl">
+                <div class="mb-4 text-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-red-500" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
-                    <h3 class="text-xl font-semibold mt-4 text-slate-900 dark:text-white">Удаление аккаунта</h3>
-                    <p class="mt-2 text-slate-600 dark:text-slate-300">
-                        Вы уверены, что хотите удалить свой аккаунт? Это действие необратимо, и все ваши данные будут
-                        удалены.
+                    <h3 class="text-lg font-medium text-slate-900 dark:text-white mt-2">Delete Account</h3>
+                    <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                        Are you sure you want to delete your account? This action cannot be undone and will result in
+                        the loss
+                        of all your data.
                     </p>
-                    <div class="flex justify-center space-x-3 mt-6">
-                        <button @click="showConfirmationModal = false"
-                            class="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            Отмена
-                        </button>
-                        <button @click="deleteAccount"
-                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-                            :disabled="isDeleting">
-                            <svg v-if="isDeleting" class="animate-spin -ml-1 mr-1 h-4 w-4 inline-block"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                            {{ isDeleting ? 'Удаление...' : 'Да, удалить' }}
-                        </button>
-                    </div>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button @click="showConfirmationModal = false" type="button"
+                        class="inline-flex justify-center px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm hover:bg-slate-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Cancel
+                    </button>
+                    <button @click="deleteAccount" type="button"
+                        class="inline-flex justify-center items-center px-4 py-2 text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                        :disabled="isDeleting">
+                        <svg v-if="isDeleting" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        <template v-if="isDeleting">Deleting...</template>
+                        <template v-else>Yes, Delete Account</template>
+                    </button>
                 </div>
             </div>
         </div>
-    </Teleport>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, reactive, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useToastStore } from '~/stores/toast';
 import { useAuthService } from '~/composables/useAuthService';
 
@@ -215,142 +163,119 @@ definePageMeta({
     middleware: ['auth'],
 });
 
+const router = useRouter();
 const toastStore = useToastStore();
-const { isPremium, user, updateProfile } = useAuthService();
+const { user, updateProfile, deleteAccount: deleteAccountService } = useAuthService();
 
-// Данные пользователя
-const firstName = ref('');
-const lastName = ref('');
-const email = ref('');
+// Form state
+const form = reactive({
+    firstName: '',
+    lastName: '',
+});
 
-// Состояния загрузки
+// Loading states
 const isLoading = ref(false);
 const isDeleting = ref(false);
 const showConfirmationModal = ref(false);
 
-// Вычисляемые свойства
-const userFullName = computed(() => {
-    if (firstName.value && lastName.value) {
-        return `${firstName.value} ${lastName.value}`;
-    } else if (firstName.value) {
-        return firstName.value;
-    } else if (lastName.value) {
-        return lastName.value;
-    }
-    return '';
+// Error handling
+const errors = reactive({
+    firstName: '',
+    lastName: '',
+    general: '',
 });
 
-const userInitials = computed(() => {
-    const first = firstName.value ? firstName.value.charAt(0).toUpperCase() : '';
-    const last = lastName.value ? lastName.value.charAt(0).toUpperCase() : '';
-    return first + last || 'U';
-});
-
-const accountTypeClasses = computed(() => {
-    return isPremium.value
-        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-        : 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400';
-});
-
-// Функции
-const fetchUserData = async () => {
-    try {
-        if (user.value) {
-            firstName.value = user.value.firstName || '';
-            lastName.value = user.value.lastName || '';
-            email.value = user.value.email || '';
-        }
-    } catch (error) {
-        console.error('Error fetching user data:', error);
-        toastStore.error('Failed to load user data');
-    }
+// Clear errors
+const clearErrors = () => {
+    errors.firstName = '';
+    errors.lastName = '';
+    errors.general = '';
 };
 
-const saveProfileInfo = async () => {
+// Set initial form values from user data
+onMounted(() => {
+    if (user.value) {
+        form.firstName = user.value.firstName || '';
+        form.lastName = user.value.lastName || '';
+    }
+});
+
+// Validate form
+const validateForm = () => {
+    clearErrors();
+    let isValid = true;
+
+    // Check first name length if provided
+    if (form.firstName && form.firstName.length > 50) {
+        errors.firstName = 'First name must be less than 50 characters';
+        isValid = false;
+    }
+
+    // Check last name length if provided
+    if (form.lastName && form.lastName.length > 50) {
+        errors.lastName = 'Last name must be less than 50 characters';
+        isValid = false;
+    }
+
+    return isValid;
+};
+
+// Save profile
+const saveProfile = async () => {
+    if (!validateForm()) return;
+
+    isLoading.value = true;
+    clearErrors();
+
     try {
-        // Удаляем лишние пробелы в начале и конце полей
-        firstName.value = firstName.value.trim();
-        lastName.value = lastName.value.trim();
-
-        // Базовая валидация
-        if (firstName.value.length > 50) {
-            toastStore.error('First name is too long (maximum 50 characters)');
-            return;
-        }
-
-        if (lastName.value.length > 50) {
-            toastStore.error('Last name is too long (maximum 50 characters)');
-            return;
-        }
-
-        isLoading.value = true;
-
-        // Вызываем API для обновления профиля
-        const response = await updateProfile({
-            firstName: firstName.value,
-            lastName: lastName.value
+        const result = await updateProfile({
+            firstName: form.firstName,
+            lastName: form.lastName,
         });
 
-        if (response.success) {
-            // Показываем сообщение об успехе
-            toastStore.success('Profile information saved successfully');
-
-            // Обновляем локальные данные (на случай, если API изменило данные)
-            fetchUserData();
+        if (result.success) {
+            toastStore.success('Profile updated successfully');
         } else {
-            // Показываем сообщение об ошибке
-            toastStore.error(response.error || 'Failed to save profile information');
+            errors.general = result.error || 'Failed to update profile';
+            toastStore.error(errors.general);
         }
     } catch (error: any) {
-        console.error('Error saving profile:', error);
-        toastStore.error(error.message || 'Failed to save profile information');
+        errors.general = error.message || 'An error occurred while updating profile';
+        toastStore.error(errors.general);
     } finally {
         isLoading.value = false;
     }
 };
 
+// Confirm delete account
 const confirmDeleteAccount = () => {
     showConfirmationModal.value = true;
 };
 
+// Delete account
 const deleteAccount = async () => {
-    try {
-        isDeleting.value = true;
+    isDeleting.value = true;
 
-        // Вызываем API для удаления аккаунта
-        const result = await useAuthService().deleteAccount();
+    try {
+        const result = await deleteAccountService();
 
         if (result.success) {
-            toastStore.success(result.message || 'Account deleted successfully');
+            showConfirmationModal.value = false;
+            toastStore.success('Your account has been successfully deleted');
 
-            // Небольшая задержка для отображения уведомления
+            // Redirect to home page after a short delay
             setTimeout(() => {
-                // Перенаправляем на главную страницу
-                window.location.href = '/';
+                router.push('/');
             }, 1000);
         } else {
             toastStore.error(result.error || 'Failed to delete account');
         }
-    } catch (error) {
-        console.error('Error deleting account:', error);
-        toastStore.error('Failed to delete account');
+    } catch (error: any) {
+        toastStore.error(error.message || 'An error occurred while deleting your account');
     } finally {
         isDeleting.value = false;
-        showConfirmationModal.value = false;
     }
 };
-
-// Загружаем данные при монтировании компонента
-onMounted(() => {
-    fetchUserData();
-});
-
-// Получаем данные пользователя при изменении объекта user (например, после входа)
-watch(() => user.value, (newUser) => {
-    if (newUser) {
-        fetchUserData();
-    }
-}, { immediate: true });
 </script>
 
 <style scoped>
