@@ -291,6 +291,15 @@ export const useAuthStore = defineStore('auth', {
             }
         },
 
+        setTwoFactorPending(email: string, remember: boolean = false) {
+            this.requiresTwoFactor = true;
+            this.pendingTwoFactorAuth = {
+                email,
+                remember
+            };
+            console.log('Set two-factor pending state for email:', email);
+        },
+
         async verifyTwoFactorCode(code: string) {
             if (!this.pendingTwoFactorAuth.email) {
                 throw new Error('No pending two-factor authentication')

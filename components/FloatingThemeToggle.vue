@@ -2,7 +2,7 @@
 	<button
 		v-if="props.ready"
 		@click="props.toggleDarkMode"
-		class="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:transform hover:scale-110 theme-toggle-btn"
+		class="fixed bottom-6 right-6 z-[3000] w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:transform hover:scale-110 theme-toggle-btn"
 		:class="{
 			'bg-slate-800 text-yellow-300': !props.isDark,
 			'bg-blue-100 text-slate-800': props.isDark

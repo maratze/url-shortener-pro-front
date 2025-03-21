@@ -35,10 +35,10 @@
                     <!-- Описание -->
                     <div class="text-center">
                         <p class="text-slate-700 dark:text-slate-300">
-                            Для этого аккаунта включена двухфакторная аутентификация.
+                            For this account, two-factor authentication is enabled.
                         </p>
                         <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">
-                            Пожалуйста, введите код подтверждения из приложения-аутентификатора.
+                            Please enter the verification code from the authenticator app.
                         </p>
                     </div>
 
@@ -49,7 +49,7 @@
                                 v-model="verificationCode"
                                 type="text"
                                 maxlength="6"
-                                placeholder="Введите 6-значный код"
+                                placeholder="Enter 6-digit code"
                                 class="block w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white text-center text-xl tracking-wide"
                                 :disabled="loading"
                                 @keyup.enter="verify" />
@@ -67,7 +67,7 @@
                     v-if="!loading"
                     @click="close"
                     class="py-2 px-4 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">
-                    Отмена
+                    Cancel
                 </button>
 
                 <button
@@ -83,9 +83,9 @@
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                             </path>
                         </svg>
-                        Проверка...
+                        Checking...
                     </span>
-                    <span v-else>Войти</span>
+                    <span v-else>Login</span>
                 </button>
             </div>
         </div>
@@ -102,7 +102,7 @@ const props = defineProps({
     },
     title: {
         type: String,
-        default: 'Двухфакторная аутентификация'
+        default: '2FA authentication'
     },
     error: {
         type: String,
