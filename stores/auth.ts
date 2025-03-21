@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { userApi } from '~/services/api/userApi'
-import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest, ChangePasswordRequest } from '~/types/auth'
+import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest, ChangePasswordRequest, TwoFactorAuthRequest } from '~/types/auth'
 import { getStringFromStorage, setStringInStorage, removeLocalStorage } from '~/utils/client'
 
 export const useAuthStore = defineStore('auth', {
@@ -151,9 +151,18 @@ export const useAuthStore = defineStore('auth', {
 
             try {
                 const user = await userApi.getCurrentUser()
-                this.user = user
-                this.isAuthenticated = true
-                return user
+
+                // Проверяем, что пользователь и его email существуют
+                if (user && user.email) {
+                    this.user = user
+                    this.isAuthenticated = true
+                    return user
+                } else {
+                    console.error('User data is incomplete:', user)
+                    // Если данные неполные, выходим из системы
+                    this.logout()
+                    return null
+                }
             } catch (error: any) {
                 console.error('Error fetching current user:', error.message)
 
@@ -232,6 +241,33 @@ export const useAuthStore = defineStore('auth', {
                 return {
                     success: false,
                     message: error.message || 'Failed to change password'
+                }
+            } finally {
+                this.loading = false
+            }
+        },
+
+        async toggleTwoFactorAuth(enable: boolean) {
+            this.loading = true
+            this.error = ''
+
+            try {
+                const response = await userApi.toggleTwoFactorAuth(enable)
+
+                // Если 2FA успешно включено/отключено, обновляем информацию о пользователе
+                if (response.success && this.user) {
+                    this.user = {
+                        ...this.user,
+                        isTwoFactorEnabled: enable
+                    }
+                }
+
+                return response
+            } catch (error: any) {
+                this.error = error.message
+                return {
+                    success: false,
+                    message: error.message || 'Failed to update two-factor authentication settings'
                 }
             } finally {
                 this.loading = false

@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue'
 import { useAuthStore } from '~/stores/auth'
 import type { UpdateProfileRequest, ChangePasswordRequest } from '~/types/auth'
+import type { TwoFactorAuthResponse } from '~/types/auth'
 
 /**
  * Composable for authentication management
@@ -29,12 +30,14 @@ export const useAuthService = () => {
             await authStore.fetchCurrentUser()
 
             // Добавляем логирование для отладки данных пользователя
-            if (authStore.user) {
+            if (authStore.user && authStore.user.email) {
                 console.log('User authenticated, details:', {
                     id: authStore.user.id,
                     email: authStore.user.email,
                     authProvider: authStore.user.authProvider || 'Not set'
                 })
+            } else if (authStore.user) {
+                console.warn('User authenticated but data is incomplete')
             }
         } catch (error) {
             console.error('Error checking authentication status:', error)
@@ -138,6 +141,30 @@ export const useAuthService = () => {
         }
     }
 
+    /**
+     * Enable or disable two-factor authentication
+     */
+    const toggleTwoFactorAuth = async (enable: boolean, verificationCode?: string): Promise<TwoFactorAuthResponse | null> => {
+        try {
+            const response = await $fetch(`${getApiBaseUrl()}/api/users/two-factor-auth`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    enable,
+                    code: verificationCode
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authStore.token}`
+                }
+            });
+
+            return response as TwoFactorAuthResponse;
+        } catch (error) {
+            console.error('Error toggling 2FA:', error);
+            throw error;
+        }
+    }
+
     return {
         isAuthenticated,
         isInitializing,
@@ -150,7 +177,8 @@ export const useAuthService = () => {
         updateProfile,
         logout,
         deleteAccount,
-        changePassword
+        changePassword,
+        toggleTwoFactorAuth
     }
 }
 

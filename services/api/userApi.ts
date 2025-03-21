@@ -249,5 +249,51 @@ export const userApi = {
                 message: errorMessage
             };
         }
+    },
+
+    // Метод для управления двухфакторной аутентификацией
+    toggleTwoFactorAuth: async (enable: boolean): Promise<{ success: boolean, message: string, qrCodeUrl?: string }> => {
+        try {
+            // Safe localStorage access that works with SSR
+            const token = process.client ? localStorage.getItem('token') : null;
+            if (!token) {
+                throw new Error('Authentication required');
+            }
+
+            console.log(`Making API request to ${getApiBaseUrl()}/api/users/two-factor-auth`);
+
+            const response = await $fetch(`${getApiBaseUrl()}/api/users/two-factor-auth`, {
+                method: 'POST',
+                body: { enable },
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            return {
+                success: true,
+                message: enable ? 'Two-factor authentication enabled' : 'Two-factor authentication disabled',
+                qrCodeUrl: response.qrCodeUrl
+            };
+        } catch (error: any) {
+            console.error('Error toggling 2FA:', error);
+
+            let errorMessage = 'Failed to update two-factor authentication settings';
+            if (error.response) {
+                const statusCode = error.response.status;
+                if (statusCode === 401) {
+                    errorMessage = 'Authentication required';
+                } else if (statusCode === 400) {
+                    errorMessage = error.response._data?.message || 'Invalid request';
+                } else if (statusCode === 500) {
+                    errorMessage = 'Server error occurred while updating two-factor authentication';
+                }
+            }
+
+            return {
+                success: false,
+                message: errorMessage
+            };
+        }
     }
 }

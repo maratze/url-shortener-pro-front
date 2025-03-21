@@ -28,6 +28,8 @@ export interface UserResponse {
     isEmailVerified: boolean;
     isPremium: boolean;
     authProvider?: string;
+    isOAuthUser?: boolean;
+    isTwoFactorEnabled?: boolean;
     token: string;
     registrationDate: string;
 }
@@ -41,4 +43,17 @@ export interface ChangePasswordRequest {
     currentPassword?: string;
     newPassword: string;
     isGoogleUser?: boolean;
+}
+
+export interface TwoFactorAuthRequest {
+    enable: boolean;
+    code?: string;
+}
+
+export interface TwoFactorAuthResponse {
+    isEnabled: boolean;
+    qrCodeUrl?: string;
+    qrCodeData?: string;
+    manualEntryKey?: string;
+    message?: string;
 }

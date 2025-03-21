@@ -204,15 +204,61 @@
                     </div>
                 </form>
             </section>
+
+            <!-- Two-Factor Authentication -->
+            <section
+                class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Two-Factor Authentication</h2>
+                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            Add an extra layer of security to your account
+                        </p>
+                    </div>
+                    <button @click="toggle2FA"
+                        class="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white h-10 min-w-[100px]"
+                        :class="is2FAEnabled ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700'"
+                        :disabled="isToggling2FA">
+                        <svg v-if="isToggling2FA" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        <span>{{ isToggling2FA
+                            ? (is2FAEnabled ? 'Disabling...' : 'Enabling...')
+                            : (is2FAEnabled ? 'Disable 2FA' : 'Enable 2FA') }}</span>
+                    </button>
+                </div>
+                <div v-if="is2FAEnabled" class="mt-4 p-4 bg-slate-50 dark:bg-slate-700/30 rounded-lg">
+                    <p class="text-sm text-slate-600 dark:text-slate-300">
+                        Two-factor authentication is currently enabled. You'll need to enter a verification code from
+                        your authenticator app when signing in.
+                    </p>
+                </div>
+            </section>
         </div>
+
+        <!-- QR Code Modal -->
+        <QrCodeModal v-model="showQrCodeModal" :url="qrCodeUrl" :manual-key="manualEntryKey" :is-setup="true"
+            :close-on-backdrop="false" title="Setup 2FA settings" @verify="verifyAndEnableTwoFactor" />
+
+        <!-- Verification Code Modal -->
+        <VerificationCodeModal v-model="showVerificationCodeModal" title="Отключение 2FA"
+            message="Введите код подтверждения из приложения-аутентификатора для отключения двухфакторной аутентификации"
+            :close-on-backdrop="false" @verify="verifyAndDisableTwoFactor" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue';
+import { ref, reactive, computed, onMounted } from 'vue';
 import { useToastStore } from '~/stores/toast';
 import { useAuthService } from '~/composables/useAuthService';
-import type { ChangePasswordRequest } from '~/types/auth';
+import type { ChangePasswordRequest, TwoFactorAuthResponse } from '~/types/auth';
+import QrCodeModal from '~/components/QrCodeModal.vue';
+import VerificationCodeModal from '~/components/security/VerificationCodeModal.vue';
 
 definePageMeta({
     layout: 'account',
@@ -220,7 +266,7 @@ definePageMeta({
 });
 
 const toastStore = useToastStore();
-const { changePassword: changePasswordService, user } = useAuthService();
+const { changePassword: changePasswordService, user, toggleTwoFactorAuth } = useAuthService();
 
 // Form state
 const form = reactive({
@@ -408,6 +454,112 @@ const changePassword = async () => {
         toastStore.error(errorMessage);
     } finally {
         isLoading.value = false;
+    }
+};
+
+// 2FA state
+const is2FAEnabled = ref(false);
+const isToggling2FA = ref(false);
+const showQrCodeModal = ref(false);
+const showVerificationCodeModal = ref(false);
+const qrCodeUrl = ref('');
+const manualEntryKey = ref('');
+
+// Check if 2FA is enabled when component is mounted
+onMounted(() => {
+    if (user.value?.isTwoFactorEnabled) {
+        is2FAEnabled.value = true;
+    }
+});
+
+// Функция для конструирования URL для QR-кода из данных
+const getQrCodeImageUrl = (qrCodeData: string) => {
+    // Создаем URL для запроса QR-кода с бэкенда
+    const apiBaseUrl = (import.meta.env.VITE_API_URL || 'https://localhost:7095');
+    return `${apiBaseUrl}/api/qr-code/generate?data=${encodeURIComponent(qrCodeData)}`;
+};
+
+// Toggle 2FA
+const toggle2FA = async () => {
+    try {
+        isToggling2FA.value = true;
+
+        // Call API to enable/disable 2FA
+        const enable = !is2FAEnabled.value;
+
+        // Если мы выключаем 2FA и оно включено
+        if (!enable && is2FAEnabled.value) {
+            // Показываем модальное окно для ввода кода подтверждения
+            showVerificationCodeModal.value = true;
+            isToggling2FA.value = false;
+            return;
+        }
+        // Если мы включаем 2FA
+        else if (enable) {
+            // Первый шаг: запрос QR-кода
+            try {
+                const setupResponse = await toggleTwoFactorAuth(enable);
+
+                if (setupResponse) {
+                    // Если есть данные для QR-кода, генерируем URL и показываем QR-код
+                    if (setupResponse.qrCodeData) {
+                        qrCodeUrl.value = getQrCodeImageUrl(setupResponse.qrCodeData);
+                        manualEntryKey.value = setupResponse.manualEntryKey || '';
+                        showQrCodeModal.value = true;
+                    }
+                    // Если есть прямой URL для QR-кода (для обратной совместимости)
+                    else if (setupResponse.qrCodeUrl) {
+                        qrCodeUrl.value = setupResponse.qrCodeUrl;
+                        manualEntryKey.value = setupResponse.manualEntryKey || '';
+                        showQrCodeModal.value = true;
+                    }
+                }
+            } catch (error: any) {
+                toastStore.error(error.message || 'Не удалось настроить 2FA');
+            }
+        }
+    } catch (error: any) {
+        toastStore.error(error.message || 'Не удалось обновить настройки 2FA');
+    } finally {
+        isToggling2FA.value = false;
+    }
+};
+
+// Обработка верификации кода 2FA при отключении
+const verifyAndDisableTwoFactor = async (code: string) => {
+    try {
+        isToggling2FA.value = true;
+        const disableResponse = await toggleTwoFactorAuth(false, code);
+
+        if (disableResponse) {
+            is2FAEnabled.value = disableResponse.isEnabled;
+            toastStore.success(disableResponse.message || 'Двухфакторная аутентификация отключена');
+            showVerificationCodeModal.value = false;
+        }
+    } catch (error: any) {
+        toastStore.error(error.message || 'Не удалось проверить код 2FA');
+        // Не закрываем модальное окно при ошибке, чтобы пользователь мог повторить попытку
+    } finally {
+        isToggling2FA.value = false;
+    }
+};
+
+// Обработка верификации кода 2FA после сканирования QR-кода
+const verifyAndEnableTwoFactor = async (code: string) => {
+    try {
+        isToggling2FA.value = true;
+        const enableResponse = await toggleTwoFactorAuth(true, code);
+
+        if (enableResponse) {
+            is2FAEnabled.value = enableResponse.isEnabled;
+            toastStore.success(enableResponse.message || 'Двухфакторная аутентификация включена');
+            showQrCodeModal.value = false;
+        }
+    } catch (error: any) {
+        toastStore.error(error.message || 'Не удалось проверить код 2FA');
+        // Не закрываем модальное окно при ошибке, чтобы пользователь мог повторить попытку
+    } finally {
+        isToggling2FA.value = false;
     }
 };
 </script>
