@@ -246,8 +246,8 @@
             :close-on-backdrop="false" title="Setup 2FA settings" @verify="verifyAndEnableTwoFactor" />
 
         <!-- Verification Code Modal -->
-        <VerificationCodeModal v-model="showVerificationCodeModal" title="Отключение 2FA"
-            message="Введите код подтверждения из приложения-аутентификатора для отключения двухфакторной аутентификации"
+        <VerificationCodeModal v-model="showVerificationCodeModal" title="Disable 2FA"
+            message="Enter the verification code from the authenticator app to disable two-factor authentication"
             :close-on-backdrop="false" @verify="verifyAndDisableTwoFactor" />
     </div>
 </template>
@@ -256,7 +256,6 @@
 import { ref, reactive, computed, onMounted } from 'vue';
 import { useToastStore } from '~/stores/toast';
 import { useAuthService } from '~/composables/useAuthService';
-import type { ChangePasswordRequest, TwoFactorAuthResponse } from '~/types/auth';
 import QrCodeModal from '~/components/QrCodeModal.vue';
 import VerificationCodeModal from '~/components/security/VerificationCodeModal.vue';
 
