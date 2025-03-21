@@ -6,7 +6,7 @@
 		data-aos-duration="1000"
 	>
 		<div class="feature-icon-wrapper">
-			<!-- Иконка с эффектом overlay при наведении -->
+			<!-- Icon with effect overlay on the hover -->
 			<div class="feature-icon-bg"></div>
 			<div class="feature-icon">
 				<!-- Lightning bolt icon -->

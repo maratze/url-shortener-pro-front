@@ -1,13 +1,13 @@
 <template>
 	<header
-		class="fixed top-0 left-0 right-0 z-40 py-4 transition-all duration-300 z-[2000]"
+		class="fixed top-0 left-0 right-0 py-4 transition-all duration-300 z-[2000]"
 		:class="{
 			'backdrop-blur-md bg-white/80 dark:bg-slate-900/80 shadow-md': isScrolled,
 			'bg-transparent': !isScrolled
 		}">
 		<div class="container mx-auto px-6 max-w-7xl">
 			<div class="flex items-center justify-between">
-				<!-- Левая часть: Логотип -->
+				<!-- Left part: Logo -->
 				<div class="flex items-center space-x-4">
 					<NuxtLink :to="layoutType === 'dashboard' ? '/dashboard' : '/'" class="flex items-center space-x-2">
 						<div
@@ -19,7 +19,7 @@
 					</NuxtLink>
 				</div>
 
-				<!-- Центральная часть: Навигация -->
+				<!-- Central part: Navigation -->
 				<nav v-if="layoutType !== 'auth'" class="hidden md:flex items-center justify-center space-x-6">
 					<NuxtLink v-if="authStore.isAuthenticated" to="/dashboard" class="nav-link"
 						active-class="router-link-active">Dashboard</NuxtLink>
@@ -33,9 +33,9 @@
 						class="nav-link" active-class="router-link-active">About</NuxtLink>
 				</nav>
 
-				<!-- Правая часть: Кнопки авторизации или Меню пользователя -->
+				<!-- Right part: Authorization buttons or User menu -->
 				<div class="flex items-center space-x-3">
-					<!-- Показываем кнопки регистрации и входа для неавторизованных пользователей -->
+					<!-- Show registration and login buttons for non-authenticated users -->
 					<template v-if="!authStore.isAuthenticated">
 						<template v-if="layoutType !== 'auth'">
 							<NuxtLink to="/register" class="register-btn hidden sm:flex">Register</NuxtLink>
@@ -43,7 +43,7 @@
 						</template>
 					</template>
 
-					<!-- Показываем меню пользователя для авторизованных пользователей -->
+					<!-- Show user menu for authenticated users -->
 					<UserMenu v-else />
 				</div>
 			</div>
@@ -54,7 +54,7 @@
 			<div v-if="mobileMenuOpen && layoutType !== 'auth'" class="md:hidden mobile-menu">
 				<nav class="px-4 py-6 space-y-4">
 					<div class="border-t dark:border-slate-700"></div>
-					<!-- Мобильное меню -->
+					<!-- Mobile menu -->
 					<NuxtLink v-if="authStore.isAuthenticated" to="/dashboard" class="mobile-nav-link"
 						active-class="text-purple-600 dark:text-purple-400 font-semibold"
 						@click="mobileMenuOpen = false">
@@ -77,7 +77,7 @@
 						@click="mobileMenuOpen = false">About
 					</NuxtLink>
 
-					<!-- Показываем кнопки регистрации/входа или профиль пользователя -->
+					<!-- Show registration/login buttons or user profile -->
 					<template v-if="!authStore.isAuthenticated">
 						<NuxtLink
 							to="/register"
@@ -114,7 +114,7 @@ import { useRoute } from 'vue-router';
 const props = defineProps({
 	layoutType: {
 		type: String,
-		default: 'default', // Возможные значения: 'default', 'auth', 'dashboard'
+		default: 'default', // Possible values: 'default', 'auth', 'dashboard'
 		validator: (value) => ['default', 'auth', 'dashboard'].includes(value)
 	}
 });
@@ -124,17 +124,17 @@ const route = useRoute();
 const mobileMenuOpen = ref(false);
 const isScrolled = ref(false);
 
-// Вычисляем инициалы для аватара (для мобильного меню)
+// Calculate initials for avatar (for mobile menu)
 const userInitials = computed(() => {
 	if (!authStore.user?.email) return '?';
 	return authStore.user.email.charAt(0).toUpperCase();
 });
 
-// Функция выхода для мобильного меню
+// Logout function for mobile menu
 const logout = () => {
 	authStore.logout();
 	mobileMenuOpen.value = false;
-	// Перенаправляем на главную страницу
+	// Redirect to home page
 	navigateTo('/');
 };
 
@@ -146,7 +146,7 @@ onMounted(() => {
 	window.addEventListener('scroll', checkScroll);
 	checkScroll();
 
-	// Получаем данные о текущем пользователе при загрузке
+	// Get current user data when loading
 	authStore.fetchCurrentUser();
 });
 

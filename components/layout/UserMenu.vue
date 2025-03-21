@@ -1,6 +1,6 @@
 <template>
 	<div class="relative">
-		<!-- Аватар и кнопка для выпадающего меню -->
+		<!-- Avatar and button for dropdown menu -->
 		<button
 			@click="toggleMenu"
 			class="flex items-center space-x-2 relative focus:outline-none"
@@ -19,11 +19,11 @@
 			</span>
 		</button>
 
-		<!-- Выпадающее меню -->
+		<!-- Dropdown menu -->
 		<Transition name="fade">
 			<div v-if="isMenuOpen"
 				 class="absolute right-0 mt-2 min-w-[240px] rounded-lg shadow-lg bg-white dark:bg-slate-800 ring-1 ring-black ring-opacity-5 z-50 py-2">
-				<!-- Информация о пользователе -->
+				<!-- User information -->
 				<div class="px-4 py-2 border-b border-slate-200 dark:border-slate-700">
 					<div class="font-medium text-slate-800 dark:text-white truncate">{{ getFullName(user) }}</div>
 					<div v-if="user?.isPremium" class="text-xs text-purple-600 dark:text-purple-400 font-medium">PRO
@@ -32,7 +32,7 @@
 					<div v-else class="text-xs text-slate-500 dark:text-slate-400">Free account</div>
 				</div>
 
-				<!-- Ссылки меню -->
+				<!-- Menu links -->
 				<div class="py-1">
 					<NuxtLink to="/account"
 							  class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
@@ -58,7 +58,7 @@ const user = computed(() => authStore.user);
 const isMenuOpen = ref(false);
 const menuButton = ref(null);
 
-// Вычисляем инициалы для аватара
+// Calculate initials for avatar
 const userInitials = computed(() => {
 	let result = '';
 
@@ -95,23 +95,23 @@ const getFullName = (user) => {
 	return result;
 };
 
-// Переключение видимости меню
+// Toggle menu visibility
 const toggleMenu = () => {
 	isMenuOpen.value = !isMenuOpen.value;
 };
 
-// Закрываем меню при клике вне
+// Close menu when clicking outside
 const handleClickOutside = (event) => {
 	if (menuButton.value && !menuButton.value.contains(event.target) && isMenuOpen.value) {
 		isMenuOpen.value = false;
 	}
 };
 
-// Выход из системы
+// Logout
 const logout = () => {
 	authStore.logout();
 	isMenuOpen.value = false;
-	// Перенаправление на главную страницу
+	// Redirect to home page
 	navigateTo('/');
 };
 
