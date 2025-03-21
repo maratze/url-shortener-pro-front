@@ -8,6 +8,22 @@ export interface LoginRequest {
     email: string;
     password: string;
     remember?: boolean;
+    verificationCode?: string;
+}
+
+export interface LoginResponse {
+    token?: string;
+    requiresTwoFactor?: boolean;
+    id?: number;
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+    isEmailVerified?: boolean;
+    isPremium?: boolean;
+    authProvider?: string;
+    isOAuthUser?: boolean;
+    isTwoFactorEnabled?: boolean;
+    registrationDate?: string;
 }
 
 export interface OAuthRequest {
@@ -30,6 +46,7 @@ export interface UserResponse {
     authProvider?: string;
     isOAuthUser?: boolean;
     isTwoFactorEnabled?: boolean;
+    requiresTwoFactor?: boolean;
     token: string;
     registrationDate: string;
 }

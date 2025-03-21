@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { userApi } from '~/services/api/userApi'
-import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest, ChangePasswordRequest, TwoFactorAuthRequest } from '~/types/auth'
+import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest, ChangePasswordRequest, TwoFactorAuthRequest, LoginResponse } from '~/types/auth'
 import { getStringFromStorage, setStringInStorage, removeLocalStorage } from '~/utils/client'
 
 export const useAuthStore = defineStore('auth', {
@@ -9,7 +9,12 @@ export const useAuthStore = defineStore('auth', {
         token: '',
         error: '',
         loading: false,
-        isAuthenticated: false
+        isAuthenticated: false,
+        requiresTwoFactor: false,
+        pendingTwoFactorAuth: {
+            email: '',
+            remember: false
+        }
     }),
 
     actions: {
@@ -45,9 +50,21 @@ export const useAuthStore = defineStore('auth', {
         async login(loginData: LoginRequest) {
             this.loading = true
             this.error = ''
+            this.requiresTwoFactor = false
 
             try {
                 const response = await userApi.login(loginData)
+
+                // Проверяем, требуется ли 2FA
+                if (response.requiresTwoFactor) {
+                    console.log('Two-factor authentication required')
+                    this.requiresTwoFactor = true
+                    this.pendingTwoFactorAuth = {
+                        email: loginData.email,
+                        remember: loginData.remember || false
+                    }
+                    return { requiresTwoFactor: true } as const
+                }
 
                 // Проверяем, что ответ содержит токен
                 if (!response || !response.token) {
@@ -55,7 +72,7 @@ export const useAuthStore = defineStore('auth', {
                 }
 
                 // Сохраняем данные пользователя и токен
-                this.user = response
+                this.user = response as UserResponse
                 this.token = response.token
                 this.isAuthenticated = true
 
@@ -269,6 +286,51 @@ export const useAuthStore = defineStore('auth', {
                     success: false,
                     message: error.message || 'Failed to update two-factor authentication settings'
                 }
+            } finally {
+                this.loading = false
+            }
+        },
+
+        async verifyTwoFactorCode(code: string) {
+            if (!this.pendingTwoFactorAuth.email) {
+                throw new Error('No pending two-factor authentication')
+            }
+
+            this.loading = true
+            this.error = ''
+
+            try {
+                const response = await userApi.validateTwoFactorCode(
+                    this.pendingTwoFactorAuth.email,
+                    code,
+                    this.pendingTwoFactorAuth.remember
+                )
+
+                // Проверяем, что ответ содержит токен
+                if (!response || !response.token) {
+                    throw new Error('Authentication failed: No token received')
+                }
+
+                // Сохраняем данные пользователя и токен
+                this.user = response
+                this.token = response.token
+                this.isAuthenticated = true
+                this.requiresTwoFactor = false
+
+                // Очищаем данные ожидающей 2FA аутентификации
+                this.pendingTwoFactorAuth = {
+                    email: '',
+                    remember: false
+                }
+
+                // Явно сохраняем токен в localStorage
+                console.log('Saving token to localStorage after 2FA:', { tokenLength: response.token.length })
+                setStringInStorage('token', response.token)
+
+                return { success: true, user: response }
+            } catch (error: any) {
+                this.error = error.message
+                return { success: false, error: error.message }
             } finally {
                 this.loading = false
             }

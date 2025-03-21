@@ -1,5 +1,5 @@
 import { $fetch } from 'ohmyfetch'
-import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest, ChangePasswordRequest } from '~/types/auth'
+import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest, ChangePasswordRequest, LoginResponse } from '~/types/auth'
 
 export const userApi = {
     register: async (registerData: RegisterRequest): Promise<UserResponse> => {
@@ -17,7 +17,7 @@ export const userApi = {
         }
     },
 
-    login: async (loginData: LoginRequest): Promise<UserResponse> => {
+    login: async (loginData: LoginRequest): Promise<LoginResponse> => {
         try {
             console.log(`Making API request to ${getApiBaseUrl()}/api/users/login`);
 
@@ -294,6 +294,33 @@ export const userApi = {
                 success: false,
                 message: errorMessage
             };
+        }
+    },
+
+    validateTwoFactorCode: async (email: string, code: string, remember?: boolean): Promise<UserResponse> => {
+        try {
+            console.log(`Validating 2FA code for ${email}`);
+
+            return await $fetch(`${getApiBaseUrl()}/api/users/validate-2fa`, {
+                method: 'POST',
+                body: {
+                    email,
+                    verificationCode: code,
+                    remember
+                },
+                retry: 0
+            });
+        } catch (error: any) {
+            console.error('2FA validation error:', error);
+            let errorMessage = 'Error during two-factor authentication';
+
+            if (error.response) {
+                if (error.response.status === 400) {
+                    errorMessage = error.response._data?.message || 'Invalid verification code';
+                }
+            }
+
+            throw new Error(errorMessage);
         }
     }
 }

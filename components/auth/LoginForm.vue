@@ -162,6 +162,13 @@
 			</form>
 		</div>
 	</div>
+
+	<!-- 2FA Modal -->
+	<TwoFactorAuthModal
+		v-model="showTwoFactorAuthModal"
+		:error="twoFactorAuthError"
+		:loading="verifyingTwoFactorAuth"
+		@verify="verifyTwoFactorAuth" />
 </template>
 
 <script setup lang="ts">
@@ -178,6 +185,9 @@ const { login } = useAuthService();
 
 const loading = ref(false);
 const showPassword = ref(false);
+const showTwoFactorAuthModal = ref(false);
+const twoFactorAuthError = ref('');
+const verifyingTwoFactorAuth = ref(false);
 
 const form = reactive({
 	email: '',
@@ -235,6 +245,7 @@ const handleSubmit = async () => {
 
 	loading.value = true;
 	clearErrors();
+	twoFactorAuthError.value = '';
 
 	try {
 		// Call login from authStore
@@ -244,11 +255,19 @@ const handleSubmit = async () => {
 			remember: form.rememberMe
 		} as LoginRequest);
 
+		// Проверяем, требуется ли 2FA
+		if ('requiresTwoFactor' in response && response.requiresTwoFactor) {
+			console.log('Two-factor authentication required');
+			loading.value = false;
+			showTwoFactorAuthModal.value = true;
+			return;
+		}
+
 		// Check authorization success
 		if (authStore.error) {
 			errors.general = authStore.error;
 			toastStore.error(authStore.error);
-		} else if (authStore.isAuthenticated && response?.token) {
+		} else if (authStore.isAuthenticated && 'token' in response && response.token) {
 			// Show success notification
 			toastStore.success('Successfully logged in! Welcome back.');
 			console.log('Login successful, authenticated:', authStore.isAuthenticated);
@@ -279,6 +298,34 @@ const handleSubmit = async () => {
 		toastStore.error(errorMessage);
 	} finally {
 		loading.value = false;
+	}
+};
+
+// Проверка кода 2FA
+const verifyTwoFactorAuth = async (code: string) => {
+	twoFactorAuthError.value = '';
+	verifyingTwoFactorAuth.value = true;
+
+	try {
+		const result = await authStore.verifyTwoFactorCode(code);
+
+		if (result.success) {
+			showTwoFactorAuthModal.value = false;
+			toastStore.success('Successfully logged in! Welcome back.');
+
+			// Redirect
+			setTimeout(() => {
+				const redirectPath = route.query.redirect?.toString() || '/dashboard';
+				navigateTo(redirectPath);
+			}, 300);
+		} else {
+			twoFactorAuthError.value = result.error || 'Invalid verification code';
+		}
+	} catch (error) {
+		const errorMessage = error instanceof Error ? error.message : 'Failed to verify code. Please try again.';
+		twoFactorAuthError.value = errorMessage;
+	} finally {
+		verifyingTwoFactorAuth.value = false;
 	}
 };
 
