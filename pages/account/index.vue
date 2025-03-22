@@ -71,60 +71,64 @@
                 <div class="pt-2">
                     <button
                         type="submit"
-                        class="inline-flex justify-center items-center py-2.5 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 min-w-[120px] h-10"
-                        :disabled="isLoading">
-                        <svg v-if="isLoading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                            </circle>
-                            <path class="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
-                        <template v-if="isLoading">Saving...</template>
-                        <template v-else>Save Changes</template>
+                        class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-6 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:ring-offset-slate-800 transition">
+                        <span v-if="isLoading" class="inline-block h-4 w-4 mr-2">
+                            <svg class="animate-spin h-full w-full" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4">
+                                </circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                        </span>
+                        Save Changes
                     </button>
                 </div>
             </form>
         </section>
 
-        <!-- Advanced Settings -->
-		<section
-			class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-			<details class="group">
-				<summary class="cursor-pointer flex items-center text-slate-700 dark:text-slate-300">
-					<h2 class="text-lg font-medium">Advanced Settings</h2>
-					<span class="ml-auto">
-						<svg class="h-5 w-5 transform group-open:rotate-180 transition-transform duration-200"
-							 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-							 stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-								  d="M19 9l-7 7-7-7" />
-						</svg>
-					</span>
-				</summary>
+        <!-- Authentication Status -->
+        <AuthStatusCard />
 
-				<div
-					class="mt-4 p-3 border border-red-200 rounded-lg bg-red-50 dark:bg-red-900/10 dark:border-red-900/30">
-					<h3 class="text-base font-medium text-red-700 dark:text-red-400">Delete Account</h3>
-					<p class="mt-1 text-sm text-red-600 dark:text-red-300">Once you delete your account, all of your
-						data will be permanently removed. This action cannot be undone.</p>
-					<button @click="confirmDeleteAccount"
-							class="mt-3 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 min-w-[120px] h-9"
-							:disabled="isDeleting">
-						<svg v-if="isDeleting" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-							 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-							<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-									stroke-width="4"></circle>
-							<path class="opacity-75" fill="currentColor"
-								  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-							</path>
-						</svg>
-						<span>{{ isDeleting ? 'Deleting...' : 'Delete Account' }}</span>
-					</button>
-				</div>
-			</details>
-		</section>
+        <!-- Advanced Settings -->
+        <section
+            class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+            <details class="group">
+                <summary class="cursor-pointer flex items-center text-slate-700 dark:text-slate-300">
+                    <h2 class="text-lg font-medium">Advanced Settings</h2>
+                    <span class="ml-auto">
+                        <svg class="h-5 w-5 transform group-open:rotate-180 transition-transform duration-200"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </span>
+                </summary>
+
+                <div
+                    class="mt-4 p-3 border border-red-200 rounded-lg bg-red-50 dark:bg-red-900/10 dark:border-red-900/30">
+                    <h3 class="text-base font-medium text-red-700 dark:text-red-400">Delete Account</h3>
+                    <p class="mt-1 text-sm text-red-600 dark:text-red-300">Once you delete your account, all of your
+                        data will be permanently removed. This action cannot be undone.</p>
+                    <button @click="confirmDeleteAccount"
+                        class="mt-3 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 min-w-[120px] h-9"
+                        :disabled="isDeleting">
+                        <svg v-if="isDeleting" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        <span>{{ isDeleting ? 'Deleting...' : 'Delete Account' }}</span>
+                    </button>
+                </div>
+            </details>
+        </section>
 
         <!-- Confirmation Modal -->
         <div v-if="showConfirmationModal"
@@ -173,6 +177,7 @@ import { ref, reactive, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToastStore } from '~/stores/toast';
 import { useAuthService } from '~/composables/useAuthService';
+import AuthStatusCard from '~/components/security/AuthStatusCard.vue';
 
 definePageMeta({
     layout: 'account',

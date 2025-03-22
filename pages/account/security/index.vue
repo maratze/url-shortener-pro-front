@@ -1,9 +1,6 @@
 <template>
     <div class="w-full">
         <div class="space-y-4">
-            <!-- Authentication Status -->
-            <AuthStatusCard />
-
             <!-- Password Change -->
             <section
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
@@ -462,7 +459,6 @@ import { useRouter } from 'vue-router';
 import { useAuthService } from '~/composables/useAuthService';
 import QrCodeModal from '~/components/QrCodeModal.vue';
 import VerificationCodeModal from '~/components/security/VerificationCodeModal.vue';
-import AuthStatusCard from '~/components/security/AuthStatusCard.vue';
 import { sessionApi } from '~/services/api/sessionApi';
 import type { RawSessionData, UserSessionDisplay } from '~/types/session';
 
