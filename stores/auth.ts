@@ -80,6 +80,9 @@ export const useAuthStore = defineStore('auth', {
                 console.log('Saving token to localStorage:', { tokenLength: response.token.length })
                 setStringInStorage('token', response.token)
 
+                // Сохраняем время входа в localStorage
+                localStorage.setItem('loginTime', new Date().toISOString())
+
                 return response
             } catch (error: any) {
                 this.error = error.message
@@ -116,6 +119,12 @@ export const useAuthStore = defineStore('auth', {
             }
 
             this.isAuthenticated = true
+
+            // Сохраняем время входа, если оно не было сохранено ранее
+            if (!localStorage.getItem('loginTime')) {
+                localStorage.setItem('loginTime', new Date().toISOString())
+            }
+
             console.log('User data set directly:', userData.email)
         },
 
@@ -132,6 +141,9 @@ export const useAuthStore = defineStore('auth', {
 
                 // Save token
                 setStringInStorage('token', response.token)
+
+                // Сохраняем время входа в localStorage
+                localStorage.setItem('loginTime', new Date().toISOString())
 
                 return response
             } catch (error: any) {

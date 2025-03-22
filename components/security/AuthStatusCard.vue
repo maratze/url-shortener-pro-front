@@ -83,12 +83,14 @@
                             d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
                     <div>
-                        <span class="text-xs text-slate-500 dark:text-slate-400">
-                            2FA:
-                            <span v-if="user?.isTwoFactorEnabled"
-                                class="font-medium text-green-600 dark:text-green-400">Enabled</span>
-                            <span v-else class="font-medium text-slate-500 dark:text-slate-400">Disabled</span>
-                        </span>
+                        <NuxtLink to="/account/security" class="text-xs text-slate-500 dark:text-slate-400">
+                            <span class="text-xs text-slate-500 dark:text-slate-400">
+                                2FA:
+                                <span v-if="user?.isTwoFactorEnabled"
+                                    class="font-medium text-green-600 dark:text-green-400">Enabled</span>
+                                <span v-else class="font-medium text-slate-500 dark:text-slate-400">Disabled</span>
+                            </span>
+                        </NuxtLink>
                     </div>
                 </div>
             </div>
@@ -106,6 +108,13 @@ const isLoading = ref(true);
 
 // Calculate time ago for login
 const loginTimeAgo = computed(() => {
+    // Добавляем логирование для отладки
+    console.log('User data in AuthStatusCard:', {
+        email: user.value?.email,
+        lastLoginAt: user.value?.lastLoginAt,
+        authProvider: user.value?.authProvider
+    });
+
     // Check if user has lastLoginAt data
     if (user.value?.lastLoginAt) {
         const date = new Date(user.value.lastLoginAt);
@@ -145,13 +154,20 @@ const loginTimeAgo = computed(() => {
         console.log('Error getting login time:', e);
     }
 
-    return 'Unknown';
+    // Если все методы не сработали, используем currentTime
+    localStorage.setItem('loginTime', new Date().toISOString());
+    return 'Just now';
 });
 
 onMounted(() => {
     // Simulate loading
     setTimeout(() => {
         isLoading.value = false;
+
+        // Сохраняем текущее время логина в localStorage, если его еще нет
+        if (!localStorage.getItem('loginTime')) {
+            localStorage.setItem('loginTime', new Date().toISOString());
+        }
     }, 300);
 });
 </script>
