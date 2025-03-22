@@ -49,6 +49,7 @@ export interface UserResponse {
     requiresTwoFactor?: boolean;
     token: string;
     registrationDate: string;
+    lastLoginAt?: string;
 }
 
 export interface UpdateProfileRequest {

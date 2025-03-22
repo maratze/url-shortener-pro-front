@@ -54,7 +54,7 @@
                     <h3 class="text-base font-medium text-slate-900 dark:text-white">Authentication Method</h3>
                 </div>
                 <div class="flex items-center">
-                    <div v-if="user?.authProvider === 'Google'" class="flex items-center">
+                    <div v-if="user?.authProvider === 'google'" class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24">
                             <path fill="#4285F4"
                                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -106,8 +106,24 @@ const isLoading = ref(true);
 
 // Calculate time ago for login
 const loginTimeAgo = computed(() => {
-    // This would normally come from the session data
-    // For now we'll use a placeholder or try to get it from localStorage
+    // Check if user has lastLoginAt data
+    if (user.value?.lastLoginAt) {
+        const date = new Date(user.value.lastLoginAt);
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffMinutes = Math.floor(diffMs / 60000);
+
+        if (diffMinutes < 1) return 'Just now';
+        if (diffMinutes < 60) return `${diffMinutes} min ago`;
+
+        const hours = Math.floor(diffMinutes / 60);
+        if (hours < 24) return `${hours} hr ago`;
+
+        const days = Math.floor(diffMinutes / 1440);
+        return `${days} day${days > 1 ? 's' : ''} ago`;
+    }
+
+    // Fallback to localStorage if no lastLoginAt
     try {
         const loginTime = localStorage.getItem('loginTime');
         if (loginTime) {
