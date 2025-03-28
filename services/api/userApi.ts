@@ -238,7 +238,12 @@ export const userApi = {
                 if (statusCode === 401) {
                     errorMessage = 'Authentication required';
                 } else if (statusCode === 400) {
-                    errorMessage = error.response._data?.message || 'Invalid current password';
+                    // Получаем точное сообщение об ошибке от сервера
+                    errorMessage = error.response._data || 'Invalid current password';
+                    // Если сервер вернул объект с сообщением
+                    if (typeof errorMessage === 'object' && errorMessage !== null) {
+                        errorMessage = (errorMessage as any).message || 'Invalid current password';
+                    }
                 } else if (statusCode === 500) {
                     errorMessage = 'Server error occurred while changing password';
                 }

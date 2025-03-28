@@ -136,7 +136,7 @@ export const useAuthService = () => {
         } catch (error: any) {
             return {
                 success: false,
-                error: error?.message || 'Failed to change password'
+                message: error?.message || 'Failed to change password'
             }
         }
     }

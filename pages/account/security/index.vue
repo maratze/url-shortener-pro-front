@@ -853,8 +853,8 @@ const changePassword = async () => {
             toastStore.success(successResult.message || 'Password changed successfully');
         } else {
             // Преобразуем result к правильному типу для доступа к сообщению об ошибке
-            const errorResult = result as { success: false; error: string };
-            errors.general = errorResult.error || 'Failed to change password';
+            const errorResult = result as { success: false; message: string };
+            errors.general = errorResult.message || 'Failed to change password';
             toastStore.error(errors.general);
         }
     } catch (error: any) {
