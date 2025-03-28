@@ -132,9 +132,9 @@ const userInitials = computed(() => {
 
 // Logout function for mobile menu
 const logout = () => {
+	// Redirect to home page
 	authStore.logout();
 	mobileMenuOpen.value = false;
-	// Redirect to home page
 	navigateTo('/');
 };
 
