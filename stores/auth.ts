@@ -25,8 +25,6 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await userApi.register(userData)
 
-                debugger
-
                 // Сохраняем данные пользователя и токен так же, как при логине
                 if (response && response.token) {
                     this.user = response
@@ -264,6 +262,11 @@ export const useAuthStore = defineStore('auth', {
 
             try {
                 const response = await userApi.changePassword(passwordData)
+                
+                if (response.success && this.user) {
+                    this.user.hasPasswordSet = true;
+                }
+
                 return response
             } catch (error: any) {
                 this.error = error.message

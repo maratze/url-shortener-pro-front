@@ -9,7 +9,7 @@
                 </div>
 
                 <!-- Information for Google users -->
-                <div v-if="isGoogleUser"
+                <div v-if="isGoogleUser && !hasPasswordSet"
                     class="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded-lg text-sm flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
                         viewBox="0 0 20 20" fill="currentColor">
@@ -20,11 +20,24 @@
                     <span>You signed in with Google. Set a password to be able to log in with email and password.</span>
                 </div>
 
+                <!-- Information for Google users who already set a password -->
+                <div v-if="isGoogleUser && hasPasswordSet"
+                    class="mb-4 p-4 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded-lg text-sm flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
+                        viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span>Password has been set. You can now log in with email and password, or continue using
+                        Google.</span>
+                </div>
+
                 <form @submit.prevent="changePassword" class="space-y-4">
                     <!-- Two columns for more compact display of fields -->
                     <div class="grid grid-cols-1 gap-4">
-                        <!-- Current password (only for non-Google users) -->
-                        <div v-if="!isGoogleUser" class="form-field">
+                        <!-- Current password (only for non-Google users or Google users with password set) -->
+                        <div v-if="!isGoogleUser || (isGoogleUser && hasPasswordSet)" class="form-field">
                             <label for="currentPassword"
                                 class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                                 Current Password
@@ -41,7 +54,8 @@
                                 <input id="currentPassword" v-model="form.currentPassword"
                                     :type="showCurrentPassword ? 'text' : 'password'"
                                     class="block w-full h-11 px-4 pl-10 pr-10 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white text-base"
-                                    placeholder="Enter current password" :required="!isGoogleUser" />
+                                    placeholder="Enter current password"
+                                    :required="!isGoogleUser || (isGoogleUser && hasPasswordSet)" />
                                 <button type="button" @click="showCurrentPassword = !showCurrentPassword"
                                     class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 focus:outline-none">
                                     <svg v-if="showCurrentPassword" xmlns="http://www.w3.org/2000/svg"
@@ -771,13 +785,19 @@ const isGoogleUser = computed(() => {
     return user.value?.authProvider?.toLowerCase() === 'google';
 });
 
+// Переменная для отслеживания установленного пароля - получаем из модели пользователя
+const hasPasswordSet = computed(() => {
+    return user.value?.hasPasswordSet || false;
+});
+
 // Form validation
 const validateForm = () => {
     clearErrors();
     let isValid = true;
 
-    // If the user is registered via Google, we don't require the current password
-    if (!isGoogleUser.value && !form.currentPassword) {
+    // Если это Google-пользователь без установленного пароля, не требуем текущий пароль
+    // Иначе (обычный пользователь или Google-пользователь с установленным паролем) - требуем
+    if ((!isGoogleUser.value || (isGoogleUser.value && hasPasswordSet.value)) && !form.currentPassword) {
         errors.currentPassword = 'Enter current password';
         isValid = false;
     }
@@ -809,24 +829,30 @@ const changePassword = async () => {
     clearErrors();
 
     try {
-        // If the user is from Google, send the request with the isGoogleUser flag
-        const passwordData = isGoogleUser.value
-            ? { newPassword: form.newPassword, isGoogleUser: true }
-            : { currentPassword: form.currentPassword, newPassword: form.newPassword };
+        // Определяем данные для запроса в зависимости от типа пользователя и статуса пароля
+        let passwordData;
+
+        if (isGoogleUser.value && !hasPasswordSet.value) {
+            // Google-пользователь без установленного пароля - не требуем текущий пароль
+            passwordData = { newPassword: form.newPassword, isGoogleUser: true };
+        } else {
+            // Обычный пользователь или Google-пользователь с установленным паролем
+            passwordData = { currentPassword: form.currentPassword, newPassword: form.newPassword };
+        }
 
         const result = await changePasswordService(passwordData as any);
 
         if (result.success) {
-            // Convert the result to the correct type for access to the message property
-            const successResult = result as { success: true; message: string };
-            toastStore.success(successResult.message || 'Password changed successfully');
-
-            // Clear the form
+            // Очищаем форму
             form.currentPassword = '';
             form.newPassword = '';
             form.confirmPassword = '';
+
+            // Преобразуем result к правильному типу для доступа к сообщению
+            const successResult = result as { success: true; message: string };
+            toastStore.success(successResult.message || 'Password changed successfully');
         } else {
-            // Convert the result to the correct type for access to the error property
+            // Преобразуем result к правильному типу для доступа к сообщению об ошибке
             const errorResult = result as { success: false; error: string };
             errors.general = errorResult.error || 'Failed to change password';
             toastStore.error(errors.general);

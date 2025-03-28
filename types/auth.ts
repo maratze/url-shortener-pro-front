@@ -47,6 +47,7 @@ export interface UserResponse {
     isOAuthUser?: boolean;
     isTwoFactorEnabled?: boolean;
     requiresTwoFactor?: boolean;
+    hasPasswordSet?: boolean;
     token: string;
     registrationDate: string;
     lastLoginAt?: string;
