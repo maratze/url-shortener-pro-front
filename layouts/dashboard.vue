@@ -8,7 +8,7 @@
             :ready="ready" />
 
         <div class="flex flex-col min-h-screen">
-            <AppHeader layout-type="dashboard" />
+            <AppHeaderDashboard />
             <main class="flex-grow bg-slate-50 dark:bg-slate-900 min-h-screen pt-[74px] pb-6">
                 <div class="container mx-auto px-6 max-w-7xl">
                     <NuxtPage />
@@ -23,8 +23,8 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import AppHeader from '~/components/layout/AppHeader.vue';
 import FloatingThemeToggle from '~/components/FloatingThemeToggle.vue';
+import AppHeaderDashboard from '~/components/layout/AppHeaderDashboard.vue';
 import { useTheme } from '~/composables/useTheme';
 
 const { isDark, toggleDarkMode, ready } = useTheme();

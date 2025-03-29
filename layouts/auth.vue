@@ -8,7 +8,7 @@
             :ready="ready" />
 
         <div class="flex flex-col min-h-screen">
-            <AppHeader layout-type="auth" />
+            <AppHeaderAuth />
             <main class="flex-grow">
                 <div
                     class="from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-950 dark:to-purple-950 transition-colors duration-300">
@@ -26,9 +26,9 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import AppHeader from '~/components/layout/AppHeader.vue';
-import FloatingThemeToggle from '~/components/FloatingThemeToggle.vue';
 import { useTheme } from '~/composables/useTheme';
+import FloatingThemeToggle from '~/components/FloatingThemeToggle.vue';
+import AppHeaderAuth from '~/components/layout/AppHeaderAuth.vue';
 
 const { isDark, toggleDarkMode, ready } = useTheme();
 const isMounted = ref(false)
