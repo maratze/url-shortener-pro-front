@@ -336,7 +336,7 @@
                                 : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700'
                         ]">
                         <div class="flex items-start justify-between">
-                            <div class="flex space-x-3">
+                            <div class="flex space-x-3 w-full">
                                 <!-- Device icon -->
                                 <div class="mt-0.5">
                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -355,17 +355,32 @@
                                     </svg>
                                 </div>
                                 <!-- Session info -->
-                                <div>
-                                    <div class="flex items-center">
+                                <div class="w-full">
+                                    <div class="flex items-center justify-between">
                                         <h3 class="text-base font-medium text-slate-900 dark:text-white">{{ session.device }}</h3>
-                                        <span v-if="session.current"
-                                            class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                                        <span 
+											v-if="session.current"
+                                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200"
+										>
                                             Current
                                         </span>
                                     </div>
                                     <div class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                                         <div class="flex flex-wrap gap-x-4">
+                                            <!-- Last Active Time -->
                                             <span class="inline-flex items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="h-4 w-4 mr-1 text-slate-400"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                {{ session.lastActive }}
+                                            </span>
+
+                                            <!-- Location (only shown if available) -->
+                                            <span v-if="session.location" class="inline-flex items-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                     class="h-4 w-4 mr-1 text-slate-400"
                                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -378,15 +393,17 @@
                                                 </svg>
                                                 {{ session.location }}
                                             </span>
-                                            <span class="inline-flex items-center">
+
+                                            <!-- IP Address (only shown if available) -->
+                                            <span v-if="session.ipAddress" class="inline-flex items-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                     class="h-4 w-4 mr-1 text-slate-400"
                                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2"
-                                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                                                 </svg>
-                                                {{ session.lastActive }}
+                                                {{ session.ipAddress }}
                                             </span>
                                         </div>
                                     </div>
@@ -411,15 +428,15 @@
                                     Terminating...
                                 </span>
                                 <span v-else>
-									<span class="flex items-center gap-1">
-                                    	<span>Terminate</span>
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-											 viewBox="0 0 24 24"
-											 stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-												  d="M6 18L18 6M6 6l12 12"/>
-										</svg>
-									</span>
+                                    <span class="flex items-center gap-1">
+                                        <span>Terminate</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </span>
                                 </span>
                             </button>
                         </div>
@@ -438,14 +455,16 @@
             :close-on-backdrop="false" @verify="verifyAndDisableTwoFactor" />
 
         <!-- Confirm Terminate All Sessions Modal -->
-        <div v-if="showConfirmAllSessionsModal" class="fixed inset-0 z-50 overflow-y-auto">
+        <div v-if="showConfirmAllSessionsModal" class="fixed inset-0 z-[2000] overflow-y-auto">
             <div class="flex items-center justify-center min-h-screen">
                 <div class="fixed inset-0 bg-black bg-opacity-40 transition-opacity"
                     @click="showConfirmAllSessionsModal = false"></div>
                 <div class="relative bg-white dark:bg-slate-800 rounded-lg max-w-md w-full mx-auto shadow-xl p-6">
                     <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Terminate All Sessions</h3>
                     <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                        <span>This will terminate all your sessions from other devices. You will remain signed in on this device.</span>
+                        <span>This will terminate all your sessions from other devices. You will remain signed in on
+                            this
+                            device.</span>
                         <span class="block mt-2 font-medium">Are you sure you want to continue?</span>
                     </p>
 
@@ -455,7 +474,7 @@
                             Cancel
                         </button>
                         <button @click="confirmAndTerminateAll"
-                            class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-sm transition">
+                            class="px-3 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded text-sm transition">
                             Terminate All
                         </button>
                     </div>
@@ -475,6 +494,7 @@ import QrCodeModal from '~/components/QrCodeModal.vue';
 import VerificationCodeModal from '~/components/security/VerificationCodeModal.vue';
 import { sessionApi } from '~/services/api/sessionApi';
 import type { RawSessionData, UserSessionDisplay } from '~/types/session';
+import { parseDeviceInfo } from '~/utils/deviceParser';
 
 definePageMeta({
     layout: 'account',
@@ -573,8 +593,8 @@ const loadSessions = async () => {
             // Map and format session data if both operations succeeded
             activeSessions.value = sessions.map((session: RawSessionData): UserSessionDisplay => ({
                 id: session.id,
-                device: session.deviceInfo || 'Unknown device',
-                location: session.location || 'Unknown location',
+                device: parseDeviceInfo(session.deviceInfo) || 'Unknown device',
+                location: session.location !== 'Unknown' ? session.location : '',
                 lastActive: formatRelativeTime(session.lastActivityAt),
                 ipAddress: session.ipAddress || undefined,
                 createdAt: session.createdAt,
@@ -586,8 +606,8 @@ const loadSessions = async () => {
             // If we can't determine current session, just show all sessions
             activeSessions.value = sessions.map((session: RawSessionData): UserSessionDisplay => ({
                 id: session.id,
-                device: session.deviceInfo || 'Unknown device',
-                location: session.location || 'Unknown location',
+                device: parseDeviceInfo(session.deviceInfo) || 'Unknown device',
+                location: session.location !== 'Unknown' ? session.location : '',
                 lastActive: formatRelativeTime(session.lastActivityAt),
                 ipAddress: session.ipAddress || undefined,
                 createdAt: session.createdAt,
