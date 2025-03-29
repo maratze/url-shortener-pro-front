@@ -8,7 +8,7 @@
 		<div class="container mx-auto px-6 max-w-7xl">
 			<div class="flex items-center justify-between">
 				<!-- Left part: Logo -->
-				<div class="flex items-center space-x-4">
+				<div class="flex items-center space-x-4 min-h-[42px]">
 					<NuxtLink :to="layoutType === 'dashboard' ? '/dashboard' : '/'" class="flex items-center space-x-2">
 						<div
 							class="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold">
