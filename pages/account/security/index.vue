@@ -259,7 +259,7 @@
                 class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Active Sessions</h2>
-                    <button v-if="activeSessions.length > 0" @click="confirmTerminateAllSessions"
+                    <button v-if="activeSessions.length > 1" @click="confirmTerminateAllSessions"
                         class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm transition flex items-center space-x-1 disabled:opacity-50 disabled:cursor-not-allowed"
                         :disabled="isTerminating || isLoadingSessions">
                         <span v-if="isTerminating" class="flex items-center">
@@ -357,8 +357,7 @@
                                 <!-- Session info -->
                                 <div>
                                     <div class="flex items-center">
-                                        <h3 class="text-base font-medium text-slate-900 dark:text-white">{{
-                                            session.device }}</h3>
+                                        <h3 class="text-base font-medium text-slate-900 dark:text-white">{{ session.device }}</h3>
                                         <span v-if="session.current"
                                             class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
                                             Current
@@ -412,13 +411,15 @@
                                     Terminating...
                                 </span>
                                 <span v-else>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                    Terminate
+									<span class="flex items-center gap-1">
+                                    	<span>Terminate</span>
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+											 viewBox="0 0 24 24"
+											 stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												  d="M6 18L18 6M6 6l12 12"/>
+										</svg>
+									</span>
                                 </span>
                             </button>
                         </div>
@@ -444,9 +445,8 @@
                 <div class="relative bg-white dark:bg-slate-800 rounded-lg max-w-md w-full mx-auto shadow-xl p-6">
                     <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Terminate All Sessions</h3>
                     <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                        This will terminate all your sessions from other devices. You will remain signed in on this
-                        device.
-                        <span class="block mt-1 font-medium">Are you sure you want to continue?</span>
+                        <span>This will terminate all your sessions from other devices. You will remain signed in on this device.</span>
+                        <span class="block mt-2 font-medium">Are you sure you want to continue?</span>
                     </p>
 
                     <div class="mt-4 flex justify-end space-x-3">

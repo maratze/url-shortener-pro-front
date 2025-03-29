@@ -282,7 +282,7 @@ const handleSubmit = async () => {
 			// Small delay before redirect to show notification and complete token saving
 			setTimeout(() => {
 				// Get redirect page if specified
-				const redirectPath = route.query.redirect?.toString() || '/dashboard';
+				const redirectPath = route.query.redirect?.toString() || '/account/security';
 				navigateTo(redirectPath);
 			}, 300);
 		} else {
