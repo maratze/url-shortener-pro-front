@@ -1,18 +1,13 @@
 <template>
     <section class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-        <div class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Authentication Status</h2>
+        <div class="mb-4">
+            <h2 class="text-lg font-medium text-slate-900 dark:text-white">Authentication Status</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400">View your current authentication status and session
+                information</p>
         </div>
 
-        <div v-if="isLoading" class="flex items-center justify-center py-4">
-            <svg class="animate-spin h-5 w-5 text-indigo-500 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                </path>
-            </svg>
-            <span class="text-slate-600 dark:text-slate-400">Loading authentication status...</span>
+        <div v-if="isLoading" class="flex justify-center py-6">
+            <div class="spinner"></div>
         </div>
 
         <div v-else class="grid gap-6 md:grid-cols-2">
@@ -51,21 +46,16 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                     </svg>
-                    <h3 class="text-base font-medium text-slate-900 dark:text-white">Authentication Method</h3>
+                    <h3 class="text-base font-medium text-slate-900 dark:text-white">Login Method</h3>
                 </div>
-                <div class="flex items-center">
-                    <div v-if="user?.authProvider === 'google'" class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24">
-                            <path fill="#4285F4"
-                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                            <path fill="#34A853"
-                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                            <path fill="#FBBC05"
-                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                            <path fill="#EA4335"
-                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                <div class="mb-2">
+                    <div v-if="user?.authProvider === 'Google'" class="flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+                            <path fill="currentColor"
+                                d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z">
+                            </path>
                         </svg>
-                        <span class="text-sm text-slate-600 dark:text-slate-300">Google Account</span>
+                        <span class="text-sm text-slate-600 dark:text-slate-300">Google</span>
                     </div>
                     <div v-else class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-500" fill="none"
@@ -108,66 +98,66 @@ const isLoading = ref(true);
 
 // Calculate time ago for login
 const loginTimeAgo = computed(() => {
-    // Добавляем логирование для отладки
-    console.log('User data in AuthStatusCard:', {
-        email: user.value?.email,
-        lastLoginAt: user.value?.lastLoginAt,
-        authProvider: user.value?.authProvider
-    });
+    if (!process.client) return 'Unknown';
 
-    // Check if user has lastLoginAt data
-    if (user.value?.lastLoginAt) {
-        const date = new Date(user.value.lastLoginAt);
+    const loginTimeString = localStorage.getItem('loginTime');
+    if (!loginTimeString) return 'Unknown';
+
+    try {
+        const loginTime = new Date(loginTimeString);
         const now = new Date();
-        const diffMs = now.getTime() - date.getTime();
-        const diffMinutes = Math.floor(diffMs / 60000);
+        const diffMs = now.getTime() - loginTime.getTime();
+
+        // Handle invalid date
+        if (isNaN(diffMs)) return 'Unknown';
+
+        // Convert to minutes, hours, days
+        const diffMinutes = Math.floor(diffMs / (1000 * 60));
 
         if (diffMinutes < 1) return 'Just now';
         if (diffMinutes < 60) return `${diffMinutes} min ago`;
 
-        const hours = Math.floor(diffMinutes / 60);
-        if (hours < 24) return `${hours} hr ago`;
+        const diffHours = Math.floor(diffMinutes / 60);
+        if (diffHours < 24) return `${diffHours} hr ago`;
 
-        const days = Math.floor(diffMinutes / 1440);
-        return `${days} day${days > 1 ? 's' : ''} ago`;
-    }
+        const diffDays = Math.floor(diffHours / 24);
+        if (diffDays === 1) return 'Yesterday';
+        if (diffDays < 7) return `${diffDays} days ago`;
 
-    // Fallback to localStorage if no lastLoginAt
-    try {
-        const loginTime = localStorage.getItem('loginTime');
-        if (loginTime) {
-            const date = new Date(loginTime);
-            const now = new Date();
-            const diffMs = now.getTime() - date.getTime();
-            const diffMinutes = Math.floor(diffMs / 60000);
-
-            if (diffMinutes < 1) return 'Just now';
-            if (diffMinutes < 60) return `${diffMinutes} min ago`;
-
-            const hours = Math.floor(diffMinutes / 60);
-            if (hours < 24) return `${hours} hr ago`;
-
-            const days = Math.floor(diffMinutes / 1440);
-            return `${days} day${days > 1 ? 's' : ''} ago`;
-        }
+        // For longer periods, just show the date
+        return loginTime.toLocaleDateString();
     } catch (e) {
-        console.log('Error getting login time:', e);
+        console.error('Error calculating login time:', e);
+        return 'Unknown';
     }
-
-    // Если все методы не сработали, используем currentTime
-    localStorage.setItem('loginTime', new Date().toISOString());
-    return 'Just now';
 });
 
 onMounted(() => {
-    // Simulate loading
+    // We're setting isLoading to false without any real data fetching
+    // In a real app, this might fetch session data
     setTimeout(() => {
         isLoading.value = false;
-
-        // Сохраняем текущее время логина в localStorage, если его еще нет
-        if (!localStorage.getItem('loginTime')) {
-            localStorage.setItem('loginTime', new Date().toISOString());
-        }
-    }, 300);
+    }, 500);
 });
 </script>
+
+<style scoped>
+.spinner {
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 3px solid #6366f1;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+</style>

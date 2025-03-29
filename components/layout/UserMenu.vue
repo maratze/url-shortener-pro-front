@@ -11,10 +11,10 @@
 			</span>
 			<span class="flex items-center">
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500 dark:text-slate-400"
-					 viewBox="0 0 20 20" fill="currentColor">
+					viewBox="0 0 20 20" fill="currentColor">
 					<path fill-rule="evenodd"
-						  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-						  clip-rule="evenodd"/>
+						d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+						clip-rule="evenodd" />
 				</svg>
 			</span>
 		</button>
@@ -22,7 +22,7 @@
 		<!-- Dropdown menu -->
 		<Transition name="fade">
 			<div v-if="isMenuOpen"
-				 class="absolute right-0 mt-2 min-w-[240px] rounded-lg shadow-lg bg-white dark:bg-slate-800 ring-1 ring-black ring-opacity-5 z-50 py-2">
+				class="absolute right-0 mt-2 min-w-[240px] rounded-lg shadow-lg bg-white dark:bg-slate-800 ring-1 ring-black ring-opacity-5 z-50 py-2">
 				<!-- User information -->
 				<div class="px-4 py-2 border-b border-slate-200 dark:border-slate-700">
 					<div class="font-medium text-slate-800 dark:text-white truncate">{{ getFullName(user) }}</div>
@@ -35,11 +35,11 @@
 				<!-- Menu links -->
 				<div class="py-1">
 					<NuxtLink to="/account"
-							  class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+						class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
 						<span>Account Settings</span>
 					</NuxtLink>
 					<button @click="logout"
-							class="w-full text-left block px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-slate-100 dark:hover:bg-slate-700">
+						class="w-full text-left block px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-slate-100 dark:hover:bg-slate-700">
 						Log out
 					</button>
 				</div>
@@ -60,6 +60,8 @@ const menuButton = ref(null);
 
 // Calculate initials for avatar
 const userInitials = computed(() => {
+	if (!user.value) return '?';
+
 	let result = '';
 
 	if (user.value?.firstName) {
@@ -70,14 +72,16 @@ const userInitials = computed(() => {
 		result += user.value.lastName.charAt(0);
 	}
 
-	if (result === '' && user.value.email) {
+	if (result === '' && user.value?.email) {
 		result += user.value.email.charAt(0)
 	}
 
-	return result ? result : '?';
+	return result ? result.toUpperCase() : '?';
 });
 
 const getFullName = (user) => {
+	if (!user) return 'Гость';
+
 	let result = '';
 
 	if (user.firstName) {
@@ -88,8 +92,10 @@ const getFullName = (user) => {
 		result += ' ' + user.lastName;
 	}
 
-	if (result === '') {
+	if (result.trim() === '' && user.email) {
 		result = user.email;
+	} else if (result.trim() === '') {
+		result = 'Гость';
 	}
 
 	return result;
@@ -108,11 +114,18 @@ const handleClickOutside = (event) => {
 };
 
 // Logout
-const logout = () => {
-	authStore.logout();
+const logout = async () => {
 	isMenuOpen.value = false;
-	// TODO: rollback this
-	navigateTo('/login');
+
+	try {
+		await authStore.logout();
+		setTimeout(() => {
+			navigateTo('/login');
+		}, 100);
+	} catch (error) {
+		console.error('Ошибка при выходе из системы:', error);
+		navigateTo('/login');
+	}
 };
 
 onMounted(() => {

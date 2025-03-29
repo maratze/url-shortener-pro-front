@@ -3,6 +3,7 @@ import { useAuthStore } from '~/stores/auth'
 import { useRoute, navigateTo } from '#app'
 import type { UpdateProfileRequest, ChangePasswordRequest } from '~/types/auth'
 import type { TwoFactorAuthResponse } from '~/types/auth'
+import { useToastStore } from '~/stores/toast'
 
 /**
  * Composable for authentication management
@@ -14,6 +15,9 @@ export const useAuthService = () => {
     const isInitializing = ref(false)
     const isInitialized = ref(false)
 
+    // Флаг для предотвращения множественных редиректов
+    const isRedirecting = ref(false)
+
     // Computed properties for easy access to authentication state
     const isAuthenticated = computed(() => authStore.isAuthenticated)
     const user = computed(() => authStore.user)
@@ -24,6 +28,8 @@ export const useAuthService = () => {
      * Loads user data if a token exists
      */
     const checkAuthStatus = async () => {
+        if (isRedirecting.value) return false;
+
         isInitializing.value = true
         try {
             // Try to load user data if a token exists
@@ -43,16 +49,49 @@ export const useAuthService = () => {
         } catch (error: any) {
             console.error('Error checking authentication status:', error)
 
-            // Если получена ошибка 401 (Unauthorized) - это может означать, что сессия истекла
-            // или была деактивирована (например, из другого устройства)
-            if (error?.response?.status === 401 || error?.message?.includes('401')) {
+            // Улучшенная обработка ошибок авторизации
+            if (error?.response?.status === 401 ||
+                error?.status === 401 ||
+                error?.message?.includes('401') ||
+                error?.message?.includes('Authentication failed') ||
+                error?.message?.includes('Session expired') ||
+                error?.message?.includes('session may have expired')) {
+
                 console.log('Session invalid or expired, logging out')
+
+                // Используем локальную переменную, чтобы избежать повторных редиректов
+                const shouldRedirect = !isRedirecting.value
+                isRedirecting.value = true
+
+                // Выполняем выход из системы
                 await authStore.logout()
+
                 // Если мы не на странице логина, перенаправляем на нее
-                const route = useRoute()
-                if (!route.path.startsWith('/login')) {
-                    navigateTo('/login')
+                if (shouldRedirect) {
+                    const route = useRoute()
+                    const currentPath = route.fullPath
+
+                    // Добавляем небольшую задержку перед редиректом, чтобы состояние успело обновиться
+                    setTimeout(() => {
+                        if (!route.path.startsWith('/login')) {
+                            navigateTo(`/login?redirect=${encodeURIComponent(currentPath)}`)
+                        }
+
+                        // Сбрасываем флаг редиректа после перенаправления
+                        setTimeout(() => {
+                            isRedirecting.value = false
+                        }, 500)
+                    }, 100)
+                } else {
+                    // Сбрасываем флаг, если редирект не требуется
+                    setTimeout(() => {
+                        isRedirecting.value = false
+                    }, 500)
                 }
+
+                // Показываем уведомление о невалидной сессии
+                const toastStore = useToastStore()
+                toastStore.error('Ваша сессия истекла. Пожалуйста, войдите снова.')
             }
         } finally {
             isInitializing.value = false

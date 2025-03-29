@@ -1,5 +1,6 @@
 import { useAuthStore } from "~/stores/auth";
 import { getStringFromStorage } from "~/utils/client";
+import { useToastStore } from "~/stores/toast";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
     // Список защищенных маршрутов
@@ -29,9 +30,44 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if (isProtectedRoute && hasToken && !authStore.user) {
         console.log('Auth middleware: fetching user data before accessing protected route');
         try {
-            await authStore.fetchCurrentUser();
+            const userData = await authStore.fetchCurrentUser();
+
+            // Проверяем, что данные пользователя были успешно получены
+            if (!userData || !authStore.user) {
+                console.warn('Auth middleware: failed to fetch user data, redirecting to login');
+
+                // Очищаем токен и состояние авторизации
+                authStore.logout();
+
+                // Показываем сообщение пользователю
+                if (process.client) {
+                    const toastStore = useToastStore();
+                    toastStore.error('Ваша сессия истекла. Пожалуйста, войдите снова.');
+                }
+
+                // Перенаправляем на страницу входа с сохранением целевого маршрута
+                return navigateTo({
+                    path: '/login',
+                    query: { redirect: to.fullPath }
+                });
+            }
         } catch (error) {
-            console.error('Failed to fetch user data:', error);
+            console.error('Auth middleware: error fetching user data:', error);
+
+            // Очищаем токен и состояние авторизации
+            authStore.logout();
+
+            // Показываем сообщение пользователю
+            if (process.client) {
+                const toastStore = useToastStore();
+                toastStore.error('Ошибка авторизации. Пожалуйста, войдите снова.');
+            }
+
+            // Перенаправляем на страницу входа с сохранением целевого маршрута
+            return navigateTo({
+                path: '/login',
+                query: { redirect: to.fullPath }
+            });
         }
     }
 

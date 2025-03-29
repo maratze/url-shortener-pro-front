@@ -2,6 +2,9 @@ import { useAuthStore } from '~/stores/auth'
 import { useToastStore } from '~/stores/toast'
 import { navigateTo } from '#app'
 
+// Переменная для отслеживания состояния активного редиректа
+let isRedirecting = false;
+
 /**
  * Общая функция-обработчик 401 ошибок для всех API запросов
  * @param error Ошибка, которая произошла при выполнении запроса
@@ -27,12 +30,24 @@ export const handleAuthError = (error: any) => {
         )) {
             console.log('Session invalidated, logging out')
 
+            // Предотвращаем множественные редиректы
+            if (isRedirecting) {
+                throw error;
+            }
+
+            isRedirecting = true;
+
             // Показываем сообщение пользователю
             toastStore.error('Ваша сессия завершена. Пожалуйста, войдите снова.')
 
             // Выполняем выход и перенаправляем на страницу входа
             authStore.logout()
-            navigateTo('/login')
+            navigateTo('/login');
+
+            // Сбросить флаг после короткой задержки
+            setTimeout(() => {
+                isRedirecting = false;
+            }, 1000);
         }
     }
 
