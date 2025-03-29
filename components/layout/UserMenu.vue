@@ -111,8 +111,8 @@ const handleClickOutside = (event) => {
 const logout = () => {
 	authStore.logout();
 	isMenuOpen.value = false;
-	// Redirect to home page
-	navigateTo('/');
+	// TODO: rollback this
+	navigateTo('/login');
 };
 
 onMounted(() => {

@@ -105,6 +105,7 @@ const canVerify = computed(() => {
 // Function to close the modal
 const close = () => {
     emit('update:modelValue', false);
+    navigateTo('/login');
 };
 
 // Function to verify the code

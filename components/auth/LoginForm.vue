@@ -174,14 +174,12 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth';
 import { useToastStore } from '~/stores/toast';
-import type { LoginRequest, OAuthRequest } from "~/types/auth";
-import { useAuthService } from '~/composables/useAuthService';
+import type { LoginRequest } from "~/types/auth";
 import { getStringFromStorage, setStringInStorage } from '~/utils/client';
 import { userApi } from '~/services/api/userApi';
 
 const authStore = useAuthStore();
 const toastStore = useToastStore();
-const { login } = useAuthService();
 
 const loading = ref(false);
 const showPassword = ref(false);
@@ -190,8 +188,9 @@ const twoFactorAuthError = ref('');
 const verifyingTwoFactorAuth = ref(false);
 
 const form = reactive({
-	email: '',
-	password: '',
+	// TODO: remove this
+	email: 'maratoff20@gmail.com',
+	password: '123123',
 	rememberMe: false
 });
 

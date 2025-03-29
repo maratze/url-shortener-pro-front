@@ -71,6 +71,7 @@ export const useAuthStore = defineStore('auth', {
 
                 // Сохраняем данные пользователя и токен
                 this.user = response as UserResponse
+
                 this.token = response.token
                 this.isAuthenticated = true
 
@@ -79,7 +80,7 @@ export const useAuthStore = defineStore('auth', {
                 setStringInStorage('token', response.token)
 
                 // Сохраняем время входа в localStorage
-                localStorage.setItem('loginTime', new Date().toISOString())
+                setStringInStorage('loginTime', new Date().toISOString())
 
                 return response
             } catch (error: any) {
