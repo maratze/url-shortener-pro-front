@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
 import { useAuthStore } from '~/stores/auth'
+import { useRoute, navigateTo } from '#app'
 import type { UpdateProfileRequest, ChangePasswordRequest } from '~/types/auth'
 import type { TwoFactorAuthResponse } from '~/types/auth'
 
@@ -39,8 +40,20 @@ export const useAuthService = () => {
             } else if (authStore.user) {
                 console.warn('User authenticated but data is incomplete')
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error checking authentication status:', error)
+
+            // Если получена ошибка 401 (Unauthorized) - это может означать, что сессия истекла
+            // или была деактивирована (например, из другого устройства)
+            if (error?.response?.status === 401 || error?.message?.includes('401')) {
+                console.log('Session invalid or expired, logging out')
+                await authStore.logout()
+                // Если мы не на странице логина, перенаправляем на нее
+                const route = useRoute()
+                if (!route.path.startsWith('/login')) {
+                    navigateTo('/login')
+                }
+            }
         } finally {
             isInitializing.value = false
             isInitialized.value = true

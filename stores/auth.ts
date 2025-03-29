@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { userApi } from '~/services/api/userApi'
 import type { RegisterRequest, LoginRequest, UserResponse, OAuthRequest, UpdateProfileRequest, ChangePasswordRequest, TwoFactorAuthRequest, LoginResponse } from '~/types/auth'
 import { getStringFromStorage, setStringInStorage, removeLocalStorage } from '~/utils/client'
+import { useToastStore } from '~/stores/toast'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -196,8 +197,12 @@ export const useAuthStore = defineStore('auth', {
 
                 // Если ошибка 401, значит токен недействителен, очищаем его
                 if (error.response && error.response.status === 401) {
-                    console.log('Token invalid, logging out')
+                    console.log('Token invalid or session expired, logging out')
                     this.logout()
+
+                    // Добавляем уведомление для пользователя
+                    const toastStore = useToastStore()
+                    toastStore.error('Ваша сессия истекла, пожалуйста, войдите снова')
                 }
 
                 return null
@@ -263,7 +268,7 @@ export const useAuthStore = defineStore('auth', {
 
             try {
                 const response = await userApi.changePassword(passwordData)
-                
+
                 if (response.success && this.user) {
                     this.user.hasPasswordSet = true;
                 }
